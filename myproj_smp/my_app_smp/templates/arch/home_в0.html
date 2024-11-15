@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Данные из БД</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Данные из таблицы smp_razbor_tab</h1>
+    </header>
+
+    <nav>
+        <a href="#">Главная</a>
+        <a href="#">О нас</a>
+        <a href="#">Контакты</a>
+        <a href="#">Помощь</a>
+    </nav>
+
+    <table>
+        <thead>
+            <tr>
+        <th>Дата вызова SMP</th>
+        <th>FIO пациента</th>
+        <th>Количество выездов в день</th>
+        <th>Дата рождения</th>
+        <th>Полис ОМС</th>
+        <th>Результат вызова</th>
+        <th>Актив / Пассив</th>
+        <th>Диагноз по МКБ</th>
+        <th>Причина вызова скорой помощи</th>
+        <th>Наличие болевого синдрома</th>
+        <th>Причина вызова скорой помощи (кратко)</th>
+        <th>Курирующее подразделение ОВПП</th>
+        <th>Дата включения в регистр</th>
+        <th>Дата последнего визита врача из протокола осмотра EMIAS</th>
+
+
+<!--            <th>Действия CPP</th>-->
+<!--            <th>Был ли установлен базовый план на последнем визите?</th>-->
+<!--            <th>Количество дней от прошлого визита врача</th>-->
+<!--            <th>Отображены ли все жалобы пациента в полном объеме?</th>-->
+<!--            <th>Динамика состояния</th>-->
+<!--            <th>Причина вызова SMP по результатам аудиоконтроля</th>-->
+<!--            <th>Какие действия были предприняты SMP?</th>-->
+<!--            <th>Текущее состояние пациента после вызова SMP</th>-->
+<!--            <th>Остались ли жалобы после вызова SMP?</th>-->
+<!--            <th>Описание жалоб</th>-->
+<!--            <th>Были ли лекарственные средства отоварены по рецепту?</th>-->
+<!--            <th>Пациент принимает назначенные лекарственные средства?</th>-->
+<!--            <th>Эффективна ли назначенная медикаментозная терапия?</th>-->
+<!--            <th>Есть ли побочные действия от назначенных лекарственных средств?</th>-->
+<!--            <th>Пациенту была озвучена дата следующего визита?</th>-->
+<!--            <th>Пациенту были предоставлены контактные номера CPP?</th>-->
+<!--            <th>Пациент звонил по указанным контактным номерам до вызова SMP?</th>-->
+<!--            <th>Причина, по которой пациент не звонил по указанным номерам</th>-->
+<!--            <th>Соответствует ли назначенный базовый план состоянию пациента?</th>-->
+<!--            <th>Требуется ли госпитализация на данный момент?</th>-->
+<!--            <th>Базовый план назначен корректно?</th>-->
+<!--            <th>Оценка состояния соответствует базовому плану?</th>-->
+<!--            <th>Жалобы описаны в полном объеме?</th>-->
+<!--            <th>Оценка заведующего произведена корректно?</th>-->
+<!--            <th>Выявленные дефекты в работе врача</th>-->
+<!--            <th>Оценка действий врача до вызова SMP</th>-->
+<!--            <th>Оценка действий после вызова SMP</th>-->
+<!--            <th>Выводы по результатам оценки</th>-->
+<!--            <th>Анализ действий главным врачом</th>-->
+
+
+<!--            <th>Количество дней от момента получения данных по SMP до завершения</th>-->
+<!--            <th>Дата следующего визита врача согласно протоколу</th>-->
+
+<!--            <th>Дата назначения аудиопротокола согласно протоколу врача</th>-->
+<!--            <th>Дата получения сведений по вызовам SMP от KC</th>-->
+<!--            <th>Дата аудиопротокола после получения данных о вызове SMP</th>-->
+
+
+        </tr>
+        {% for item in data_smp %}
+            <tr>
+                <td>{{ item.fio_pacienta }}</td>
+<!--                <td>{{ item_.fio_pac}}</td>-->
+<!--                <td>{{ item_.d_vkl_reestr}}</td>-->
+
+                <td>{{ item.aktiv_passiv }}</td>
+                <td>{{ item.diagnoz_po_mkb }}</td>
+                <td>{{ item.prichina_vyzova_skoroiy_pomoschi }}</td>
+                <td>{{ item.nalichie_bolevogo_sindroma }}</td>
+                <td>{{ item.prichina_vyzova_skoroiy_pomoschi_kratko }}</td>
+                <td>{{ item.kuriruyushchee_podrazdelenie_ovpp }}</td>
+                <td>{{ item.dejstviya_cpp }}</td>
+
+
+<!--                <td>{{ item.byl_li_ustanovlen_bazovyj_plan_na_poslednem_vizite }}</td>-->
+<!--                <td>{{ item.otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme }}</td>-->
+<!--                <td>{{ item.dinamika_sostoyaniya }}</td>-->
+<!--                <td>{{ item.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya }}</td>-->
+<!--                <td>{{ item.kakie_dejstviya_byli_predprinyaty_smp }}</td>-->
+<!--                <td>{{ item.tekushchee_sostoyanie_pacienta_posle_vyzova_smp }}</td>-->
+<!--                <td>{{ item.ostalis_li_zhaloby_posle_vyzova_smp }}</td>-->
+<!--                <td>{{ item.opisanie_zhalob }}</td>-->
+<!--                <td>{{ item.byli_li_lekarstvennye_sredstva_otovareny_po_receptu }}</td>-->
+<!--                <td>{{ item.pacient_prinimaet_naznachennye_lekarstvennye_sredstva }}</td>-->
+<!--                <td>{{ item.ehffektivna_li_naznachennaya_medikamentoznaya_terapiya }}</td>-->
+<!--                <td>{{ item.est_li_pobochnye_dejstviya_ot_naznachennykh_lekarstvennykh }}</td>-->
+<!--                <td>{{ item.pacientu_byla_ozvuchena_data_sleduyushchego_vizita }}</td>-->
+<!--                <td>{{ item.pacientu_byli_predostavleny_kontaktnye_nomera_cpp }}</td>-->
+<!--                <td>{{ item.pacient_zvonil_po_ukazannym_kontaktnym_nomera_do_vyzova_smp }}</td>-->
+<!--                <td>{{ item.prichina_po_kotoroj_pacient_ne_zvonil_po_ukazannym_nomeram }}</td>-->
+<!--                <td>{{ item.sootvetstvuet_li_naznachennyj_bazovyj_plan_sostoyaniyu_pacie }}</td>-->
+<!--                <td>{{ item.trebovanie_gospitalizacii_na_dannyj_moment }}</td>-->
+<!--                <td>{{ item.bazovyj_plan_naznachen_korrektno }}</td>-->
+<!--                <td>{{ item.ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu }}</td>-->
+<!--                <td>{{ item.zhaloby_opisany_v_polnom_obeme }}</td>-->
+<!--                <td>{{ item.ocenka_zaveduyushchego_proizvedena_korrektno }}</td>-->
+<!--                <td>{{ item.vyvody_po_rezultatm_ocenki }}</td>-->
+<!--                <td>{{ item.vyyavlennye_defekty_v_rabote_vracha }}</td>-->
+<!--                <td>{{ item.ocenka_dejstvij_vracha_do_vyzova_smp }}</td>-->
+<!--                <td>{{ item.ocenka_dejstvij_posle_vyzova_smp }}</td>-->
+<!--                <td>{{ item.analiz_dejstvij_glavnym_vrachom }}</td>-->
+<!--                <td>{{ item.polis_oms }}</td>-->
+
+<!--                <td>{{ item.p_p }}</td>-->
+
+<!--                <td>{{ item.kolichestvo_vyezdov_v_den }}</td>-->
+<!--                <td>{{ item.kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover }}</td>-->
+<!--                <td>{{ item.kolichestvo_dnej_ot_proshlogo_vizita_vracha }}</td>-->
+<!--                <td>{{ item.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu }}</td>-->
+<!--                <td>{{ item.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias }}</td>-->
+<!--                <td>{{ item.        }}-->
+        </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <footer>
+        <p>&copy; 2023 Ваше название. Все права защищены.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!-- child.html -->
+{% extends "edit_pacient_base.html" %}
+
+
+{% block content %}
+
+    <form method="POST">
+        {% csrf_token %}
+<!-- Кнопка отправки и ссылка на отмену -->
+
+        <button type="submit">Сохранить изменения</button>
+        <a href="{% url 'home' %}">Отмена</a>
+  <!-- Блок с основными полями -->
+        <div class="field-group-2-columns">
+            <div>
+                <fieldset >
+                    <legend>Данные по пациенту</legend>
+                        <table >
+
+                <tr>
+                    <th >Дата вызова СМП-</th>
+<!--                    <td > {{ patient.data_vyzova_smp }} </td>-->
+                    <td > {{ patient.data_vyzova_smp }} </td>
+                </tr>
+                <tr>
+                    <th>ФИО пациента:</th>
+                    <td> {{ patient.fio_pacienta  }}  </td>
+                </tr>
+                <tr>
+                    <th><label for="{{ patient.kolichestvo_vyezdov_v_den.id_for_label }}">Количество выездов в день:</label></th>
+                    <td>{{ patient.kolichestvo_vyezdov_v_den  }} </td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.data_rozhdeniya.id_for_label }}">Дата рождения:</label></th>
+                    <td>{{ patient.data_rozhdeniya  }}</td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.polis_oms.id_for_label }}">Полис ОМС:</label></th>
+                    <td>{{ patient.polis_oms  }}</td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.rezultat_vyzova.id_for_label }}">Результат вызова:</label></th>
+                    <td>{{ patient.rezultat_vyzova  }}</td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.aktiv_passiv.id_for_label }}">Актив / Пассив:</label></th>
+                    <td>{{ patient.aktiv_passiv  }}</td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.diagnoz_po_mkb.id_for_label }}">Диагноз по МКБ:</label></th>
+                    <td>{{ patient.diagnoz_po_mkb  }}</td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.kuriruyushchee_podrazdelenie_ovpp.id_for_label }}">Курирующее подразделение ОВПП:</label></th>
+                    <td>{{ patient.kuriruyushchee_podrazdelenie_ovpp  }}</td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.nalichie_bolevogo_sindroma.id_for_label }}">Наличие болевого синдрома:</label></th>
+                    <td>{{ patient.nalichie_bolevogo_sindroma  }}</td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.prichina_vyzova_skoroiy_pomoschi.id_for_label }}">Причина вызова скорой помощи:</label></th>
+                    <td>{{ patient.prichina_vyzova_skoroiy_pomoschi  }}</td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.prichina_vyzova_skoroiy_pomoschi_kratko.id_for_label }}">Причина вызова скорой помощи (кратко):</label></th>
+                    <td>{{ patient.prichina_vyzova_skoroiy_pomoschi_kratko  }}</td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.fio_vracha.id_for_label }}">fio_vracha:</label></th>
+                    <td>{{ patient.fio_vracha  }}</td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle.id_for_label }}">Сравнение "Повода вызова СМП" с Протоколами врача ЦПП выездов ДО и ПОСЛЕ вызова СМП:</label></th>
+                    <td>{{ patient.sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle  }}</td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.dejstviya_cpp.id_for_label }}">Действия ЦПП:</label></th>
+                    <td>{{ patient.dejstviya_cpp  }}</td>
+                </tr>
+                <tr>
+                    <th><label for="{{ form.kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij.id_for_label }}">Контроль исполнения назначенных врачом ЦПП рекомендаций:</label></th>
+                    <td>{{ patient.kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij  }}</td>
+                </tr>
+
+<!------------------------------------------->
+<tr>
+    <th><label for="{{ form.vyvod.id_for_label }}">Вывод:</label></th>
+    <td>{{ form.vyvod }}</td>
+</tr>
+<tr>
+    <th><label for="{{ form.p_p.id_for_label }}">P.P:</label></th>
+    <td>{{ form.p_p }}</td>
+</tr>
+<tr>
+    <th><label for="{{ form.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias.id_for_label }}">Дата последнего визита врача из протокола осмотра ЭМИАС:</label></th>
+    <td>{{ form.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias }}</td>
+</tr>
+<tr>
+    <th><label for="{{ form.ok_vps.id_for_label }}">ОК ВПС:</label></th>
+    <td>{{ form.ok_vps }}</td>
+</tr>
+<tr>
+    <th><label for="{{ form.data_vklyucheniya_v_registr.id_for_label }}">Дата включения в регистр:</label></th>
+    <td>{{ form.data_vklyucheniya_v_registr }}</td>
+</tr>
+<tr>
+    <th><label for="{{ form.ocenka_dejstvij_vracha_do_vyzova_smp.id_for_label }}">Оценка действий врача до вызова СМП:</label></th>
+    <td>{{ form.ocenka_dejstvij_vracha_do_vyzova_smp }}</td>
+</tr>
+<tr>
+    <th><label for="{{ form.ocenka_dejstvij_posle_vyzova_smp.id_for_label }}">Оценка действий после вызова СМП:</label></th>
+    <td>{{ form.ocenka_dejstvij_posle_vyzova_smp }}</td>
+</tr>
+<tr>
+    <th><label for="{{ form.analiz_dejstvij_glavnym_vrachom.id_for_label }}">Анализ действий главным врачом:</label></th>
+    <td>{{ form.analiz_dejstvij_glavnym_vrachom }}</td>
+</tr>
+<tr>
+    <th><label for="{{ form.vyvody_po_rezultatm_ocenki.id_for_label }}">Выводы по результатам оценки:</label></th>
+    <td>{{ form.vyvody_po_rezultatm_ocenki }}</td>
+</tr>
+<tr>
+    <th><label for="{{ form.ocenka_zaveduyushchego_proizvedena_korrektno.id_for_label }}">Оценка заведующего произведена корректно:</label></th>
+    <td>{{ form.ocenka_zaveduyushchego_proizvedena_korrektno }}</td>
+</tr>
+<tr>
+    <th><label for="{{ form.zhaloby_opisany_v_polnom_obeme.id_for_label }}">Жалобы описаны в полном объеме:</label></th>
+    <td>{{ form.zhaloby_opisany_v_polnom_obeme }}</td>
+</tr>
+<tr>
+    <th><label for="{{ form.ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu.id_for_label }}">Оценка состояния соответствует базовому плану:</label></th>
+    <td>{{ form.ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu }}</td>
+</tr>
+<tr>
+    <th><label for="{{ form.bazovyj_plan_naznachen_korrektno.id_for_label }}">Базовый план назначен корректно:</label></th>
+    <td>{{ form.bazovyj_plan_naznachen_korrektno }}</td>
+</tr>
+
+<!--  --------------------------------------->
+
+
+
+                        </table>
+                </fieldset>
+
+            </div>
+
+            <div>
+                <fieldset>
+                    <legend>Комментарии заведующего</legend>
+                        <fieldset>
+                            <legend>Данные из последнего протокола врача</legend>
+                                <table>
+                                    <tr>
+                                        <th><label for="{{ form.byl_li_ustanovlen_bazovyj_plan_na_poslednem_vizite.id_for_label }}">1. Был ли установлен базовый план на последнем визите?</label></th>
+                                        <td>{{ form.byl_li_ustanovlen_bazovyj_plan_na_poslednem_vizite }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu.id_for_label }}">2. Какая дата следующего визита врача согласно протоколу?</label></th>
+                                        <td>{{ form.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.kolichestvo_dnej_ot_proshlogo_vizita_vracha.id_for_label }}">Количество дней от прошлого визита врача</label></th>
+                                        <td>{{ form.kolichestvo_dnej_ot_proshlogo_vizita_vracha }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme.id_for_label }}">3. Отображены ли все жалобы пациента в полном объеме, включая те, что не связаны с вызовами СМП?</label></th>
+                                        <td>{{ form.otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.dinamika_sostoyaniya.id_for_label }}">4. Динамика состояния</label></th>
+                                        <td>{{ form.dinamika_sostoyaniya }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.data_naznachenogo_audioprotokola_soglasno_protokolu_v.id_for_label }}">5. Дата назначеного аудиопротокола согласно протоколу врача</label></th>
+                                        <td>{{ form.data_naznachenogo_audioprotokola_soglasno_protokolu_v }}</td>
+                                    </tr>
+                                </table>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Проверка заведующего</legend>
+                                <table>
+                                    <tr>
+                                        <th><label for="{{ form.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc.id_for_label }}">6. Дата получения сведений по вызовам СМП от КЦ</label></th>
+                                        <td>{{ form.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp.id_for_label }}">7. Дата аудиопротокола после получения данных о вызове СМП?</label></th>
+                                        <td>{{ form.data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover.id_for_label }}">Колчество дней  от момента получения данных по СМП до совершеня звонка</label></th>
+                                        <td>{{ form.kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya.id_for_label }}">8. Какова причина вызова СМП по резуьтатам аудиоконтроля?</label></th>
+                                        <td>{{ form.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.kakie_dejstviya_byli_predprinyaty_smp.id_for_label }}">9. Какие действия были предприняты СМП?</label></th>
+                                        <td>{{ form.kakie_dejstviya_byli_predprinyaty_smp }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.tekushchee_sostoyanie_pacienta_posle_vyzova_smp.id_for_label }}">10. Текущее состояние пациента после вызова СМП</label></th>
+                                        <td>{{ form.tekushchee_sostoyanie_pacienta_posle_vyzova_smp }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.ostalis_li_zhaloby_posle_vyzova_smp.id_for_label }}">11.Остались ли жалобы после вызова СМП? </label></th>
+                                        <td>{{ form.ostalis_li_zhaloby_posle_vyzova_smp }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.opisanie_zhalob.id_for_label }}">12. Описание жалоб </label></th>
+                                        <td>{{ form.opisanie_zhalob }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.byli_li_lekarstvennye_sredstva_otovareny_po_receptu.id_for_label }}">13. Были ли лекарственные средства отоварены по рецепту?</label></th>
+                                        <td>{{ form.byli_li_lekarstvennye_sredstva_otovareny_po_receptu }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.pacient_prinimaet_naznachennye_lekarstvennye_sredstva.id_for_label }}">14. Пациент принимает назначенные лекарственные средства?</label></th>
+                                        <td>{{ form.pacient_prinimaet_naznachennye_lekarstvennye_sredstva }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.ehffektivna_li_naznachennaya_medikamentoznaya_terapiya.id_for_label }}">15. Эффективна ли назначенная медикаментозная терапия?</label></th>
+                                        <td>{{ form.ehffektivna_li_naznachennaya_medikamentoznaya_terapiya }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.est_li_pobochnye_dejstviya_ot_naznachennykh_lekarstvennykh.id_for_label }}">16. Есть ли побочные действия от назначенных лекарственных средств?</label></th>
+                                        <td>{{ form.est_li_pobochnye_dejstviya_ot_naznachennykh_lekarstvennykh }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.pacientu_byla_ozvuchena_data_sleduyushchego_vizita.id_for_label }}">17. Пациенту была озвучена дата следующего визита?</label></th>
+                                        <td>{{ form.pacientu_byla_ozvuchena_data_sleduyushchego_vizita }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.pacientu_byli_predostavleny_kontaktnye_nomera_cpp.id_for_label }}">18. Пациенту были предоставлены контактные номера ЦПП?</label></th>
+                                        <td>{{ form.pacientu_byli_predostavleny_kontaktnye_nomera_cpp }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.pacient_zvonil_po_ukazannym_kontaktnym_nomera_do_vyzova_smp.id_for_label }}">19. Пациент звонил по указанным контактным номера до вызова СМП?</label></th>
+                                        <td>{{ form.pacient_zvonil_po_ukazannym_kontaktnym_nomera_do_vyzova_smp }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.prichina_po_kotoroj_pacient_ne_zvonil_po_ukazannym_nomeram.id_for_label }}">20. Причина по которой пациент не звонил по указанным номерам (при отсутствие звонка)</label></th>
+                                        <td>{{ form.prichina_po_kotoroj_pacient_ne_zvonil_po_ukazannym_nomeram }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.sootvetstvuet_li_naznachennyj_bazovyj_plan_sostoyaniyu_pacie.id_for_label }}">21. Соответствует ли назначенный базовый план состоянию пациента?</label></th>
+                                        <td>{{ form.sootvetstvuet_li_naznachennyj_bazovyj_plan_sostoyaniyu_pacie }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.trebovanie_gospitalizacii_na_dannyj_moment.id_for_label }}">22. Требуется ли госпитализация на данный момент?</label></th>
+                                        <td>{{ form.trebovanie_gospitalizacii_na_dannyj_moment }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ form.vyyavlennye_defekty_v_rabote_vracha.id_for_label }}">23. Выявленные дефекты в работе врача</label></th>
+                                        <td>{{ form.vyyavlennye_defekty_v_rabote_vracha }}</td>
+                                    </tr>
+                                </table>
+                        </fieldset>
+
+                </fieldset>
+            </div>
+
+
+        </div>
+
+        <!-- Горизонтальная линия -->
+        <!-- Горизонтальная линия -->
+        <div class="separator"></div>
+
+<!-- Блок с дополнительными полями -->
+
+
+                <div class="separator"></div>
+<!-- Блок с дополнительными полями -->
+
+
+        <div class="separator"></div>
+
+<!-- Блок с дополнительными полями -->
+
+<!-- Кнопка отправки и ссылка на отмену -->
+
+        <button type="submit">Сохранить изменения</button>
+        <a href="{% url 'home' %}">Отмена</a>
+    </form>
+
+
+{% endblock %}
+
+
+
+
+
+

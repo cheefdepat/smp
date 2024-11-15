@@ -1,0 +1,33 @@
+<!-- child.html -->
+{% extends "edit_pacient_base.html" %}
+
+
+{% block content %}
+
+
+    <form method="POST">
+        {% csrf_token %}
+<form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+     <table>
+            <tr>
+                <th><label for="{{ field.label.id_for_label }}">{{field.label}}:</label></th>
+
+           {{ field.label }}: {{ field }}  <!-- Отображаем метку и поле -->
+
+           <td>{{ field }}</td>
+           </tr>
+        {% endfor %}
+         </table>
+
+    <button type="submit">Сохранить</button>
+</form>
+
+        <button type="submit">Сохранить изменения</button>
+        <a href="{% url 'home' %}">Отмена</a>
+
+
+
+{% endblock %}
+

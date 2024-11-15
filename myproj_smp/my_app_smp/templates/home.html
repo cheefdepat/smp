@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Данные из БД</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <script>
+            function submitForm() {
+                document.getElementById('searchForm').submit();
+            }
+        </script>
+</head>
+<body>
+   <header>
+        <h4>Данные из таблицы СМП</h4>
+        <div style="text-align: right; margin-top: -30px; margin-bottom: 20px;">
+            <strong>Общее количество записей: {{ total_records }}</strong>
+        </div>
+       Вы авторизованы как " {{user}} "<br>
+<!--       ** @2 {{groups}} ****<br>-->
+<!--       ** @3 {{group_names}} ****<br>-->
+<!--       ** @4 {{group}} ****<br>-->
+<!--       ** @5 {{request.user.groups}} ****<br>-->
+<!--       ** @6 {{user.groups.all}} ****<br>-->
+<!--       ** @7 {{user.groups.filter.values}} ****<br>-->
+
+<!--     4  {{user.groups.values.0.name}}<br>-->
+<!--     5  {{user.groups.1.name}}<br>-->
+
+<!--       {% if user.groups.values.0.name == 'vps' or user.groups.values.3.name == 'admin' %}-->
+<!--              @@@{{user}}-->
+<!--       {% else  %}-->
+<!--       ++++++www-->
+<!--       {% endif  %}-->
+
+    </header>
+
+    <nav>
+        <a href="{% url 'home' %}" class="btn">Главная</a>
+        <a href="#" class="btn">КЭР</a>
+        <a href="#" class="btn">Контакты</a>
+        <a href="#" class="btn">Помощь</a>
+        <a href="/login/" class="btn">Авторизация</a>
+       <a  href="{% url 'logout' %}" class="btn">Выход</a>
+
+
+    </nav>
+
+
+    <!-- Форма поиска и количество записей на странице -->
+    <form method="GET" action="" class="search-container">
+        <input type="text" name="search_fio" placeholder="Введите фамилию пациента" value="{{ search_fio }}">
+
+        <select name="search_kurir" onchange="submitForm()">
+        <option value="">Все ВПС</option>
+                    {% for kurir in unique_kurir %}
+                        <option value="{{ kurir }}" {% if kurir == search_kurir %}selected{% endif %}>{{ kurir }}</option>
+                    {% endfor %}
+        </select>
+
+        <input type="number" name="records_per_page" placeholder="Записей на странице" value="{{ records_per_page }}" min="1">
+        <button type="submit">Поиск</button>
+    </form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Действия</th>  <!-- Изменено на "Действия" для ясности -->
+            <th>№ п/п</th>
+            <th>Дата вызова SMP</th>
+            <th>FIO пациента</th>
+            <th>Количество выездов в день</th>
+            <th>Дата рождения</th>
+            <th>Полис ОМС</th>
+            <th>Результат вызова</th>
+            <th>Актив / Пассив</th>
+            <th>Диагноз по МКБ</th>
+            <th>Причина вызова скорой помощи</th>
+            <th>Наличие болевого синдрома</th>
+            <th>Причина вызова скорой помощи (кратко)</th>
+            <th>Курирующее подразделение ОВПП</th>
+            <th>Дата включения в регистр</th>
+            <th>Дата последнего визита врача из протокола осмотра EMIAS</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in data_smp %}
+            <tr>
+                <td>
+
+                    <a href="{% url 'patient_detail' item.id %}">Пациент</a> <!-- Ссылка на детали -->
+                    {% if user.is_authenticated %}
+                    {% if user.groups.values.0.name == 'vps' or user.groups.values.2.name == 'admin' %}
+                    <a href="{% url 'edit_patient' item.id %}">Данные ВПС</a> <!-- Ссылка на редактирование -->
+                    {% endif  %}
+                 {% if user.groups.values.0.name == 'ker' or user.groups.values.2.name == 'admin' %}
+                    <a href="{% url 'edit_ker' item.id %}">Данные КЭР</a><!-- Ссылка на редактирование -->
+                    {% endif  %}
+                    {% endif  %}
+                </td>
+                <td>{{ item.p_p }}</td>
+                <td>{{ item.data_vyzova_smp }}</td>
+                <td>{{ item.fio_pacienta }}</td>
+                <td>{{ item.kolichestvo_vyezdov_v_den }}</td>
+                <td>{{ item.data_rozhdeniya }}</td>
+                <td>{{ item.polis_oms }}</td>
+                <td>{{ item.rezultat_vyzova }}</td>
+                <td>{{ item.aktiv_passiv }}</td>
+                <td>{{ item.diagnoz_po_mkb }}</td>
+                <td>{{ item.prichina_vyzova_skoroiy_pomoschi }}</td>
+                <td>{{ item.nalichie_bolevogo_sindroma }}</td>
+                <td>{{ item.prichina_vyzova_skoroiy_pomoschi_kratko }}</td>
+                <td>{{ item.kuriruyushchee_podrazdelenie_ovpp }}</td>
+                <td>{{ item.data_vklyucheniya_v_registr }}</td>
+                <td>{{ item.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+    <!-- Пагинация -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if data_smp.has_previous %}
+                <a href="?page=1">&laquo; Первая</a>
+                <a href="?page={{ data_smp.previous_page_number }}">Предыдущая</a>
+            {% endif %}
+
+            <span class="current">
+                Страница {{ data_smp.number }} из {{ data_smp.paginator.num_pages }}.
+            </span>
+
+            {% if data_smp.has_next %}
+                <a href="?page={{ data_smp.next_page_number }}">Следующая</a>
+                <a href="?page={{ data_smp.paginator.num_pages }}">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 ЦПП. Все права защищены.</p>
+    </footer>
+</body>
+</html>

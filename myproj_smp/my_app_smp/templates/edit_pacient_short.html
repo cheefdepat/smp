@@ -1,0 +1,251 @@
+{% extends "edit_pacient_base.html" %}
+
+
+{% block content %}
+
+    <form method="POST">
+    <a href="{% url 'home' %}" class="btn">Назад к списку пациентов </a>  <br>
+        <a href="{% url 'send_to_ker' patient.id  %}" class="btn">Отправить в КЭР </a>  <br>
+
+        <button type="submit">Сохранить</button>
+
+
+        {% csrf_token %}
+
+        <div class="field-group-2-columns">
+            <div>
+                <fieldset >
+                    <legend>Данные по вызову СМП</legend>
+                    <table >
+                        <tr>
+                            <th >Дата вызова СМП:</th>
+                            <td > {{ patient.p_p }} </td>
+                        </tr>
+                        <tr>
+                            <th >№ п/п:</th>
+                            <td > {{ patient.data_vyzova_smp }} </td>
+                        </tr>
+                        <tr>
+                            <th>ФИО пациента:</th>
+                            <td> {{ patient.fio_pacienta  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Количество выездов в день:</th>
+                            <td> {{ patient.kolichestvo_vyezdov_v_den  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Дата рождения:</th>
+                            <td> {{ patient.data_rozhdeniya  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Полис ОМ:</th>
+                            <td> {{ patient.polis_oms  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Результат вызова:</th>
+                            <td> {{ patient.rezultat_vyzova  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Актив / Пассив:</th>
+                            <td> {{ patient.aktiv_passiv  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Диагноз по MКБ:</th>
+                            <td> {{ patient.diagnoz_po_mkb  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Причина вызова скорой помощи:</th>
+                            <td> {{ patient.prichina_vyzova_skoroiy_pomoschi  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Наличие болевого синдрома:</th>
+                            <td> {{ patient.nalichie_bolevogo_sindroma  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Причина вызова скорой помощи (кратко):</th>
+                            <td> {{ patient.prichina_vyzova_skoroiy_pomoschi_kratko  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Курирующее подразделение ОВПП:</th>
+                            <td> {{ patient.kuriruyushchee_podrazdelenie_ovpp  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Дата включения в Регистр:</th>
+                            <td> {{ patient.data_vklyucheniya_v_registr  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Дата последнего визита врача из протокола осмотра ЕМИАС:</th>
+                            <td> {{ patient.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>ФИО врача:</th>
+                            <td> {{ patient.fio_vracha  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Сравнение "Повода вызова СМП" с Протоколами врача ЦПП выездов ДО и ПОСЛЕ вызова СМП:</th>
+                            <td> {{ patient.sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Действия ЦПП:</th>
+                            <td> {{ patient.dejstviya_cpp  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Контроль исполнения назначенных врачом ЦПП рекомендаций:</th>
+                            <td> {{ patient.kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>Вывод:</th>
+                            <td> {{ patient.vyvod  }}  </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </div>
+            <div>
+                <fieldset>
+                    <legend>Поля для внесения данных</legend>
+                    <fieldset>
+                        <legend>Данные из последнего протокола врача</legend>
+                        <table>
+                            <tr>
+                                <th>1. Был ли установлен базовый план на последнем визите?</th>
+                                <td><input type="text" name="byl_li_ustanovlen_bazovyj_plan_na_poslednem_vizite"  value="{{ patient.byl_li_ustanovlen_bazovyj_plan_na_poslednem_vizite }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>2. Какая дата следующего визита врача согласно протоколу?</th>
+                                <td><input type="date" name="kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu" value="{{ patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu|date:'Y-m-d' }}" > </td>
+                            </tr>
+                            <tr>
+                                <th>Количество дней от прошлого визита врача:</th>
+                                <td>{{ dni }}  </td>
+                            </tr>
+                            <tr>
+                                <th>3. Отображены ли все жалобы пациента в полном объеме, включая те, что не связаны с вызовами СМП?</th>
+                                <td><input list="da_net" name="otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme"  value="{{ patient.otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme }}" >
+                                    <datalist id="da_net">
+                                        <option value="Да">
+                                        <option value="Нет">
+                                    </datalist>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>4. Динамика состояния</th>
+                                <td><input type="text" name="dinamika_sostoyaniya"  value="{{ patient.dinamika_sostoyaniya }}" > </td>
+                            </tr>
+                            <tr>
+                                <th>5. Дата назначеного аудиопротокола согласно протокола врача</th>
+                                <td><input type="date" name="data_naznachenogo_audioprotokola_soglasno_protokolu_v"  value="{{ patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v|date:'Y-m-d' }}" > </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    </br>
+                    <fieldset>
+                        <legend>Проверка заведующего</legend>
+                        <table>
+                            <tr>
+                                <th>6. Дата получения сведений по вызовам СМП от КЦ</th>
+                                <td><input type="date" name="data_polucheniya_svedenij_po_vyzovam_smp_ot_kc"  value="{{ patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc|date:'Y-m-d' }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>7. Дата аудиопротокола после получения данных о вызове СМП?</th>
+                                <td><input type="date" name="data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp"  value="{{ patient.data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp|date:'Y-m-d' }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>Колчество дней  от момента получения данных по СМП до совершеня звонка</th>
+                                <td>{{ dni_zvon }}</td>
+                            </tr>
+                            <tr>
+                                <th>8. Какова причина вызова СМП по резуьтатам аудиоконтроля?</th>
+                                <td><input type="text" name="kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya"  value="{{ patient.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>9. Какие действия были предприняты СМП?</th>
+                                <td><input type="text" name="kakie_dejstviya_byli_predprinyaty_smp"  value="{{ patient.kakie_dejstviya_byli_predprinyaty_smp }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>10. Текущее состояние пациента после вызова СМП</th>
+                                <td><input type="text" name="tekushchee_sostoyanie_pacienta_posle_vyzova_smp"  value="{{ patient.tekushchee_sostoyanie_pacienta_posle_vyzova_smp }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>11.Остались ли жалобы после вызова СМП?</th>
+                                <td><input list="da_net" name="ostalis_li_zhaloby_posle_vyzova_smp"  value="{{ patient.ostalis_li_zhaloby_posle_vyzova_smp }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>12. Описание жалоб</th>
+                                <td><input type="text" name="opisanie_zhalob"  value="{{ patient.opisanie_zhalob }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>13. Были ли лекарственные средства отоварены по рецепту?</th>
+                                <td><input list="da_net" name="byli_li_lekarstvennye_sredstva_otovareny_po_receptu"  value="{{ patient.byli_li_lekarstvennye_sredstva_otovareny_po_receptu }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>14. Пациент принимает назначенные лекарственные средства?</th>
+                                <td><input list="da_net" name="pacient_prinimaet_naznachennye_lekarstvennye_sredstva"  value="{{ patient.pacient_prinimaet_naznachennye_lekarstvennye_sredstva }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>15. Эффективна ли назначенная медикаментозная терапия?</th>
+                                <td><input list="da_net" name="ehffektivna_li_naznachennaya_medikamentoznaya_terapiya"  value="{{ patient.ehffektivna_li_naznachennaya_medikamentoznaya_terapiya }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>16. Есть ли побочные действия от назначенных лекарственных средств?</th>
+                                <td><input list="da_net" name="est_li_pobochnye_dejstviya_ot_naznachennykh_lekarstvennykh"  value="{{ patient.est_li_pobochnye_dejstviya_ot_naznachennykh_lekarstvennykh }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>17. Пациенту была озвучена дата следующего визита?</th>
+                                <td><input list="da_net" name="pacientu_byla_ozvuchena_data_sleduyushchego_vizita"  value="{{ patient.pacientu_byla_ozvuchena_data_sleduyushchego_vizita }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>18. Пациенту были предоставлены контактные номера ЦПП?</th>
+                                <td><input list="da_net" name="pacientu_byli_predostavleny_kontaktnye_nomera_cpp"  value="{{ patient.pacientu_byli_predostavleny_kontaktnye_nomera_cpp }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>19. Пациент звонил по указанным контактным номера до вызова СМП?</th>
+                                <td><input list="da_net" name="pacient_zvonil_po_ukazannym_kontaktnym_nomera_do_vyzova_smp"  value="{{ patient.pacient_zvonil_po_ukazannym_kontaktnym_nomera_do_vyzova_smp }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>20. Причина по которой пациент не звонил по указанным номерам (при отсутствие звонка)</th>
+                                <td><input type="text" name="prichina_po_kotoroj_pacient_ne_zvonil_po_ukazannym_nomeram"  value="{{ patient.prichina_po_kotoroj_pacient_ne_zvonil_po_ukazannym_nomeram }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>21. Соответствует ли назначенный базовый план состоянию пациента?</th>
+                                <td><input list="da_net" name="sootvetstvuet_li_naznachennyj_bazovyj_plan_sostoyaniyu_pacie"  value="{{ patient.sootvetstvuet_li_naznachennyj_bazovyj_plan_sostoyaniyu_pacie }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>22. Требуется ли госпитализация на данный момент?</th>
+                                <td><input list="da_net" name="trebovanie_gospitalizacii_na_dannyj_moment"  value="{{ patient.trebovanie_gospitalizacii_na_dannyj_moment }}" ></td>
+                            </tr>
+                            <tr>
+                                <th>23. Выявленные дефекты в работе врача</th>
+                                <td><input type="text" name="vyyavlennye_defekty_v_rabote_vracha"  value="{{ patient.vyyavlennye_defekty_v_rabote_vracha }}" ></td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </fieldset>
+            </div>
+        </div>
+
+
+
+
+
+            <!--        <input type="text" name="kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu"  value="{{ patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu }}" >-->
+
+            <!--            <label>FIO пациента:</label>-->
+            <!--            <input type="text" value="{{ patient.fio_pacienta }}" readonly>-->
+            <!--        </div>-->
+            <!--        <div>-->
+            <!--            <label>Дата вызова SMP:</label>-->
+            <!--            <input type="text" value="{{ patient.data_vyzova_smp }}" readonly>-->
+            <!--        </div>-->
+            <!--        <div>-->
+            <!--            <label>Полис ОМС:</label>-->
+            <!--            <input type="text" name="polis_oms"  value="{{ patient.polis_oms }}" >-->
+            <!--        </div>-->
+            <!--        <div>-->
+            <!--            <label>Причина вызова:</label>-->
+            <!--            <input type="text" name="kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya" value="{{ patient.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya }}">-->
+            <!--        </div>-->
+        </br>
+
+    </form>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Детали пациента</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Детали пациента</h1>
+    </header>
+
+    <div>
+        <h2>Информация о пациенте</h2>
+        <table>
+            <tr>
+                <th>Дата вызова SMP</th>
+                <td>{{ patient.data_vyzova_smp }}</td>
+            </tr>
+            <tr>
+                <th>FIO пациента</th>
+                <td>{{ patient.fio_pacienta }}</td>
+            </tr>
+            <tr>
+                <th>Количество выездов в день</th>
+                <td>{{ patient.kolichestvo_vyezdov_v_den }}</td>
+            </tr>
+            <tr>
+                <th>Дата рождения</th>
+                <td>{{ patient.data_rozhdeniya }}</td>
+            </tr>
+            <tr>
+                <th>Полис ОМС</th>
+                <td>{{ patient.polis_oms }}</td>
+            </tr>
+            <tr>
+                <th>Результат вызова</th>
+                <td>{{ patient.rezultat_vyzova }}</td>
+            </tr>
+            <tr>
+                <th>Актив / Пассив</th>
+                <td>{{ patient.aktiv_passiv }}</td>
+            </tr>
+            <tr>
+                <th>Диагноз по МКБ</th>
+                <td>{{ patient.diagnoz_po_mkb }}</td>
+            </tr>
+            <tr>
+                <th>Причина вызова скорой помощи</th>
+                <td>{{ patient.prichina_vyzova_skoroiy_pomoschi }}</td>
+            </tr>
+            <tr>
+                <th>Наличие болевого синдрома</th>
+                <td>{{ patient.nalichie_bolevogo_sindroma }}</td>
+            </tr>
+            <tr>
+                <th>Причина вызова скорой помощи (кратко)</th>
+                <td>{{ patient.prichina_vyzova_skoroiy_pomoschi_kratko }}</td>
+            </tr>
+            <tr>
+                <th>Курирующее подразделение ОВПП</th>
+                <td>{{ patient.kuriruyushchee_podrazdelenie_ovpp }}</td>
+            </tr>
+            <tr>
+                <th>Дата включения в регистр</th>
+                <td>{{ patient.data_vklyucheniya_v_registr }}</td>
+            </tr>
+            <tr>
+                <th>Дата последнего визита врача из протокола осмотра EMIAS</th>
+                <td>{{ patient.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Кнопка "Вернуться назад" -->
+    <div style="margin-top: 20px;">
+        <a href="{% url 'home' %}" class="btn">Вернуться назад</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 ЦПП. Все права защищены.</p>
+    </footer>
+</body>
+</html>

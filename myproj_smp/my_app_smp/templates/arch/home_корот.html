@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Данные из БД</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Данные из таблицы СМП</h1>
+    </header>
+
+    <nav>
+        <a href="#">Главная</a>
+        <a href="#">О нас</a>
+        <a href="#">Контакты</a>
+        <a href="#">Помощь</a>
+    </nav>
+
+    <table>
+        <thead>
+            <tr>
+        <th>Дата вызова SMP</th>
+        <th>FIO пациента</th>
+        <th>Количество выездов в день</th>
+        <th>Дата рождения</th>
+        <th>Полис ОМС</th>
+        <th>Результат вызова</th>
+        <th>Актив / Пассив</th>
+        <th>Диагноз по МКБ</th>
+        <th>Причина вызова скорой помощи</th>
+        <th>Наличие болевого синдрома</th>
+        <th>Причина вызова скорой помощи (кратко)</th>
+        <th>Курирующее подразделение ОВПП</th>
+        <th>Дата включения в регистр</th>
+        <th>Дата последнего визита врача из протокола осмотра EMIAS</th>
+
+
+
+        </tr>
+        {% for item in data_smp %}
+            <tr>
+                <td>{{ item.data_vyzova_smp }}</td>
+                <td>{{ item.fio_pacienta }}</td>
+                <td>{{ item.kolichestvo_vyezdov_v_den }}</td>
+                <td>{{ item.data_rozhdeniya }}</td>
+                <td>{{ item.polis_oms }}</td>
+                <td>{{ item.rezultat_vyzova }}</td>
+
+                <td>{{ item.aktiv_passiv }}</td>
+                <td>{{ item.diagnoz_po_mkb }}</td>
+                <td>{{ item.prichina_vyzova_skoroiy_pomoschi }}</td>
+                <td>{{ item.nalichie_bolevogo_sindroma }}</td>
+                <td>{{ item.prichina_vyzova_skoroiy_pomoschi_kratko }}</td>
+                <td>{{ item.kuriruyushchee_podrazdelenie_ovpp }}</td>
+                <td>{{ item.data_vklyucheniya_v_registr }}</td>
+                <td>{{ item.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias }}</td>
+
+
+        </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <footer>
+        <p>&copy; 2024 ЦПП. Все права защищены.</p>
+    </footer>
+</body>
+</html>

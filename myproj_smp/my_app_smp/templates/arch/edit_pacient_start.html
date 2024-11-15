@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать запись пациента</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <style>
+        .field-group-6-columns {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* 6 колонки */
+            gap: 20px; /* Промежуток между колонками */
+            margin-bottom: 20px;
+        }
+        .separator {
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+        }
+        label {
+            display: block; /* Каждое поле будет на новой строке */
+            margin-bottom: 5px; /* Отступ между меткой и полем */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>Редактировать запись пациента</h2>
+    </header>
+
+    <nav>
+        <a href="{% url 'home' %}">Главная</a>
+        <a href="#">О нас</a>
+        <a href="#">Контакты</a>
+        <a href="#">Помощь</a>
+    </nav>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- Блок с основными полями -->
+        <div class="field-group-6-columns">
+            <div>   <label for="{{ form.data_vyzova_smp.id_for_label }}">Дата вызова СМП:</label>
+                {{ form.data_vyzova_smp }}
+                    <label for="{{ form.fio_pacienta.id_for_label }}">ФИО пациента:</label>
+                {{ form.fio_pacienta }}
+            </div>
+            <div>                <label for="{{ form.kolichestvo_vyezdov_v_den.id_for_label }}">Количество выездов в день:</label>
+                {{ form.kolichestvo_vyezdov_v_den }}            </div>
+            <div>                <label for="{{ form.data_rozhdeniya.id_for_label }}">Дата рождения:</label>
+                {{ form.data_rozhdeniya }}            </div>
+            <div>                <label for="{{ form.polis_oms.id_for_label }}">Полис ОМС:</label>
+                {{ form.polis_oms }}            </div>
+            <div>                <label for="{{ form.rezultat_vyzova.id_for_label }}">Результат вызова:</label>
+                {{ form.rezultat_vyzova }}            </div>
+            <div>                <label for="{{ form.aktiv_passiv.id_for_label }}">Актив / Пассив:</label>
+                {{ form.aktiv_passiv }}            </div>
+            <div>                <label for="{{ form.diagnoz_po_mkb.id_for_label }}">Диагноз по МКБ:</label>
+                {{ form.diagnoz_po_mkb }}            </div>
+             <div>                <label for="{{ form.kuriruyushchee_podrazdelenie_ovpp.id_for_label }}">Курирующее подразделение ОВПП:</label>
+                {{ form.kuriruyushchee_podrazdelenie_ovpp }}            </div>
+            <div>                <label for="{{ form.nalichie_bolevogo_sindroma.id_for_label }}">Наличие болевого синдрома:</label>
+                {{ form.nalichie_bolevogo_sindroma }}            </div>
+            <div>                <label for="{{ form.prichina_vyzova_skoroiy_pomoschi.id_for_label }}">Причина вызова скорой помощи:</label>
+                {{ form.prichina_vyzova_skoroiy_pomoschi }}            </div>
+            <div>               <label for="{{ form.prichina_vyzova_skoroiy_pomoschi_kratko.id_for_label }}">Причина вызова скорой помощи (кратко):</label>
+                {{ form.prichina_vyzova_skoroiy_pomoschi_kratko }}   </div>
+            <div>               <label for="{{ form.fio_vracha.id_for_label }}">fio_vracha:</label>
+                {{ form.fio_vracha }}   </div>
+            <div>               <label for="{{ form.sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle.id_for_label }}">
+                Сравнение "Повода вызова СМП" с Протоколами врача ЦПП выездов ДО и ПОСЛЕ вызова СМП            </label>
+                {{ form.sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle }}   </div>
+            <div>               <label for="{{ form.dejstviya_cpp.id_for_label }}">Действия ЦПП:</label>
+                {{ form.dejstviya_cpp }}   </div>
+            <div>               <label for="{{ form.kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij.id_for_label }}">Контроль исполнения назначенных врачом ЦПП рекомендаций:</label>
+                {{ form.kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij }}   </div>
+            <div>               <label for="{{ form.vyvod.id_for_label }}">Вывод:</label>
+                {{ form.vyvod }}   </div>
+           </div>
+
+        <!-- Горизонтальная линия -->
+        <!-- Горизонтальная линия -->
+        <div class="separator"></div>
+
+<!-- Блок с дополнительными полями -->
+<div class="field-group-6-columns">
+    <div>        <label for="{{ form.byl_li_ustanovlen_bazovyj_plan_na_poslednem_vizite.id_for_label }}">Был ли установлен базовый план на последнем визите:</label>
+        {{ form.byl_li_ustanovlen_bazovyj_plan_na_poslednem_vizite }}    </div>
+    <div>        <label for="{{ form.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu.id_for_label }}">Какая дата следующего визита врача согласно протоколу:</label>
+        {{ form.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu }}    </div>
+    <div>        <label for="{{ form.kolichestvo_dnej_ot_proshlogo_vizita_vracha.id_for_label }}">Количество дней от прошлого визита врача:</label>
+        {{ form.kolichestvo_dnej_ot_proshlogo_vizita_vracha }}    </div>
+    <div>        <label for="{{ form.otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme.id_for_label }}">Отображены ли все жалобы пациента в полном объеме:</label>
+        {{ form.otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme }}    </div>
+    <div>        <label for="{{ form.dinamika_sostoyaniya.id_for_label }}">Динамика состояния:</label>
+        {{ form.dinamika_sostoyaniya }}    </div>
+    <div>        <label for="{{ form.data_naznachenogo_audioprotokola_soglasno_protokolu_v.id_for_label }}">Дата назначенного аудиопротокола согласно протоколу:</label>
+        {{ form.data_naznachenogo_audioprotokola_soglasno_protokolu_v }}    </div>
+</div>
+
+                <div class="separator"></div>
+<!-- Блок с дополнительными полями -->
+
+
+        <div class="separator"></div>
+
+<!-- Блок с дополнительными полями -->
+
+<!-- Кнопка отправки и ссылка на отмену -->
+
+        <button type="submit">Сохранить изменения</button>
+        <a href="{% url 'home' %}">Отмена</a>
+    </form>
+
+    <footer>
+        <p>&copy; 2024 ЦПП. Все права защищены.</p>
+    </footer>
+</body>
+</html>

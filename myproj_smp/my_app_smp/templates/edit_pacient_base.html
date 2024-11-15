@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать запись пациента</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+
+</head>
+<body>
+    <header>
+        <h2>Редактировать запись пациента</h2>
+    </header>
+
+    <nav>
+        <a href="{% url 'home' %}" class="btn">Главная</a>
+        <a href="{% url 'home' %}" class="btn">О нас</a>
+        <a href="{% url 'home' %}" class="btn">Контакты</a>
+        <a href="{% url 'home' %}" class="btn">Помощь</a>
+    </nav>
+
+        <main>
+        {% block content %}
+        <!-- Основной контент будет вставлен сюда -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 ЦПП. Все права защищены.</p>
+    </footer>
+</body>
+</html>

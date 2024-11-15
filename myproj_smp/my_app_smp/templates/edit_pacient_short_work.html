@@ -1,0 +1,41 @@
+<!-- edit_pacient.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать пациента</title>
+</head>
+<body>
+    <h1>Редактировать данные пациента</h1>
+    <form method="POST">
+        {% csrf_token %}
+
+        <div>
+            <label>FIO пациента:</label>
+            <input type="text" value="{{ patient.fio_pacienta }}" disabled>
+        </div>
+        <div>
+            <label>Дата вызова SMP:</label>
+            <input type="text" value="{{ patient.data_vyzova_smp }}" readonly>
+        </div>
+        <div>
+            <label>Полис ОМС:</label>
+            <input type="text" value="{{ patient.polis_oms }}" readonly>
+        </div>
+<!--        <div>-->
+<!--            <label>Причина вызова:</label>-->
+<!--            <input type="text" name="kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya" value="{{ patient.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya }}">-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <label>Выводы по результатам оценки:</label>-->
+<!--            <input type="text" name="vyvody_po_rezultatm_ocenki" value="{{ patient.vyvody_po_rezultatm_ocenki }}">-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <label>Жалобы:</label>-->
+<!--            <input type="text" name="zhaloby_opisany_v_polnom_obeme" value="{{ patient.zhaloby_opisany_v_polnom_obeme }}">-->
+<!--        </div>-->
+        <button type="submit">Сохранить</button>
+    </form>
+    <a href="{% url 'home' %}">Назад к списку пациентов</a>
+</body>
+</html>

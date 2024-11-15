@@ -1,0 +1,83 @@
+{% extends "edit_pacient_base.html" %}
+
+
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu|date:'Y-m-d' }}
+        {{ patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu }}
+<div class="field-group-2-columns">
+            <div>
+                <fieldset >
+                    <legend>Данные по пациенту</legend>
+                        <table >
+                            <tr>
+<th >Дата вызова СМП:</th>
+<td > {{ patient.data_vyzova_smp }} </td>
+</tr>
+<tr><th>ФИО пациента:</th><td> {{ patient.fio_pacienta  }}  </td></tr>
+<tr><th>Дата рождения:</th><td> {{ patient.data_rozhdeniya  }}  </td></tr>
+<tr><th>Количество выездов в день:</th><td> {{ patient.kolichestvo_vyezdov_v_den  }}  </td></tr>
+<tr><th>Полис ОМ:</th><td> {{ patient.polis_oms  }}  </td></tr>
+<tr><th>Результат вызова:</th><td> {{ patient.rezultat_vyzova  }}  </td></tr>
+                        </table>
+                </fieldset>
+            </div>
+    <div>
+                <fieldset >
+                    <legend>Данные по пациенту</legend>
+                        <table >
+<tr><th>1. Был ли установлен базовый план на последнем визите?</th><td >
+    <input type="text" name="byl_li_ustanovlen_bazovyj_plan_na_poslednem_vizite"  value="{{ patient.byl_li_ustanovlen_bazovyj_plan_na_poslednem_vizite }}" > </td></tr>
+<tr><th>2. Какая дата следующего визита врача согласно протоколу?</th><td>
+          <input type="date"
+                 name="kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu"
+                 value="{{ patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu|date:'Y-m-d' }}" > </td></tr>
+
+<tr><th>Количество дней от прошлого визита врача:</th><td>
+<!--            <input type="text" name="kolichestvo_dnej_ot_proshlogo_vizita_vracha"  value="{{ patient.kolichestvo_dnej_ot_proshlogo_vizita_vracha }}" > </td></tr>-->
+            {{ dni }}  </td></tr>
+<tr><th>3. Отображены ли все жалобы пациента в полном объеме, включая те, что не связаны с вызовами СМП?</th><td>
+            <input type="text" name="otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme"  value="{{ patient.otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme }}" > </td></tr>
+<tr><th>4. Динамика состояния</th><td>
+             <input type="text" name="dinamika_sostoyaniya"  value="{{ patient.dinamika_sostoyaniya }}" > </td></tr>
+<tr><th>5. Дата назначеного аудиопротокола согласно протокола врача</th><td>
+            <input type="date" name="data_naznachenogo_audioprotokola_soglasno_protokolu_v"  value="{{ patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v|date:'Y-m-d' }}" > </td></tr>
+                        </table>
+                </fieldset>
+            </div>
+</div>
+
+
+
+
+
+<!--        <input type="text" name="kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu"  value="{{ patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu }}" >-->
+
+<!--            <label>FIO пациента:</label>-->
+<!--            <input type="text" value="{{ patient.fio_pacienta }}" readonly>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <label>Дата вызова SMP:</label>-->
+<!--            <input type="text" value="{{ patient.data_vyzova_smp }}" readonly>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <label>Полис ОМС:</label>-->
+<!--            <input type="text" name="polis_oms"  value="{{ patient.polis_oms }}" >-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <label>Причина вызова:</label>-->
+<!--            <input type="text" name="kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya" value="{{ patient.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya }}">-->
+<!--        </div>-->
+        <div>
+            <label>Выводы по результатам оценки:</label>
+            <input type="text" name="vyvody_po_rezultatm_ocenki" value="{{ patient.vyvody_po_rezultatm_ocenki }}">
+        </div>
+        <div>
+            <label>Жалобы:</label>
+            <input type="text" name="zhaloby_opisany_v_polnom_obeme" value="{{ patient.zhaloby_opisany_v_polnom_obeme }}">
+        </div>
+        <button type="submit">Сохранить</button>
+    </form>
+    <a href="{% url 'home' %}">Назад к списку пациентов</a>
+{% endblock %}
