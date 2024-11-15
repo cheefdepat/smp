@@ -112,7 +112,7 @@ def edit_patient(request, id):
 
     if patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc and patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v:
         dni_zvon =  patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc - patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v
-    else: dni_zvon = 'нет звонка или врача'
+    else: dni_zvon = 'нет звонка или  врача'
 
 
     if request.method == 'POST':
