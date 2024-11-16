@@ -95,7 +95,7 @@ def home(request):
         'records_per_page': records_per_page,
         'total_records': total_records,  # Передаем общее количество записей
         'unique_kurir': unique_kurir,  # Передаем уникальные значения в контекст
-        # 'groups': groups_, # Получаем все группы
+        'groups': user_groups_list, # Получаем все группы
     })
 
 def patient_detail(request, id):
