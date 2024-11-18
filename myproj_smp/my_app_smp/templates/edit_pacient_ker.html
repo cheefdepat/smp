@@ -3,10 +3,11 @@
 
 {% block content %}
     <form method="POST">
+        <a href="{% url 'home' %}" class="btn_save">Назад к списку пациентов </a> 
+        <button class="btn_save" type="submit">Сохранить</button>        
+
         {% csrf_token %}
-        {{ patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu|date:'Y-m-d' }}
-        {{ patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu }}
-        
+                
         <div class="field-group-2-columns">            
             <div>
                 <fieldset >
@@ -94,6 +95,7 @@
                         </tr>
                     </table>
                 </fieldset>
+            </br>
                 <fieldset >
                     <legend>Данные от Заведующего</legend>
                     <table>
@@ -206,7 +208,7 @@
                     <table>
                         <tr>
                             <th>Базовый план назначен корректно</th>
-                            <td><input list="da_net" name="bazovyj_plan_naznachen_korrektno"  value="{{ patient.bazovyj_plan_naznachen_korrektno }}" >
+                            <td><input list="da_net" name="bazovyj_plan_naznachen_korrektno"  value="{{ patient.bazovyj_plan_naznachen_korrektno }}" required pattern="Да|Нет">
                                 <datalist id="da_net">
                                     <option value="Да">
                                     <option value="Нет">                                
@@ -215,15 +217,15 @@
                         </tr>
                         <tr>
                             <th>Оценка состояния соответствует базовому плану</th>
-                            <td><input list="da_net" name="ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu" value="{{ patient.ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu }}" > </td>
+                            <td><input list="da_net" name="ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu" value="{{ patient.ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu }}" required pattern="Да|Нет"> </td>
                         </tr>
                         <tr>
                             <th>Жалобы описаны в полном объёме</th>
-                            <td><input list="da_net" name="zhaloby_opisany_v_polnom_obeme" value="{{ patient.zhaloby_opisany_v_polnom_obeme }}" > </td>
+                            <td><input list="da_net" name="zhaloby_opisany_v_polnom_obeme" value="{{ patient.zhaloby_opisany_v_polnom_obeme }}" required pattern="Да|Нет"> </td>
                         </tr>
                         <tr>
                             <th>Оценка заведующего произведена корректно</th>
-                            <td><input list="da_net" name="ocenka_zaveduyushchego_proizvedena_korrektno" value="{{ patient.ocenka_zaveduyushchego_proizvedena_korrektno }}" > </td>
+                            <td><input list="da_net" name="ocenka_zaveduyushchego_proizvedena_korrektno" value="{{ patient.ocenka_zaveduyushchego_proizvedena_korrektno }}" required pattern="Да|Нет"> </td>
                         </tr>
                         <tr>
                             <th>Оценка действий врача до вызова СМП</th>
@@ -264,7 +266,7 @@
             <!--            <input type="text" name="kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya" value="{{ patient.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya }}">-->
             <!--        </div>-->
         </br>
-        <button type="submit">Сохранить</button>    
+    
     </form>
-    <a href="{% url 'home' %}">Назад к списку пациентов</a>
+    
 {% endblock %}

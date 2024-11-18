@@ -18,10 +18,10 @@
             <strong>Общее количество записей: {{ total_records }}</strong>
         </div>
        Вы авторизованы как " {{user}} "<br>
-       ** @2 {{groups}} ****<br>
-       ** @3 {{group_names}} ****<br>
-       ** @4 {{user.groups.values.2.name}} ****<br>
-       ** @5 {{user}} ****<br>
+<!--       ** @2 {{groups}} ****<br>-->
+<!--       ** @3 {{group_names}} ****<br>-->
+<!--       ** @4 {{group}} ****<br>-->
+<!--       ** @5 {{request.user.groups}} ****<br>-->
 <!--       ** @6 {{user.groups.all}} ****<br>-->
 <!--       ** @7 {{user.groups.filter.values}} ****<br>-->
 
@@ -41,7 +41,7 @@
         <a href="#" class="btn">КЭР</a>
         <a href="#" class="btn">Контакты</a>
         <a href="#" class="btn">Помощь</a>
-        <a href="/login/" class="btn">Авторизация</a>
+        <a href="/" class="btn">Авторизация</a>
        <a  href="{% url 'logout' %}" class="btn">Выход</a>
 
 
@@ -91,10 +91,10 @@
 
                     <a href="{% url 'patient_detail' item.id %}">Пациент</a> <!-- Ссылка на детали -->
                     {% if user.is_authenticated %}
-                    {% if 'vps' in groups %}<!-- Если юзер в группе ВПС -->
+                    {% if 'vps' in groups %}
                     <a href="{% url 'edit_patient' item.id %}">Данные ВПС</a> <!-- Ссылка на редактирование -->
                     {% endif  %}
-                    {% if 'ker' in groups %}<!-- Если юзер в группе ВПС -->
+                 {% if 'ker' in groups %}
                     <a href="{% url 'edit_ker' item.id %}">Данные КЭР</a><!-- Ссылка на редактирование -->
                     {% endif  %}
                     {% endif  %}
