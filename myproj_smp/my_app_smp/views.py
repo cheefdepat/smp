@@ -12,8 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 
 
-
-def login(request):
+def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -21,22 +20,26 @@ def login(request):
 
         if user is not None:
             auth_login(request, user)
-            return redirect('home')  # Перенаправление на главную страницу
+            return redirect('home')
         else:
-            error_message = "Неверный логин или пароль."
+            error_message = "Вас нет в списке"
             return render(request, 'login.html', {'error_message': error_message})
 
     return render(request, 'login.html')
 
-# class MyprojectLogout(LogoutView):
-#     next_page  = reverse_lazy('home')
 
 def logout(request):
     auth_logout(request)  # Выход из аккаунта
     print("User logged out")  # Отладочное сообщение
-    return redirect('home')  # Перенаправление на главную страницу
+    return redirect('login')  # Перенаправление на главную страницу
+    # return render(request, 'login.html')
 
 
+# class MyprojectLogout(LogoutView):
+#     next_page  = reverse_lazy('login')
+
+
+# @login_required
 def home(request):
     # --------------
     # user_groups = request.user.groups.all()
@@ -95,14 +98,16 @@ def home(request):
         'records_per_page': records_per_page,
         'total_records': total_records,  # Передаем общее количество записей
         'unique_kurir': unique_kurir,  # Передаем уникальные значения в контекст
-        # 'groups': groups_, # Получаем все группы
+        'groups': user_groups_list, # Получаем все группы
     })
 
+# @login_required
 def patient_detail(request, id):
     patient = get_object_or_404(SmpRazborTab, id=id)  # Получаем запись по ID
 
     return render(request, 'patient_detail.html', {'patient': patient})
 
+# @login_required
 def edit_patient(request, id):
     patient = get_object_or_404(SmpRazborTab, id=id)
 
@@ -219,7 +224,6 @@ def edit_ker(request, id):
 
 
 def send_to_ker(request, id):
-# def send_to_ker(id):
     record = get_object_or_404(SmpRazborTab, id=id)
     record.ok_vps = "Передано в КЭР"  # Изменяем состояние поля
     record.save()  # Сохраняем изменения

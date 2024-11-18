@@ -9,11 +9,14 @@ body {
 }
 
 th {
-    background-color: #add8e6 !important; /* Светло-синий цвет для заголовка таблицы */
+    background-color: #b5cfde !important; /* Светло-синий цвет для заголовка таблицы */
+    font-weight: normal;
+    text-align: left;
+    color: #000000;
 }
 
 th, td {
-    text-align: center !important; /* Центрирование текста */
+    text-align: left !important; /* Центрирование текста */
 }
 
 header {
@@ -46,13 +49,13 @@ table {
 }
 
 th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center; /* Центрирование текста */
+    border: 3px solid #e5e5e5;
+    padding: 4px;
+    text-align: left; /* Центрирование текста */
 }
 
 th {
-    background-color: #add8e6; /* Светло-синий цвет для заголовка таблицы */
+    background-color: #d4d4d4; /* Светло-синий цвет для заголовка таблицы */
 }
 
 footer {
@@ -63,6 +66,18 @@ footer {
     position: relative;
     bottom: 0;
     width: 100%;
+}
+
+fieldset {
+  background-color: #e5e5e5;
+  color: #000000;
+}
+
+legend {
+  background-color: #e5e5e5;
+  color: #495f75;
+  padding: 5px 10px;
+  font-weight: bold;
 }
 
 .pagination {
@@ -93,6 +108,22 @@ footer {
 .btn:hover {
     background-color: #005599; /* Цвет при наведении */
 }
+
+.btn_save {
+    display: inline-block;
+    padding: 6px 15px;
+    background-color: #529dc9; /* Темно-синий цвет */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin: 10px 10px;
+}
+
+.btn_save:hover {
+    background-color: #0070b0; /* Цвет при наведении */
+}
+
 .search-container {
     display: flex; /* Используем flexbox для горизонтального расположения */
     gap: 10px; /* Отступ между полями */
@@ -107,7 +138,15 @@ footer {
 }
 .field-group-2-columns {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 колонок */
+    grid-template-columns: repeat(2, 1fr); /* 2 колонки */
     gap: 20px; /* Промежуток между колонками */
     margin-bottom: 20px;
+}
+
+input:invalid {
+  border: 2px dashed red;
+}
+
+input:valid {
+  border: 1px solid black;
 }
