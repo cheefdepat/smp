@@ -2,13 +2,13 @@
 
 
 {% block content %}
-{{pacient.ok_vps}}
-----
+
     <form method="POST">
-        <a href="{% url 'home' %}" class="btn_save">Назад к списку пациентов </a>
-        <button class="btn_save" type="submit" name="save_ker">Сохранить</button>
+        <a href="{% url 'home' %}" class="btn_save">Отменить правки</a>
         <button class="btn_save" type="submit" name="return_na_vps">Вернуть Зав.ВПС</button>
-        <a href="#" class="btn_save">Вернуть на корректировку</a>
+        <button class="btn_save" type="submit" name="save_ker">Сохранить</button>
+        <button class="btn_save" type="submit" name="go_gv">Передать Главврачу</button>
+<!--        <a href="#" class="btn_save">Вернуть на корректировку</a>-->
 
         {% csrf_token %}
 

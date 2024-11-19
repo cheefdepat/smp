@@ -324,6 +324,11 @@ def edit_ker(request, id):
             patient.save()  # Сохраняем изменения
             return redirect('home')  # Переходим на страницу проверки
 
+        elif 'go_gv' in request.POST:  # Кнопка "Отправить в КЭР"
+            patient.ok_vps = "Передано ГВ"
+            patient.save()  # Сохраняем изменения
+            return redirect('home')  # Переходим на страницу проверки
+
         return redirect('home',
 
                         )  # Перенаправляем на главную страницу
@@ -350,15 +355,15 @@ def proverka(request, id):
 
 
 
-def proverka_ker(request, id):
-    patient = get_object_or_404(SmpRazborTab, id=id)
-    if request.method == 'POST':
-        if 'confirm' in request.POST:  # Кнопка "Отправить в КЭР"
-            patient.save()
-            return redirect('home')  # Переходим на главную страницу
-
-        elif 'edit' in request.POST:  # Кнопка "Корректировать"
-            return redirect('home')  # Возвращаем на страницу редактирования
-
-    return render(request, 'home.html', {'patient': patient})
+# def proverka_ker(request, id):
+#     patient = get_object_or_404(SmpRazborTab, id=id)
+#     if request.method == 'POST':
+#         if 'confirm' in request.POST:  # Кнопка "Отправить в КЭР"
+#             patient.save()
+#             return redirect('home')  # Переходим на главную страницу
+#
+#         elif 'edit' in request.POST:  # Кнопка "Корректировать"
+#             return redirect('home')  # Возвращаем на страницу редактирования
+#
+#     return render(request, 'home.html', {'patient': patient})
 
