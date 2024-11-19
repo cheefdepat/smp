@@ -112,7 +112,7 @@ legend {
 .btn_save {
     display: inline-block;
     padding: 6px 15px;
-    background-color: #529dc9; /* Темно-синий цвет */
+    background-color: #529dc9;
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -144,9 +144,15 @@ legend {
 }
 
 input:invalid {
-  border: 2px dashed red;
+    border: 2px dashed red; /* рамка для некорректных данных */
 }
 
 input:valid {
-  border: 1px solid black;
+    border: 1px solid black; /* рамка для корректных данных */ 
+}
+
+input {
+    border-radius: 5px; 
+    width: 400px;
+    height: 24px;
 }

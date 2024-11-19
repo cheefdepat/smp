@@ -5,8 +5,8 @@
 
     <form method="POST">
         <a href="{% url 'home' %}" class="btn_save">Назад к списку пациентов </a>
-        <button class="btn_save" type="submit">Сохранить</button>
-               <a href="{% url 'send_to_ker' patient.id  %}" class="btn_save">Отправить в КЭР </a>
+        <button class="btn_save" type="submit" name="save" >Сохранить</button>
+        <button class="btn_save" type="submit" name="send_to_ker" name="send_to_ker">Отправить в КЭР</button>
 
         {% csrf_token %}
 
@@ -74,13 +74,13 @@
                         <tr>
                             <th>Дата последнего визита врача из протокола осмотра ЕМИАС:</th>
                             <td> {{ patient.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias  }}  </td>
-                        </tr>                        
+                        </tr>
                     </table>
                 </fieldset>
             </div>
             <div>
                 <fieldset>
-                    <legend>Поля для внесения данных</legend>                    
+                    <legend>Поля для внесения данных</legend>
                     <table>
                         <tr>
                             <th>ФИО врача:</th>
@@ -101,8 +101,8 @@
                         <tr>
                             <th>Вывод:</th>
                             <td><input type="text" name="vyvod"  value="{{ patient.vyvod }}" ></td>
-                        </tr>                                                                                                                                
-                    </table>                   
+                        </tr>
+                    </table>
                 </fieldset>
             </br>
                 <fieldset>
@@ -241,25 +241,6 @@
 
 
 
-
-
-            <!--        <input type="text" name="kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu"  value="{{ patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu }}" >-->
-
-            <!--            <label>FIO пациента:</label>-->
-            <!--            <input type="text" value="{{ patient.fio_pacienta }}" readonly>-->
-            <!--        </div>-->
-            <!--        <div>-->
-            <!--            <label>Дата вызова SMP:</label>-->
-            <!--            <input type="text" value="{{ patient.data_vyzova_smp }}" readonly>-->
-            <!--        </div>-->
-            <!--        <div>-->
-            <!--            <label>Полис ОМС:</label>-->
-            <!--            <input type="text" name="polis_oms"  value="{{ patient.polis_oms }}" >-->
-            <!--        </div>-->
-            <!--        <div>-->
-            <!--            <label>Причина вызова:</label>-->
-            <!--            <input type="text" name="kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya" value="{{ patient.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya }}">-->
-            <!--        </div>-->
         </br>
 
     </form>

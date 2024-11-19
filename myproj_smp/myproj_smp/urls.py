@@ -27,6 +27,6 @@ urlpatterns = [
     # path('accounts/login/', auth_views.LoginView.as_view(), name='login'),   ###### 3
     # path('accounts/logout/', auth_views.LogoutView.as_view(), name='login') ###### 3
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
-    path('login/', views.login_view, name='login'),  # Предполагается, что у вас есть представление для входа
+    path('login/', views.login_view, name='login'),  # Предполагается, что у вас есть представление для входа1
 
 ]

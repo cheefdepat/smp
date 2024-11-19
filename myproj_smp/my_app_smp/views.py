@@ -12,6 +12,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 
 
+
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -37,6 +39,14 @@ def logout(request):
 
 # class MyprojectLogout(LogoutView):
 #     next_page  = reverse_lazy('login')
+
+def zamena_pustot(pole_proverki_daty):
+    # Функция проверки является ли значение в поле ДАТЫ - пустым??? для ВСЕХ ДАТ проверку!!!!
+    if pole_proverki_daty == "":
+        pole_proverki_daty = None
+    else:
+        pole_proverki_daty = pole_proverki_daty
+    return pole_proverki_daty
 
 
 # @login_required
@@ -153,25 +163,23 @@ def edit_patient(request, id):
             'byl_li_ustanovlen_bazovyj_plan_na_poslednem_vizite')
         patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu = request.POST.get(
             'kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu')
-        # Проверяем, является ли значение None
-        if patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu == "":
-            patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu = None
-        else:
-            patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu = patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu
-        # -----------------
-        # patient.kolichestvo_dnej_ot_proshlogo_vizita_vracha= request.POST.get('kolichestvo_dnej_ot_proshlogo_vizita_vracha')
+
+        # Проверяем, является ли значение None ---------------- для ВСЕХ ДАТ проверку!!!!
+        patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu = zamena_pustot(patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu)
+
+
+
         # -----------------
         patient.otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme = request.POST.get(
             'otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme')
         patient.dinamika_sostoyaniya = request.POST.get('dinamika_sostoyaniya')
         patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v = request.POST.get(
             'data_naznachenogo_audioprotokola_soglasno_protokolu_v')
-        # Проверяем, является ли значение None
-        if patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v == "":
-            patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v = None
-        else:
-            patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v = patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v
-        # -----------------
+
+        # Проверяем ДАТУ, является ли значение None ---------------- для ВСЕХ ДАТ проверку!!!!
+        patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v = zamena_pustot(
+            patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v)
+
         # -----------------------------Проверка заведующего --------------------------
 
         # 'data_polucheniya_svedenij_po_vyzovam_smp_ot_kc',
@@ -195,10 +203,16 @@ def edit_patient(request, id):
         # 'trebovanie_gospitalizacii_na_dannyj_moment',
         # 'vyyavlennye_defekty_v_rabote_vracha',
 
-        patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc = request.POST.get(
-            'data_polucheniya_svedenij_po_vyzovam_smp_ot_kc')
-        patient.data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp = request.POST.get(
-            'data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp')
+
+        # --------------------Проверяем ДАТУ !!!!--------------------------------------------------
+        patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc = zamena_pustot(
+                                                                patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc)
+
+
+        # --------------------Проверяем ДАТУ !!!!--------------------------------------------------
+        patient.data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp = zamena_pustot(
+            patient.data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp)
+
 
         patient.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya = request.POST.get(
             'kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya')
@@ -233,11 +247,23 @@ def edit_patient(request, id):
         # patient.kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = request.POST.get(
         #     'kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover')
         # -----------------------
+        print('1ssssss-----------------')
+        if 'save' in request.POST:  # Кнопка "Сохранить"
+            print('ssssss-----------------')
+            # if patient.is_valid():
+            patient.save()
+            return redirect('home')
 
-        patient.save()  # Сохраняем изменения
-        return redirect('home',
+        elif 'send_to_ker' in request.POST:  # Кнопка "Отправить в КЭР"
+            # if patient.is_valid():
+            print('send_to_ker-----------------')
+            patient.save()  # Сохраняем изменения
+            return redirect('proverka', id=patient.id)  # Переходим на страницу проверки
 
-                        )  # Перенаправляем на главную страницу
+        # patient.save()  # Сохраняем изменения
+        # return redirect('home',
+        #
+        #                 )  # Перенаправляем на главную страницу
 
     return render(request, 'edit_pacient_short.html', {'patient': patient,
                                                        'koli4_dney_ot_proshlogo_vizita_vracha': koli4_dney_ot_proshlogo_vizita_vracha,
@@ -270,7 +296,8 @@ def edit_ker(request, id):
         # -----------------
         # Получаем значение из формы
         # next_visit_date = patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu
-        # Проверяем, является ли значение None
+
+        # Проверяем, является ли значение None-------- для всех дат требуется проверка !!!
         if patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu == "":
             patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu = None
         else:
@@ -282,7 +309,8 @@ def edit_ker(request, id):
         patient.otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme= request.POST.get('otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme')
         patient.dinamika_sostoyaniya= request.POST.get('dinamika_sostoyaniya')
         patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v= request.POST.get('data_naznachenogo_audioprotokola_soglasno_protokolu_v')
-        # Проверяем, является ли значение None
+
+        # Проверяем, является ли значение None -------- для всех дат требуется проверка !!!
         if patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v == "":
             patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v = None
         else:
@@ -302,11 +330,26 @@ def edit_ker(request, id):
                                                        })
 
 
-def send_to_ker(request, id):
-    record = get_object_or_404(SmpRazborTab, id=id)
-    record.ok_vps = "Передано в КЭР"  # Изменяем состояние поля
-    record.save()  # Сохраняем изменения
+def proverka(request, id):
+    patient = get_object_or_404(SmpRazborTab, id=id)
 
-    return redirect('home')  # Перенаправляем на нужный URL
+    if request.method == 'POST':
+        if 'confirm' in request.POST:  # Кнопка "Отправить в КЭР"
+            patient.ok_vps = "Передано в КЭР"
+            patient.save()
+            return redirect('home')  # Переходим на главную страницу
+
+        elif 'edit' in request.POST:  # Кнопка "Корректировать"
+            return redirect('edit_patient', id=id)  # Возвращаем на страницу редактирования
+
+    return render(request, 'patient_detail.html', {'patient': patient})
+
+
+# def send_to_ker(request, id):
+#     record = get_object_or_404(SmpRazborTab, id=id)
+#     record.ok_vps = "Передано в КЭР"  # Изменяем состояние поля
+#     record.save()  # Сохраняем изменения
+#
+#     return redirect('home')  # Перенаправляем на нужный URL
 
 
