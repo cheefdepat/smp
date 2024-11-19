@@ -48,11 +48,22 @@
         <input type="text" name="search_fio" placeholder="Введите  фамилию пациента" value="{{ search_fio }}">
 
         <select name="search_kurir" onchange="submitForm()">
-        <option value="">Все ВПС</option>
+        <option value="">Фильтр ВПС(Все ВПС)</option>
                     {% for kurir in unique_kurir %}
                         <option value="{{ kurir }}" {% if kurir == search_kurir %}selected{% endif %}>{{ kurir }}</option>
                     {% endfor %}
         </select>
+       <!----------- ПЕРЕДАННЫЕ В КЭР------------------->
+        {% if 'ker' in groups %}
+        <select name="search_otrabot" onchange="submitForm()">
+        <option value="">Все записи (ВСП/КЭР)</option>
+                    {% for otrab_ in unique_otrab %}
+                        <option value="{{ otrab_ }}" {% if otrab_ == search_otrabot %}selected{% endif %}>{{ otrab_ }}</option>
+                    {% endfor %}
+        </select>
+        {% endif %}
+        <!----------- ПЕРЕДАННЫЕ В КЭР------------------->
+
 
         <input type="number" name="records_per_page" placeholder="Записей на странице" value="{{ records_per_page }}" min="1">
         <button type="submit">Поиск</button>
@@ -84,13 +95,13 @@
             <tr>
                 <td>
 
-                    <a href="{% url 'patient_detail' item.id %}">Пациент</a> <!-- Ссылка на детали -->
+                    <!-- <a href="{% url 'patient_detail' item.id %}">Пациент</a> --> <!-- Ссылка на детали -->
                     {% if user.is_authenticated %}
                     {% if 'vps' in groups %}
-                    <a href="{% url 'edit_patient' item.id %}">Данные ВПС</a> <!-- Ссылка на редактирование -->
+                    <a href="{% url 'edit_patient' item.id %}" class="btn_save">Данные ВПС</a> <!-- Ссылка на редактирование -->
                     {% endif  %}
-                 {% if 'ker' in groups %}
-                    <a href="{% url 'edit_ker' item.id %}">Данные КЭР</a><!-- Ссылка на редактирование -->
+                    {% if 'ker' in groups %}
+                    <a href="{% url 'edit_ker' item.id %}" class="btn_save">Данные КЭР</a><!-- Ссылка на редактирование -->
                     {% endif  %}
                     {% endif  %}
                 </td>
