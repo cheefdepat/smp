@@ -11,6 +11,11 @@
     <header>
         <h1>Детали пациента</h1>
     </header>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="confirm">Отправить в КЭР</button>
+        <button type="submit" name="edit">Корректировать</button>
+    </form>
 
     <div>
         <h2>Информация о пациенте</h2>

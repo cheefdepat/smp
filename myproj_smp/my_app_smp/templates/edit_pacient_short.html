@@ -5,8 +5,8 @@
 
     <form method="POST">
         <a href="{% url 'home' %}" class="btn_save">Назад к списку пациентов </a>
-        <button class="btn_save" type="submit">Сохранить</button>
-        <a href="{% url 'send_to_ker' patient.id  %}" class="btn_save">Отправить в КЭР </a>
+        <button class="btn_save" type="submit" name="save" >Сохранить</button>
+        <button type="submit" name="send_to_ker" name="send_to_ker">Отправить в КЭР</button>
 
         {% csrf_token %}
 
@@ -17,11 +17,11 @@
                     <table >
                         <tr>
                             <th >Дата вызова СМП:</th>
-                            <td > {{ patient.p_p }} </td>
+                            <td > {{ patient.data_vyzova_smp }} </td>
                         </tr>
                         <tr>
                             <th >№ п/п:</th>
-                            <td > {{ patient.data_vyzova_smp }} </td>
+                            <td > {{ patient.p_p }} </td>
                         </tr>
                         <tr>
                             <th>ФИО пациента:</th>
@@ -75,30 +75,36 @@
                             <th>Дата последнего визита врача из протокола осмотра ЕМИАС:</th>
                             <td> {{ patient.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias  }}  </td>
                         </tr>
-                        <tr>
-                            <th>ФИО врача:</th>
-                            <td> {{ patient.fio_vracha  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Сравнение "Повода вызова СМП" с Протоколами врача ЦПП выездов ДО и ПОСЛЕ вызова СМП:</th>
-                            <td> {{ patient.sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Действия ЦПП:</th>
-                            <td> {{ patient.dejstviya_cpp  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Контроль исполнения назначенных врачом ЦПП рекомендаций:</th>
-                            <td> {{ patient.kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Вывод:</th>
-                            <td> {{ patient.vyvod  }}  </td>
-                        </tr>
                     </table>
                 </fieldset>
             </div>
             <div>
+                <fieldset>
+                    <legend>Поля для внесения данных</legend>
+                    <table>
+                        <tr>
+                            <th>ФИО врача:</th>
+                            <td><input type="text" name="fio_vracha"  value="{{ patient.fio_vracha }}" ></td>
+                        </tr>
+                        <tr>
+                            <th>Сравнение "Повода вызова СМП" с Протоколами врача ЦПП выездов ДО и ПОСЛЕ вызова СМП:</th>
+                            <td><input type="text" name="sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle"  value="{{ patient.sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle }}" ></td>
+                        </tr>
+                        <tr>
+                            <th>Действия ЦПП:</th>
+                            <td><input type="text" name="dejstviya_cpp"  value="{{ patient.dejstviya_cpp }}" ></td>
+                        </tr>
+                        <tr>
+                            <th>Контроль исполнения назначенных врачом ЦПП рекомендаций:</th>
+                            <td><input type="text" name="kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij"  value="{{ patient.kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij }}" ></td>
+                        </tr>
+                        <tr>
+                            <th>Вывод:</th>
+                            <td><input type="text" name="vyvod"  value="{{ patient.vyvod }}" ></td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </br>
                 <fieldset>
                     <legend>Данные из последнего протокола врача</legend>
                     <table>
@@ -121,7 +127,7 @@
                         </tr>
                         <tr>
                             <th>Количество дней от прошлого визита врача:</th>
-                            <td>{{ dni }}  </td>
+                            <td>{{ koli4_dney_ot_proshlogo_vizita_vracha }}  </td>
                         </tr>
                         <tr>
                             <th>3. Отображены ли все жалобы пациента в полном объеме, включая те, что не связаны с вызовами СМП?</th>
@@ -162,7 +168,7 @@
                         </tr>
                         <tr>
                             <th>Колчество дней  от момента получения данных по СМП до совершеня звонка</th>
-                            <td>{{ dni_zvon }}</td>
+                            <td>{{ dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover }}</td>
                         </tr>
                         <tr>
                             <th>8. Какова причина вызова СМП по резуьтатам аудиоконтроля?</th>
@@ -235,25 +241,6 @@
 
 
 
-
-
-            <!--        <input type="text" name="kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu"  value="{{ patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu }}" >-->
-
-            <!--            <label>FIO пациента:</label>-->
-            <!--            <input type="text" value="{{ patient.fio_pacienta }}" readonly>-->
-            <!--        </div>-->
-            <!--        <div>-->
-            <!--            <label>Дата вызова SMP:</label>-->
-            <!--            <input type="text" value="{{ patient.data_vyzova_smp }}" readonly>-->
-            <!--        </div>-->
-            <!--        <div>-->
-            <!--            <label>Полис ОМС:</label>-->
-            <!--            <input type="text" name="polis_oms"  value="{{ patient.polis_oms }}" >-->
-            <!--        </div>-->
-            <!--        <div>-->
-            <!--            <label>Причина вызова:</label>-->
-            <!--            <input type="text" name="kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya" value="{{ patient.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya }}">-->
-            <!--        </div>-->
         </br>
 
     </form>

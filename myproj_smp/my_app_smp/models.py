@@ -65,7 +65,7 @@ class SmpRazborTab(models.Model):
     data_rozhdeniya = models.DateField( blank=True, null=True)
     data_vklyucheniya_v_registr = models.DateField( blank=True, null=True)
 
-    ok_vps = models.CharField(max_length=100) # Новое  поле для кэр
+    ok_vps = models.CharField(max_length=10) # Новое  поле для кэр
 
     class Meta:
         db_table = 'smp_razbor_tab'  # Указываем имя таблицы в БД
