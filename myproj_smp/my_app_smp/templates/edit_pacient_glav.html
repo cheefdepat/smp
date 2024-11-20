@@ -5,82 +5,17 @@
 
     <form method="POST">
         <a href="{% url 'home' %}" class="btn_save">Отменить правки</a>
-        <button class="btn_save" type="submit" name="return_na_vps">Вернуть Зав.ВПС</button>
-        <button class="btn_save" type="submit" name="save_ker">Сохранить</button>
-        <button class="btn_save" type="submit" name="go_gv">Передать Главврачу</button>
+        <button class="btn_save" type="submit" name="return_na_vps">Вернуть на доработку Зав.ВПС</button>
+        <button class="btn_save" type="submit" name="return_na_ker">Вернуть на доработку КЭР</button>
+        <button class="btn_save" type="submit" name="save_glav">Сохранить</button>
+        <button class="btn_save" type="submit" name="go_dzm">Сохранить для передачи в ДЗМ</button>
 <!--        <a href="#" class="btn_save">Вернуть на корректировку</a>-->
 
         {% csrf_token %}
 
         <div class="field-group-2-columns">
             <div>
-                Статус записи о пациенте: "{{patient.ok_vps }}"
-                <fieldset >
-                    <legend>Данные по вызову СМП</legend>
-                    <table >
-                        <tr>
-                            <th >Дата вызова СМП:</th>
-                            <td > {{ patient.data_vyzova_smp }} </td>
-                        </tr>
-                        <tr>
-                            <th >№ п/п:</th>
-                            <td > {{ patient.p_p }} </td>
-                        </tr>
-                        <tr>
-                            <th>ФИО пациента:</th>
-                            <td> {{ patient.fio_pacienta  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Количество выездов в день:</th>
-                            <td> {{ patient.kolichestvo_vyezdov_v_den  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Дата рождения:</th>
-                            <td> {{ patient.data_rozhdeniya  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Полис ОМ:</th>
-                            <td> {{ patient.polis_oms  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Результат вызова:</th>
-                            <td> {{ patient.rezultat_vyzova  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Актив / Пассив:</th>
-                            <td> {{ patient.aktiv_passiv  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Диагноз по MКБ:</th>
-                            <td> {{ patient.diagnoz_po_mkb  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Причина вызова скорой помощи:</th>
-                            <td> {{ patient.prichina_vyzova_skoroiy_pomoschi  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Наличие болевого синдрома:</th>
-                            <td> {{ patient.nalichie_bolevogo_sindroma  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Причина вызова скорой помощи (кратко):</th>
-                            <td> {{ patient.prichina_vyzova_skoroiy_pomoschi_kratko  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Курирующее подразделение ОВПП:</th>
-                            <td> {{ patient.kuriruyushchee_podrazdelenie_ovpp  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Дата включения в Регистр:</th>
-                            <td> {{ patient.data_vklyucheniya_v_registr  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>Дата последнего визита врача из протокола осмотра ЕМИАС:</th>
-                            <td> {{ patient.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias  }}  </td>
-                        </tr>                        
-                    </table>
-                </fieldset>
-            </br>
+
                 <fieldset >
                     <legend>Поля для внесения данных</legend>
                     <table>
@@ -139,7 +74,7 @@
         </br>
                 <fieldset >
                     <legend>Данные от Заведующего</legend>
-                    <table>                        
+                    <table>
                         <tr>
                             <th>6. Дата получения сведений по вызовам СМП от КЦ</th>
                             <td>{{ patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc }}</td>
@@ -218,71 +153,132 @@
                         </tr>
                     </table>
                 </fieldset>
+                </br>
+                <fieldset>
+                    <legend>Данные от КЭР</legend>
+                    <table>
+                        <tr>
+                            <th>Базовый план назначен корректно</th>
+                            <td>{{ patient.bazovyj_plan_naznachen_korrektno }}</td>
+                        </tr>
+                        <tr>
+                            <th>Оценка состояния соответствует базовому плану</th>
+                            <td>{{ patient.ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu }}</td>
+                        </tr>
+                        <tr>
+                            <th>Жалобы описаны в полном объёме</th>
+                            <td>{{ patient.zhaloby_opisany_v_polnom_obeme }}</td>
+                        </tr>
+                        <tr>
+                            <th>Оценка заведующего произведена корректно</th>
+                            <td>{{ patient.ocenka_zaveduyushchego_proizvedena_korrektno }}</td>
+                        </tr>
+                        <tr>
+                            <th>Оценка действий врача до вызова СМП</th>
+                            <td>{{ patient.ocenka_dejstvij_vracha_do_vyzova_smp }}</td>
+                        </tr>
+                        <tr>
+                            <th>Оценка действий после вызова СМП</th>
+                            <td>{{ patient.ocenka_dejstvij_posle_vyzova_smp }}</td>
+                        </tr>
+                        <tr>
+                            <th>Выводы по результатм оценки</th>
+                            <td>{{ patient.vyvody_po_rezultatm_ocenki }}</td>
+                        </tr>
+                    </table>
+                </fieldset>
             </div>
             <div>
+                <fieldset>
+                    <legend>Статус</legend>
+                    <table>
+                        <tr>
+                            <th>Статус записи</th>
+                            <td>{{ patient.ok_vps }}</td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </br>
                 <fieldset>
                     <legend>Поля для внесения данных</legend>
                     <table>
                         <tr>
-                            <th>Базовый план назначен корректно</th>
-                            <td><input list="da_net" name="bazovyj_plan_naznachen_korrektno"  value="{{ patient.bazovyj_plan_naznachen_korrektno }}" required pattern="Да|Нет">
-                                <datalist id="da_net">
-                                    <option value="Да">
-                                    <option value="Нет">
-                                </datalist>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Оценка состояния соответствует базовому плану</th>
-                            <td><input list="da_net" name="ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu" value="{{ patient.ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu }}" required pattern="Да|Нет"> </td>
-                        </tr>
-                        <tr>
-                            <th>Жалобы описаны в полном объёме</th>
-                            <td><input list="da_net" name="zhaloby_opisany_v_polnom_obeme" value="{{ patient.zhaloby_opisany_v_polnom_obeme }}" required pattern="Да|Нет"> </td>
-                        </tr>
-                        <tr>
-                            <th>Оценка заведующего произведена корректно</th>
-                            <td><input list="da_net" name="ocenka_zaveduyushchego_proizvedena_korrektno" value="{{ patient.ocenka_zaveduyushchego_proizvedena_korrektno }}" required pattern="Да|Нет"> </td>
-                        </tr>
-                        <tr>
-                            <th>Оценка действий врача до вызова СМП</th>
-                            <td><input type="text" name="ocenka_dejstvij_vracha_do_vyzova_smp" value="{{ patient.ocenka_dejstvij_vracha_do_vyzova_smp }}" > </td>
-                        </tr>
-                        <tr>
-                            <th>Оценка действий после вызова СМП</th>
-                            <td><input type="text" name="ocenka_dejstvij_posle_vyzova_smp" value="{{ patient.ocenka_dejstvij_posle_vyzova_smp }}" > </td>
-                        </tr>
-                        <tr>
-                            <th>Выводы по результатм оценки</th>
-                            <td><input type="text" name="vyvody_po_rezultatm_ocenki" value="{{ patient.vyvody_po_rezultatm_ocenki }}" > </td>
+                            <th>Анализ действий главным врачом</th>
+                            <td><input type="text" name="analiz_dejstvij_glavnym_vrachom" value="{{ patient.analiz_dejstvij_glavnym_vrachom }}" > </td>
                         </tr>
                     </table>
                 </fieldset>
+            </br>
+            <fieldset >
+                <legend>Данные по вызову СМП</legend>
+                <table >
+                    <tr>
+                        <th >Дата вызова СМП:</th>
+                        <td > {{ patient.data_vyzova_smp }} </td>
+                    </tr>
+                    <tr>
+                        <th >№ п/п:</th>
+                        <td > {{ patient.p_p }} </td>
+                    </tr>
+                    <tr>
+                        <th>ФИО пациента:</th>
+                        <td> {{ patient.fio_pacienta  }}  </td>
+                    </tr>
+                    <tr>
+                        <th>Количество выездов в день:</th>
+                        <td> {{ patient.kolichestvo_vyezdov_v_den  }}  </td>
+                    </tr>
+                    <tr>
+                        <th>Дата рождения:</th>
+                        <td> {{ patient.data_rozhdeniya  }}  </td>
+                    </tr>
+                    <tr>
+                        <th>Полис ОМ:</th>
+                        <td> {{ patient.polis_oms  }}  </td>
+                    </tr>
+                    <tr>
+                        <th>Результат вызова:</th>
+                        <td> {{ patient.rezultat_vyzova  }}  </td>
+                    </tr>
+                    <tr>
+                        <th>Актив / Пассив:</th>
+                        <td> {{ patient.aktiv_passiv  }}  </td>
+                    </tr>
+                    <tr>
+                        <th>Диагноз по MКБ:</th>
+                        <td> {{ patient.diagnoz_po_mkb  }}  </td>
+                    </tr>
+                    <tr>
+                        <th>Причина вызова скорой помощи:</th>
+                        <td> {{ patient.prichina_vyzova_skoroiy_pomoschi  }}  </td>
+                    </tr>
+                    <tr>
+                        <th>Наличие болевого синдрома:</th>
+                        <td> {{ patient.nalichie_bolevogo_sindroma  }}  </td>
+                    </tr>
+                    <tr>
+                        <th>Причина вызова скорой помощи (кратко):</th>
+                        <td> {{ patient.prichina_vyzova_skoroiy_pomoschi_kratko  }}  </td>
+                    </tr>
+                    <tr>
+                        <th>Курирующее подразделение ОВПП:</th>
+                        <td> {{ patient.kuriruyushchee_podrazdelenie_ovpp  }}  </td>
+                    </tr>
+                    <tr>
+                        <th>Дата включения в Регистр:</th>
+                        <td> {{ patient.data_vklyucheniya_v_registr  }}  </td>
+                    </tr>
+                    <tr>
+                        <th>Дата последнего визита врача из протокола осмотра ЕМИАС:</th>
+                        <td> {{ patient.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias  }}  </td>
+                    </tr>
+                </table>
+            </fieldset>
             </div>
         </div>
 
 
 
-
-
-            <!--        <input type="text" name="kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu"  value="{{ patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu }}" >-->
-
-            <!--            <label>FIO пациента:</label>-->
-            <!--            <input type="text" value="{{ patient.fio_pacienta }}" readonly>-->
-            <!--        </div>-->
-            <!--        <div>-->
-            <!--            <label>Дата вызова SMP:</label>-->
-            <!--            <input type="text" value="{{ patient.data_vyzova_smp }}" readonly>-->
-            <!--        </div>-->
-            <!--        <div>-->
-            <!--            <label>Полис ОМС:</label>-->
-            <!--            <input type="text" name="polis_oms"  value="{{ patient.polis_oms }}" >-->
-            <!--        </div>-->
-            <!--        <div>-->
-            <!--            <label>Причина вызова:</label>-->
-            <!--            <input type="text" name="kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya" value="{{ patient.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya }}">-->
-            <!--        </div>-->
-        </br>
 
     </form>
 

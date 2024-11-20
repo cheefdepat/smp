@@ -48,6 +48,18 @@ def zamena_pustot(pole_proverki_daty):
         pole_proverki_daty = pole_proverki_daty
     return pole_proverki_daty
 
+def help(request):
+    return render(request, 'help.html', {
+        # 'data_smp': page_obj,
+        # 'search_fio': query_fio,
+        # 'search_kurir': query_kurir,
+        # 'search_otrabot': query_otrabot,
+        # 'records_per_page': records_per_page,
+        # 'total_records': total_records,  # Передаем общее количество записей
+        # 'unique_kurir': unique_kurir,  # Передаем уникальные значения в контекст по курир. филиалу ВПС
+        # 'unique_otrab': unique_otrab,  # Передаем уникальные значения в контекст по отработанным в КЭР
+        # 'groups': user_groups_list,  # Получаем все группы
+    })
 
 # @login_required
 def home(request):
@@ -325,9 +337,9 @@ def edit_ker(request, id):
             return redirect('home')  # Переходим на страницу проверки
 
         elif 'go_gv' in request.POST:  # Кнопка "Отправить в КЭР"
-            patient.ok_vps = "Передано ГВ"
+            patient.ok_vps = "Передано Глав.врачу"
             patient.save()  # Сохраняем изменения
-            return redirect('home')  # Переходим на страницу проверки
+            return redirect('proverka_ker', id=patient.id)  # Переходим на страницу проверки
 
         return redirect('home',
 
@@ -343,27 +355,100 @@ def proverka(request, id):
     patient = get_object_or_404(SmpRazborTab, id=id)
 
     if request.method == 'POST':
-        if 'confirm' in request.POST:  # Кнопка "Отправить в КЭР"
+        if 'ot_vps_v_ker' in request.POST:  # Кнопка "Отправить в КЭР"
             patient.ok_vps = "Передано в КЭР"
             patient.save()
             return redirect('home')  # Переходим на главную страницу
 
-        elif 'edit' in request.POST:  # Кнопка "Корректировать"
+        elif 'korrektirovat' in request.POST:  # Кнопка "Корректировать"
             return redirect('edit_patient', id=id)  # Возвращаем на страницу редактирования
 
     return render(request, 'patient_detail.html', {'patient': patient})
 
 
 
-# def proverka_ker(request, id):
-#     patient = get_object_or_404(SmpRazborTab, id=id)
-#     if request.method == 'POST':
-#         if 'confirm' in request.POST:  # Кнопка "Отправить в КЭР"
-#             patient.save()
-#             return redirect('home')  # Переходим на главную страницу
-#
-#         elif 'edit' in request.POST:  # Кнопка "Корректировать"
-#             return redirect('home')  # Возвращаем на страницу редактирования
-#
-#     return render(request, 'home.html', {'patient': patient})
+def proverka_ker(request, id):
+    patient = get_object_or_404(SmpRazborTab, id=id)
+    if request.method == 'POST':
+        if 'ot_ker_na_glav' in request.POST:  # Кнопка "Отправить в КЭР"
+            patient.ok_vps = "Передано Глав.врачу"
+            patient.save()
+            return redirect('home')  # Переходим на главную страницу
 
+        elif 'korrektirovat_ker' in request.POST:  # Кнопка "Корректировать"
+            patient.ok_vps = "Передано в КЭР"
+            patient.save()
+            return redirect('home')  # Возвращаем на страницу редактирования
+
+    return render(request, 'proverka_ot_ker_na_glav.html', {'patient': patient})
+
+def edit_glav(request, id):
+    patient = get_object_or_404(SmpRazborTab, id=id)
+    #  ----- отображение рассчетных ДННЕЙ+++++++--------------------
+
+    if patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu and patient.data_vklyucheniya_v_registr:
+        koli4_dney_ot_proshlogo_vizita_vracha = patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu - patient.data_vklyucheniya_v_registr
+    else:
+        koli4_dney_ot_proshlogo_vizita_vracha = 'нет даты визита врача'
+
+    if patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc and patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v:
+        dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc - patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v
+    else:
+        dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = 'нет звонка или  врача'
+
+
+
+    if request.method == 'POST':
+        # Обновляем поля, которые можно редактировать и СОХРАНЯТЬ!!!
+        # 'analiz_dejstvij_glavnym_vrachom',
+
+        # --------------- поля для редактирования и сохранения --------
+        patient.analiz_dejstvij_glavnym_vrachom = request.POST.get('analiz_dejstvij_glavnym_vrachom')
+
+
+        # patient.save()  # Сохраняем изменения
+
+        print('1ker-----------------')
+        if 'save_glav' in request.POST:  # Кнопка "Сохранить"
+            # if patient.is_valid():
+            patient.save()
+            return redirect('home')
+
+        elif 'return_na_vps' in request.POST:  # Кнопка "Отправить в КЭР"
+            patient.ok_vps = "впс"
+            patient.save()  # Сохраняем изменения
+            return redirect('home')  # Переходим на страницу проверки
+
+        elif 'return_na_ker' in request.POST:  # Кнопка "Отправить в КЭР"
+            patient.ok_vps = "Передано КЭР"
+            patient.save()  # Сохраняем изменения
+            return redirect('home')  # Переходим на страницу проверки
+
+        elif 'go_dzm' in request.POST:  # Кнопка "Отправить в КЭР"
+            patient.ok_vps = "Передано ДЗМ"
+            patient.save()  # Сохраняем изменения
+            return redirect('proverka_glav', id=patient.id)  # Переходим на страницу проверки
+
+        return redirect('home',
+
+                        )  # Перенаправляем на главную страницу
+
+    return render(request, 'edit_pacient_glav.html', {'patient': patient,
+                                                       'koli4_dney_ot_proshlogo_vizita_vracha': koli4_dney_ot_proshlogo_vizita_vracha,
+                                                       'dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover':dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover,
+                                                       })
+
+def proverka_glav(request, id):
+    patient = get_object_or_404(SmpRazborTab, id=id)
+    if request.method == 'POST':
+        if 'ot_glav_na_dzm' in request.POST:  # Кнопка "Отправить в КЭР"
+            patient.ok_vps = "Передано ДЗМ"
+            patient.save()
+            return redirect('home')  # Переходим на главную страницу
+
+        elif 'korrektir_glav' in request.POST:  # Кнопка "Корректировать"
+            patient.ok_vps = "Передано Глав.врачу"
+            patient.save()
+            return redirect('home')  # Возвращаем на страницу редактирования
+
+    return render(request, 'proverka_ot_glav.html', {'patient': patient})

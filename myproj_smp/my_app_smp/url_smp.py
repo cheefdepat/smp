@@ -7,6 +7,9 @@ from .views import edit_ker
 # from .views import send_to_ker
 from .views import proverka
 from .views import proverka_ker
+from .views import edit_glav
+from .views import proverka_glav
+from .views import help
 
 from .views import login_view
 
@@ -28,10 +31,12 @@ urlpatterns = [
     # path('logout/', auth_views.LogoutView.as_view(), name='logout'),# выход
     path('logout/', logout, name='logout'),
     path('edit_ker/<int:id>/', edit_ker, name='edit_ker'),
+    path('edit_glav/<int:id>/', edit_glav, name='edit_glav'),
     path('proverka/<int:id>/', proverka, name='proverka'),
-    # path('proverka_ker/<int:id>/', proverka_ker, name='proverka_ker'),
-    path('proverka_ker/', proverka_ker, name='proverka_ker'),
-    # path('send_to_ker/<int:id>/', send_to_ker, name='send_to_ker'),
+    path('proverka_ker/<int:id>/', proverka_ker, name='proverka_ker'),
+    path('proverka_glav/<int:id>/', proverka_glav, name='proverka_glav'),
+    path('help', help, name='help'),
+
 
 
 ]
