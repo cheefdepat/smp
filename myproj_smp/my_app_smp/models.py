@@ -24,16 +24,18 @@ class SmpRazborTab(models.Model):
 
     kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya = models.TextField( blank=True, null=True)
     kakie_dejstviya_byli_predprinyaty_smp = models.TextField( blank=True, null=True)
-    tekushchee_sostoyanie_pacienta_posle_vyzova_smp = models.TextField( blank=True, null=True)
+    tekushchee_sostoyanie_pacienta_posle_vyzova_smp = models.CharField(max_length=255, blank=True, null=True)
     ostalis_li_zhaloby_posle_vyzova_smp = models.CharField(max_length=255, blank=True, null=True)
     opisanie_zhalob = models.TextField( blank=True, null=True)
-    byli_li_lekarstvennye_sredstva_otovareny_po_receptu = models.TextField( blank=True, null=True)
+
+    byli_li_lekarstvennye_sredstva_otovareny_po_receptu = models.CharField(max_length=255, blank=True, null=True)
     pacient_prinimaet_naznachennye_lekarstvennye_sredstva = models.CharField(max_length=255, blank=True, null=True)
     ehffektivna_li_naznachennaya_medikamentoznaya_terapiya = models.CharField(max_length=255, blank=True, null=True)
     est_li_pobochnye_dejstviya_ot_naznachennykh_lekarstvennykh = models.CharField(max_length=255, blank=True, null=True)
     pacientu_byla_ozvuchena_data_sleduyushchego_vizita = models.CharField(max_length=255, blank=True, null=True)
     pacientu_byli_predostavleny_kontaktnye_nomera_cpp = models.CharField(max_length=255, blank=True, null=True)
     pacient_zvonil_po_ukazannym_kontaktnym_nomera_do_vyzova_smp = models.CharField(max_length=255, blank=True, null=True)
+
     prichina_po_kotoroj_pacient_ne_zvonil_po_ukazannym_nomeram = models.TextField( blank=True, null=True)
     sootvetstvuet_li_naznachennyj_bazovyj_plan_sostoyaniyu_pacie = models.CharField(max_length=255, blank=True, null=True)
     trebovanie_gospitalizacii_na_dannyj_moment = models.CharField(max_length=255, blank=True, null=True)
@@ -65,7 +67,7 @@ class SmpRazborTab(models.Model):
     data_rozhdeniya = models.DateField( blank=True, null=True)
     data_vklyucheniya_v_registr = models.DateField( blank=True, null=True)
 
-    ok_vps = models.CharField(max_length=10) # Новое  поле для кэр
+    ok_vps = models.CharField(max_length=100) # Новое  поле для кэр
 
     class Meta:
         db_table = 'smp_razbor_tab'  # Указываем имя таблицы в БД

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Проверка данных пациента</title>
+</head>
+<body>
+    <header>
+        <h1>Проверка данных пациента: {{ patient.name }}</h1>
+    </header>
+    <p>Возраст: {{ patient.p_p }}</p>
+    <p>Диагноз: {{ patient.diagnosis }}</p>
+    <!-- Выводим все поля пациента -->
+    <!-- Добавь другие поля по аналогии -->
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="confirm">Отправить в КЭР</button>
+        <button type="submit" name="edit">Корректировать</button>
+    </form>
+    <footer>
+        <!-- Здесь твой футер -->
+    </footer>
+</body>
+</html>

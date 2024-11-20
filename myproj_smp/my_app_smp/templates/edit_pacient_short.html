@@ -6,12 +6,13 @@
     <form method="POST">
         <a href="{% url 'home' %}" class="btn_save">Назад к списку пациентов </a>
         <button class="btn_save" type="submit" name="save" >Сохранить</button>
-        <button type="submit" name="send_to_ker" name="send_to_ker">Отправить в КЭР</button>
+        <button class="btn_save" type="submit" name="send_to_ker" name="send_to_ker">Отправить в КЭР</button>
 
         {% csrf_token %}
-
+Статус записи о пациенте: "{{patient.ok_vps }}"
         <div class="field-group-2-columns">
             <div>
+
                 <fieldset >
                     <legend>Данные по вызову СМП</legend>
                     <table >

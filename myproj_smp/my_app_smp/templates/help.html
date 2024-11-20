@@ -1,0 +1,35 @@
+<!-- child.html -->
+<style>
+    .help-text {
+        text-align: center;
+        margin: 20px;
+        font-size: 18px;
+        line-height: 1.5;
+    }
+    .help-text h1 {
+        color: #2c3e50;
+    }
+    .help-text .phone {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+</style>
+
+{% extends "edit_pacient_base.html" %}
+
+{% block content %}
+<nav>
+    <a href="{% url 'home' %}" class="btn">Вернуться назад</a>
+</nav>
+
+<div style="text-align: center; margin: 20px;">
+    <h2 style="color: #2c3e50;">Внимание!</h2>
+    <p style="font-size: 20px; line-height: 1.5;">
+        При возникновении затруднений при работе с программой - звоните по телефону
+        <strong style="color: #e74c3c;">90-40</strong>.
+    </p>
+    <p style="font-size: 18px; line-height: 1.5;">
+        "Отдел статистики и аналитики"
+    </p>
+</div>
+{% endblock %}
