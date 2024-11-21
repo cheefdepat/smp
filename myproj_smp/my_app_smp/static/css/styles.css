@@ -63,6 +63,7 @@ tr:hover {
     color: #000000; /* Цвет текста при наведении */
 }
 
+
 footer {
     background-color: #003366; /* Цвет футера */
     color: white;
@@ -103,7 +104,7 @@ legend {
 .btn {
     display: inline-block;
     padding: 10px 15px;
-    background-color: #003366; /* Темно-синий цвет */
+    background-color: #037bdd; /* Темно-синий цвет */
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -112,6 +113,7 @@ legend {
 
 .btn:hover {
     background-color: #005599; /* Цвет при наведении */
+    color: rgb(255, 230, 0);
 }
 
 .btn_save {
@@ -127,6 +129,22 @@ legend {
 
 .btn_save:hover {
     background-color: #0070b0; /* Цвет при наведении */
+}
+
+.btn_start {
+    display: inline-block;
+    padding: 15px 15px;
+    background-color: #2ca74a;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin: 10px 5px;    
+}
+
+.btn_start:hover {
+    background-color: #1c682f; /* Цвет при наведении */
+    color: white;
 }
 
 .search-container {
@@ -166,4 +184,30 @@ select {
     background-color: #b5cfde;
     border-radius: 5px;
     height: 28px;
+}
+
+.table_home {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    border: 1px solid #b1b1b1;
+    padding: 4px;
+    text-align: center !important; /* Центрирование текста */
+}
+
+.table_home th {
+    border: 1px solid #b1b1b1;
+    padding: 4px;
+    text-align: center !important; /* Центрирование текста */
+}
+
+.table_home td {
+    border: 1px solid #b1b1b1;
+    padding: 4px;
+    text-align: center !important; /* Центрирование текста */
+}
+
+.table_home tr:hover {
+    background: #bde7ff; /* Цвет фона при наведении */
+    color: #000000; /* Цвет текста при наведении */
 }

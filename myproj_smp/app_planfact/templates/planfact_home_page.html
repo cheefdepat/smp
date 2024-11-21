@@ -12,8 +12,8 @@
         </script>
 </head>
 <body>
-   <header>
-        <h4>Данные из таблицы СМП</h4>
+   <header style="background-color: #008000;">
+        <h4>Данные таблицы ПЛАН-ФАКТ</h4>
         <div style="text-align: right; margin-top: -30px; margin-bottom: 20px;">
             <strong>Общее количество записей: {{ total_records }}</strong>
         </br>
@@ -44,12 +44,13 @@
 
 
 
-
+    <!--------------------------------------------------------ФИЛЬТРЫ----------------------------------------------->
     <!-- Форма поиска и количество записей на странице -->
     <form method="GET" action="" class="search-container">
         <div style="width: 100%;">
             <div>
                     <input style="background-color: #b5cfde;" type="text" name="search_fio" placeholder="Введите  фамилию пациента" value="{{ search_fio }}">
+<input style="background-color: #b5cfde;" type="date" name="search_data_zamecaniya" placeholder="Введите search_data_zamecaniya" value="{{ search_data_zamecaniya }}">
 
                     <select name="search_kurir" onchange="submitForm()">
                     <option value="">Фильтр ВПС(Все ВПС)</option>
@@ -72,42 +73,39 @@
             <div style="text-align: right;">
                 Количество строк: <input type="number" style="width: 50px;" name="records_per_page" placeholder="Записей на странице" value="{{ records_per_page }}" min="1">
             </div>
-
+    <!--------------------------------------------------------ФИЛЬТРЫ------------------------------------------------>
         </div>
-
-
     </form>
+
+           <main>
+        {% block content %}
+        <!-- Основной контент будет вставлен сюда -->
 
 <table>
     <thead>
         <tr>
+            <!--------------- Заголовки -------------------------->
             <th>Действия</th>  <!-- Изменено на "Действия" для ясности -->
-            <th>№ п/п</th>
-            <th>Дата вызова SMP</th>
-            <th>FIO пациента</th>
-            <th>Количество выездов в день</th>
-            <th>Дата рождения</th>
-            <th>Полис ОМС</th>
-            <th>Результат вызова</th>
-            <th>Актив / Пассив</th>
-            <th>Диагноз по МКБ</th>
-            <th>Причина вызова скорой помощи</th>
-            <th>Наличие болевого синдрома</th>
-            <th>Причина вызова скорой помощи (кратко)</th>
-            <th>Курирующее подразделение ОВПП</th>
-            <th>Дата включения в регистр</th>
-            <th>Дата последнего визита врача из протокола осмотра EMIAS</th>
+            <th>Дата получения замечания</th>
+            <th>ПОЛИС ОМС</th>
+            <th>ФИО</th>
+            <th>ДР</th>
+            <th>ОВПП</th>
+            <th>Плановая дата визита согласно ЕМИАС/реестру</th>
+            <th>Фактическая дата визита согласно ЕМИАС</th>
+            <th>Вопрос для разбора</th>
+            <th>Статус выполнения</th>
+
         </tr>
     </thead>
     <tbody>
-        {% for item in data_smp %}
+        {% for item in data_plf %}
             <tr>
                 <td>
 
-
                     {% if user.is_authenticated %}
                     {% if 'vps' in groups %}
-                    <a href="{% url 'my_app_smp:edit_patient' item.id %}" class="btn_save">Правки(ВПС)</a> <!-- Ссылка на редактирование -->
+                    <a href="{% url 'app_planfact:plf_edit_patient' item.id %}" class="btn_save">Правки(ВПС)pf</a> <!-- Ссылка на редактирование -->
                     {% endif  %}
                     {% if 'ker' in groups %}
                     <a href="{% url 'my_app_smp:edit_ker' item.id %}" class="btn_save">Правки(КЭР)</a><!-- Ссылка на редактирование -->
@@ -117,21 +115,16 @@
                     {% endif  %}
                     {% endif  %}
                 </td>
-                <td>{{ item.p_p }}</td>
-                <td>{{ item.data_vyzova_smp|date:"d.m.Y" }}</td>
-                <td>{{ item.fio_pacienta }}</td>
-                <td>{{ item.kolichestvo_vyezdov_v_den }}</td>
-                <td>{{ item.data_rozhdeniya|date:"d.m.Y"  }}</td>
+                <td>{{ item.data_planfakta|date:"d.m.Y"  }}</td>
                 <td>{{ item.polis_oms }}</td>
-                <td>{{ item.rezultat_vyzova }}</td>
-                <td>{{ item.aktiv_passiv }}</td>
-                <td>{{ item.diagnoz_po_mkb }}</td>
-                <td>{{ item.prichina_vyzova_skoroiy_pomoschi }}</td>
-                <td>{{ item.nalichie_bolevogo_sindroma }}</td>
-                <td>{{ item.prichina_vyzova_skoroiy_pomoschi_kratko }}</td>
-                <td>{{ item.kuriruyushchee_podrazdelenie_ovpp }}</td>
-                <td>{{ item.data_vklyucheniya_v_registr|date:"d.m.Y"  }}</td>
-                <td>{{ item.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias|date:"d.m.Y"  }}</td>
+                <td>{{ item.fio_pacienta }}</td>
+                <td>{{ item.data_rozhdeniya|date:"d.m.Y"  }}</td>
+                <td>{{ item.ovpp_name  }}</td>
+                <td>{{ item.planovaya_data_vizita_soglasno_emias_reestru|date:"d.m.Y"  }}</td>
+                <td>{{ item.fakticheskaya_data_vizita_soglasno_emias|date:"d.m.Y"  }}</td>
+                <td>{{ item.vopros_dlya_razbora  }}</td>
+                <td>{{ item.ok_status_zapolnenia  }}</td>
+
             </tr>
         {% endfor %}
     </tbody>
@@ -140,23 +133,25 @@
     <!-- Пагинация -->
     <div class="pagination">
         <span class="step-links">
-            {% if data_smp.has_previous %}
+            {% if data_plf.has_previous %}
                 <a href="?page=1">&laquo; Первая</a>
-                <a href="?page={{ data_smp.previous_page_number }}">Предыдущая</a>
+                <a href="?page={{ data_plf.previous_page_number }}">Предыдущая</a>
             {% endif %}
 
             <span class="current">
-                Страница {{ data_smp.number }} из {{ data_smp.paginator.num_pages }}.
+                Страница {{ data_plf.number }} из {{ data_plf.paginator.num_pages }}.
             </span>
 
-            {% if data_smp.has_next %}
-                <a href="?page={{ data_smp.next_page_number }}">Следующая</a>
-                <a href="?page={{ data_smp.paginator.num_pages }}">Последняя &raquo;</a>
+            {% if data_plf.has_next %}
+                <a href="?page={{ data_plf.next_page_number }}">Следующая</a>
+                <a href="?page={{ data_plf.paginator.num_pages }}">Последняя &raquo;</a>
             {% endif %}
         </span>
     </div>
-
-    <footer>
+<!-- ко----------------------------------------нец блока endblock------------------------>
+    {% endblock %}
+    </main>
+    <footer style="background-color: #008000;">
         <p>&copy; 2024 ЦПП. Все права защищены.</p>
     </footer>
 </body>

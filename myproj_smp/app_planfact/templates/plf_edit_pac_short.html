@@ -1,0 +1,105 @@
+{% extends "planfact_home_page.html" %}
+
+
+{% block content %}
+
+    <form method="POST">
+        <a href="{% url 'app_planfact:plf_start_list' %}" class="btn_save">Назад к списку пациентов </a>
+        <button class="btn_save" type="submit" name="plf_save_vps" >Сохранить</button>
+        <button class="btn_save" type="submit" name="plf_send_to_ker" >Отправить в КЭР</button>
+
+        {% csrf_token %}
+        <br>
+
+        <div class="field-group-2-columns">
+            <div>
+
+                <fieldset >
+                    <legend>Данные по вызову СМП</legend>
+                    <table >
+                        <tr>
+                            <th >Дата получения замечания:</th>
+                            <td > {{ patient.data_planfakta }} </td>
+                        </tr>
+                        <tr>
+                            <th >ПОЛИС ОМС:</th>
+                            <td > {{ patient.polis_oms }} </td>
+                        </tr>
+                        <tr>
+                            <th>ФИО пациента:</th>
+                            <td> {{ patient.fio_pacienta  }}  </td>
+                        </tr>
+                          <tr>
+                            <th>Дата рождения:</th>
+                            <td> {{ patient.data_rozhdeniya  }}  </td>
+                        </tr>
+                        <tr>
+                            <th>ОВПП:</th>
+                            <td> {{ patient.ovpp_name  }}  </td>
+                        </tr>
+
+                        <tr>
+                            <th>Плановая дата визита согласно ЕМИАС/реестру:</th>
+                                <td>
+                                    {% if patient.planovaya_data_vizita_soglasno_emias_reestru %}
+                                        {{ patient.planovaya_data_vizita_soglasno_emias_reestru }}
+                                    {% else %}
+                                        Не указана
+                                    {% endif %}
+                                </td>
+                        </tr>
+                        <tr>
+                            <th>Фактическая дата визита согласно ЕМИАС:</th>
+                            <td>
+                                {% if patient.fakticheskaya_data_vizita_soglasno_emias %}
+                                        {{ patient.fakticheskaya_data_vizita_soglasno_emias }}
+                                    {% else %}
+                                        Не указана
+                                    {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Вопрос для разбора:</th>
+                            <td> {{ patient.vopros_dlya_razbora  }}  </td>
+                        </tr>
+
+                        </tr>
+                    </table>
+                         </fieldset>
+            </div>
+       <!------------------------------------------------------------------------------------------------------------>
+            <div>
+                <fieldset>
+                    <legend>Поля для внесения данных</legend>
+                    <legend>Статус записи о пациенте: "{{patient.ok_status_zapolnenia }}"</legend>
+                    <table>
+                        <tr>
+                            <th>Ответ КЦ:</th>
+                            <td><input type="text" name="otvet_kc"  value="{{ patient.otvet_kc }}" ></td>
+                        </tr>
+                        <tr>
+                            <th>Дефекты в оказании ПМП на основании карты контроля качества оказания ПМП в амбулаторных условиях. (есть- указать номера пунктов чек-листа/ нет):</th>
+                            <td><input type="text" name="defekty_v_okazanii_pmp_na_osnovanii_karty_kontrolya_kachest"  value="{{ patient.defekty_v_okazanii_pmp_na_osnovanii_karty_kontrolya_kachest }}" ></td>
+                        </tr>
+                        <tr>
+                            <th>Описание дефектов:</th>
+                            <td><input type="text" name="opisanie_defektov"  value="{{ patient.opisanie_defektov }}" ></td>
+                        </tr>
+                        <tr>
+                            <th>Выводы (связь переноса визита с дефектами оказания ПМП)              ДА/НЕТ:</th>
+                            <td><input type="text" name="vyvody_svyaz_perenosa_vizita_s_defektami_okazaniya_pmp"  value="{{ patient.vyvody_svyaz_perenosa_vizita_s_defektami_okazaniya_pmp }}" ></td>
+                        </tr>
+                        <tr>
+                            <th>Выполненные мероприятия по недопущению переносов. (коррекция терапии, изменеие базового плана, госпитализация):</th>
+                            <td><input type="text" name="vypolnennye_meropriyatiya_po_nedopushcheniyu_perenosov"  value="{{ patient.vypolnennye_meropriyatiya_po_nedopushcheniyu_perenosov }}" ></td>
+                        </tr>
+                    </table>
+                </fieldset>
+
+            </div>
+        </div>
+
+
+    </form>
+
+{% endblock %}

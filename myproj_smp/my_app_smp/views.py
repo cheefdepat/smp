@@ -22,7 +22,8 @@ def login_view(request):
 
         if user is not None:
             auth_login(request, user)
-            return redirect('home')
+            return redirect('my_app_smp:start_page')
+            # return redirect('start_page')
         else:
             error_message = "Вас нет в списке"
             return render(request, 'login.html', {'error_message': error_message})
@@ -35,6 +36,9 @@ def logout(request):
     print("User logged out")  # Отладочное сообщение
     return redirect('login')  # Перенаправление на главную страницу
     # return render(request, 'login.html')
+
+def start_page(request):
+    return render(request, 'start.html')
 
 
 # class MyprojectLogout(LogoutView):
@@ -129,13 +133,15 @@ def home(request):
         'groups': user_groups_list, # Получаем все группы
     })
 
+
+
 # @login_required
 def patient_detail(request, id):
     patient = get_object_or_404(SmpRazborTab, id=id)  # Получаем запись по ID
 
     return render(request, 'patient_detail.html', {'patient': patient})
 
-# @login_required
+
 def edit_patient(request, id):
     patient = get_object_or_404(SmpRazborTab, id=id)
 
@@ -271,13 +277,13 @@ def edit_patient(request, id):
             print('ssssss-----------------')
             # if patient.is_valid():
             patient.save()
-            return redirect('home')
+            return redirect('my_app_smp:home')
 
         elif 'send_to_ker' in request.POST:  # Кнопка "Отправить в КЭР"
             # if patient.is_valid():
             print('send_to_ker-----------------')
             patient.save()  # Сохраняем изменения
-            return redirect('proverka', id=patient.id)  # Переходим на страницу проверки
+            return redirect('my_app_smp:proverka', id=patient.id)  # Переходим на страницу проверки
 
         # patient.save()  # Сохраняем изменения
         # return redirect('home',
@@ -329,19 +335,19 @@ def edit_ker(request, id):
         if 'save_ker' in request.POST:  # Кнопка "Сохранить"
             # if patient.is_valid():
             patient.save()
-            return redirect('home')
+            return redirect('my_app_smp:home')
 
         elif 'return_na_vps' in request.POST:  # Кнопка "Отправить в КЭР"
             patient.ok_vps = "впс"
             patient.save()  # Сохраняем изменения
-            return redirect('home')  # Переходим на страницу проверки
+            return redirect('my_app_smp:home')  # Переходим на страницу проверки
 
         elif 'go_gv' in request.POST:  # Кнопка "Отправить в КЭР"
             patient.ok_vps = "Передано Глав.врачу"
             patient.save()  # Сохраняем изменения
-            return redirect('proverka_ker', id=patient.id)  # Переходим на страницу проверки
+            return redirect('my_app_smp:proverka_ker', id=patient.id)  # Переходим на страницу проверки
 
-        return redirect('home',
+        return redirect('my_app_smp:home',
 
                         )  # Перенаправляем на главную страницу
 
@@ -358,10 +364,10 @@ def proverka(request, id):
         if 'ot_vps_v_ker' in request.POST:  # Кнопка "Отправить в КЭР"
             patient.ok_vps = "Передано в КЭР"
             patient.save()
-            return redirect('home')  # Переходим на главную страницу
+            return redirect('my_app_smp:home')  # Переходим на главную страницу
 
         elif 'korrektirovat' in request.POST:  # Кнопка "Корректировать"
-            return redirect('edit_patient', id=id)  # Возвращаем на страницу редактирования
+            return redirect('my_app_smp:edit_patient', id=id)  # Возвращаем на страницу редактирования
 
     return render(request, 'patient_detail.html', {'patient': patient})
 
@@ -373,12 +379,12 @@ def proverka_ker(request, id):
         if 'ot_ker_na_glav' in request.POST:  # Кнопка "Отправить в КЭР"
             patient.ok_vps = "Передано Глав.врачу"
             patient.save()
-            return redirect('home')  # Переходим на главную страницу
+            return redirect('my_app_smp:home')  # Переходим на главную страницу
 
         elif 'korrektirovat_ker' in request.POST:  # Кнопка "Корректировать"
             patient.ok_vps = "Передано в КЭР"
             patient.save()
-            return redirect('home')  # Возвращаем на страницу редактирования
+            return redirect('my_app_smp:home')  # Возвращаем на страницу редактирования
 
     return render(request, 'proverka_ot_ker_na_glav.html', {'patient': patient})
 
@@ -412,24 +418,24 @@ def edit_glav(request, id):
         if 'save_glav' in request.POST:  # Кнопка "Сохранить"
             # if patient.is_valid():
             patient.save()
-            return redirect('home')
+            return redirect('my_app_smp:home')
 
         elif 'return_na_vps' in request.POST:  # Кнопка "Отправить в КЭР"
             patient.ok_vps = "впс"
             patient.save()  # Сохраняем изменения
-            return redirect('home')  # Переходим на страницу проверки
+            return redirect('my_app_smp:home')  # Переходим на страницу проверки
 
         elif 'return_na_ker' in request.POST:  # Кнопка "Отправить в КЭР"
             patient.ok_vps = "Передано КЭР"
             patient.save()  # Сохраняем изменения
-            return redirect('home')  # Переходим на страницу проверки
+            return redirect('my_app_smp:home')  # Переходим на страницу проверки
 
         elif 'go_dzm' in request.POST:  # Кнопка "Отправить в КЭР"
             patient.ok_vps = "Передано ДЗМ"
             patient.save()  # Сохраняем изменения
-            return redirect('proverka_glav', id=patient.id)  # Переходим на страницу проверки
+            return redirect('my_app_smp:proverka_glav', id=patient.id)  # Переходим на страницу проверки
 
-        return redirect('home',
+        return redirect('my_app_smp:home',
 
                         )  # Перенаправляем на главную страницу
 
@@ -444,11 +450,11 @@ def proverka_glav(request, id):
         if 'ot_glav_na_dzm' in request.POST:  # Кнопка "Отправить в КЭР"
             patient.ok_vps = "Передано ДЗМ"
             patient.save()
-            return redirect('home')  # Переходим на главную страницу
+            return redirect('my_app_smp:home')  # Переходим на главную страницу
 
         elif 'korrektir_glav' in request.POST:  # Кнопка "Корректировать"
             patient.ok_vps = "Передано Глав.врачу"
             patient.save()
-            return redirect('home')  # Возвращаем на страницу редактирования
+            return redirect('my_app_smp:home')  # Возвращаем на страницу редактирования
 
     return render(request, 'proverka_ot_glav.html', {'patient': patient})

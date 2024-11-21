@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Начальная страница</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Добро пожаловать!</h1>
+        <div style="text-align: right; margin-top: -30px; margin-right: 30px;">                    
+        Вы авторизованы как " {{user}} "        
+        </div>
+    </header>
+       <nav>
+        <a href="{% url 'my_app_smp:help' %}" class="btn">Помощь</a>
+        <a href="{% url 'my_app_smp:logout' %}" class="btn">Выход</a>
+    </nav>
+    <div style="text-align: center;">
+        <h3>Для продолжение работы выберите необходимое приложение:</h3>
+        <a href="{% url 'my_app_smp:home' %}" class="btn_start">Перейти в приложение СМП</a><br>
+        <a href="{% url 'app_planfact:plf_start_list' %}" class="btn_start">Перейти в приложение План-факт</a><br>
+        <a href="#">Перейти в приложение КИС</a><br>
+        <p></p>
+    </div>
+    <footer>
+        <p>&copy; 2024 ЦПП. Все права защищены.</p>
+    </footer>
+</body>
+</html>
