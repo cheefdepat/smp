@@ -4,7 +4,7 @@
 {% block content %}
 
     <form method="POST">
-        <a href="{% url 'home' %}" class="btn_save">Отменить правки</a>
+        <a href="{% url 'my_app_smp:home' %}" class="btn_save">Отменить правки</a>
         <button class="btn_save" type="submit" name="return_na_vps">Вернуть Зав.ВПС</button>
         <button class="btn_save" type="submit" name="save_ker">Сохранить</button>
         <button class="btn_save" type="submit" name="go_gv">Передать Главврачу</button>
@@ -14,7 +14,7 @@
 
         <div class="field-group-2-columns">
             <div>
-                Статус записи о пациенте: "{{patient.ok_vps }}"
+<!--                Статус записи о пациенте: "{{patient.ok_vps }}"-->
                 <fieldset >
                     <legend>Данные по вызову СМП</legend>
                     <table >
@@ -77,12 +77,13 @@
                         <tr>
                             <th>Дата последнего визита врача из протокола осмотра ЕМИАС:</th>
                             <td> {{ patient.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias  }}  </td>
-                        </tr>
+                        </tr>                        
                     </table>
                 </fieldset>
-            </br>
+            <br>
                 <fieldset >
                     <legend>Поля для внесения данных</legend>
+
                     <table>
                         <tr>
                             <th>ФИО врача:</th>
@@ -106,7 +107,7 @@
                         </tr>
                     </table>
                 </fieldset>
-            </br>
+            <br>
             <fieldset >
                 <legend>Данные из последнего протокола врача</legend>
                 <table>
@@ -136,10 +137,10 @@
                     </tr>
                 </table>
             </fieldset>
-        </br>
+        <br>
                 <fieldset >
                     <legend>Данные от Заведующего</legend>
-                    <table>
+                    <table>                        
                         <tr>
                             <th>6. Дата получения сведений по вызовам СМП от КЦ</th>
                             <td>{{ patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc }}</td>
@@ -222,10 +223,11 @@
             <div>
                 <fieldset>
                     <legend>Поля для внесения данных</legend>
+                   <legend>Статус записи о пациенте: "{{patient.ok_vps }}"</legend>
                     <table>
                         <tr>
                             <th>Базовый план назначен корректно</th>
-                            <td><input list="da_net" name="bazovyj_plan_naznachen_korrektno"  value="{{ patient.bazovyj_plan_naznachen_korrektno }}" required pattern="Да|Нет">
+                            <td><input list="da_net" name="bazovyj_plan_naznachen_korrektno"  value="{{ patient.bazovyj_plan_naznachen_korrektno }}" pattern="Да|Нет">
                                 <datalist id="da_net">
                                     <option value="Да">
                                     <option value="Нет">
@@ -234,15 +236,15 @@
                         </tr>
                         <tr>
                             <th>Оценка состояния соответствует базовому плану</th>
-                            <td><input list="da_net" name="ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu" value="{{ patient.ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu }}" required pattern="Да|Нет"> </td>
+                            <td><input list="da_net" name="ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu" value="{{ patient.ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu }}" pattern="Да|Нет"> </td>
                         </tr>
                         <tr>
                             <th>Жалобы описаны в полном объёме</th>
-                            <td><input list="da_net" name="zhaloby_opisany_v_polnom_obeme" value="{{ patient.zhaloby_opisany_v_polnom_obeme }}" required pattern="Да|Нет"> </td>
+                            <td><input list="da_net" name="zhaloby_opisany_v_polnom_obeme" value="{{ patient.zhaloby_opisany_v_polnom_obeme }}" pattern="Да|Нет"> </td>
                         </tr>
                         <tr>
                             <th>Оценка заведующего произведена корректно</th>
-                            <td><input list="da_net" name="ocenka_zaveduyushchego_proizvedena_korrektno" value="{{ patient.ocenka_zaveduyushchego_proizvedena_korrektno }}" required pattern="Да|Нет"> </td>
+                            <td><input list="da_net" name="ocenka_zaveduyushchego_proizvedena_korrektno" value="{{ patient.ocenka_zaveduyushchego_proizvedena_korrektno }}" pattern="Да|Нет"> </td>
                         </tr>
                         <tr>
                             <th>Оценка действий врача до вызова СМП</th>
@@ -282,7 +284,7 @@
             <!--            <label>Причина вызова:</label>-->
             <!--            <input type="text" name="kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya" value="{{ patient.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya }}">-->
             <!--        </div>-->
-        </br>
+        <br>
 
     </form>
 

@@ -4,7 +4,7 @@
 {% block content %}
 
     <form method="POST">
-        <a href="{% url 'home' %}" class="btn_save">Отменить правки</a>
+        <a href="{% url 'my_app_smp:home' %}" class="btn_save">Отменить правки</a>
         <button class="btn_save" type="submit" name="return_na_vps">Вернуть на доработку Зав.ВПС</button>
         <button class="btn_save" type="submit" name="return_na_ker">Вернуть на доработку КЭР</button>
         <button class="btn_save" type="submit" name="save_glav">Сохранить</button>
@@ -41,7 +41,7 @@
                         </tr>
                     </table>
                 </fieldset>
-            </br>
+            <br>
             <fieldset >
                 <legend>Данные из последнего протокола врача</legend>
                 <table>
@@ -71,7 +71,7 @@
                     </tr>
                 </table>
             </fieldset>
-        </br>
+        <br>
                 <fieldset >
                     <legend>Данные от Заведующего</legend>
                     <table>
@@ -153,7 +153,7 @@
                         </tr>
                     </table>
                 </fieldset>
-                </br>
+                <br>
                 <fieldset>
                     <legend>Данные от КЭР</legend>
                     <table>
@@ -198,7 +198,7 @@
                         </tr>
                     </table>
                 </fieldset>
-            </br>
+            <br>
                 <fieldset>
                     <legend>Поля для внесения данных</legend>
                     <table>
@@ -208,7 +208,7 @@
                         </tr>
                     </table>
                 </fieldset>
-            </br>
+            <br>
             <fieldset >
                 <legend>Данные по вызову СМП</legend>
                 <table >

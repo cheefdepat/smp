@@ -24,6 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-kiytz94(_7#$gy*tl8f)q=oir-rcb-u9ra-@h%v#71c#3mpbhw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = False
 DEBUG = True
 
 ALLOWED_HOSTS = [
@@ -47,9 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 'app_smp',
     'my_app_smp',
-    'app_kis_long',
     'app_planfact',
-
 ]
 
 MIDDLEWARE = [
@@ -87,32 +86,28 @@ WSGI_APPLICATION = 'myproj_smp.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-        # ------------------ sqlite3
-    # 'default': {
-    #         'ENGINE': 'django.db.backends.sqlite3',
-    #         'NAME': BASE_DIR / "db.sqlite3",
-    #     }
-
-    # ----------------- на mysql -----------------
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'mysql_smp',
-    #     'USER': 'cheef',  # Замените на ваше имя пользователя
-    #     # 'PASSWORD': 'mysql_oa',  # Замените на ваш пароль
-    #     'PASSWORD': 'cheef',  # Замените на ваш пароль
-    #     'HOST': '10.159.8.163',  # Или другой хост, если необходимо
-    #     'PORT': '3306',  # Порт по умолчанию для PostgreSQL
-    # }
-
-    # ----------------- на сервере ДИТа -----------------
+# ----------------------------mysql
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',  # Замените на ваше имя пользователя
-        'PASSWORD': 'postgres_oa',  # Замените на ваш пароль
-        'HOST': '10.159.8.163',  # Или другой хост, если необходимо
-        'PORT': '5432',  # Порт по умолчанию для PostgreSQL
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mysql_smp',
+        'USER': 'cheef',  # Замените на ваше имя пользователя
+        'PASSWORD': 'cheef',  # Замените на ваш пароль
+        # 'HOST': '10.159.8.163',  # Или другой хост, если необходимо
+        # 'HOST': 'localhost',  # Или другой хост, если необходимо
+        'HOST': '127.0.0.1',  # Или другой хост, если необходимо
+        'PORT': '3306',  # Порт по умолчанию для PostgreSQL
     }
+# ----------------------------postgresql
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'postgres',
+    #     'USER': 'postgres',  # Замените на ваше имя пользователя
+    #     'PASSWORD': 'postgres_oa',  # Замените на ваш пароль
+    #     # 'HOST': '10.159.8.163',  # Или другой хост, если необходимо
+    #     # 'HOST': 'localhost',  # Или другой хост, если необходимо
+    #     'HOST': '127.0.0.1',  # Или другой хост, если необходимо
+    #     'PORT': '5432',  # Порт по умолчанию для PostgreSQL
+    # }
 }
 
 
@@ -135,6 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+
 ]
 
 
@@ -156,10 +152,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Путь, куда будут собираться статические файлы
+STATIC_URL = 'my_app_smp/static/'
+# STATIC_URL = '/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'my_app_smp/static/css'),
+    # os.path.join(BASE_DIR, 'my_app_smp/static'),
+    os.path.join(BASE_DIR / 'static'),
 ]
 
 
@@ -167,13 +164,5 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# LOGIN_REDIRECT_URL = 'home'  # Замените 'home' на имя вашего представления
-# LOGIN_REDIRECT_URL = '/login/'  # Замените 'home' на имя вашего представления
-LOGIN_REDIRECT_URL = '/'  # Замените 'home' на имя вашего представления
-# LOGOUT_REDIRECT_URL = 'login'  # Замените 'login' на имя вашего представления
-
-LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
-# LOGOUT_REDIRECT_URL = '/'
-LOGIN_REDIRECT_URL = '/start/'  # Укажите путь к вашей начальной странице
+LOGIN_REDIRECT_URL = 'home'  # Замените 'home' на имя вашего представления
+LOGOUT_REDIRECT_URL = 'login'  # Замените 'login' на имя вашего представления

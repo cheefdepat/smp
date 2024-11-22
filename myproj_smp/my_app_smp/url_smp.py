@@ -12,14 +12,11 @@ from .views import proverka_glav
 from .views import help
 from .views import start_page
 # from .views import kis_patient_list
-
 from .views import login_view
+from django.conf.urls import handler404, handler500
 
-from django.contrib.auth.decorators import login_required
+app_name = 'my_app_smp'  # Убедитесь, что это указано
 
-# from .views import MyprojectLogout
-    # edit_record  # Импортируйте ваше новое представление
-app_name = 'my_app_smp'
 
 urlpatterns = [
     path('', login_view, name='login'),
@@ -43,3 +40,5 @@ urlpatterns = [
 
 
 ]
+handler404 = 'my_app_smp.views.custom_404_view'
+handler500 = 'my_app_smp.views.custom_500_view'
