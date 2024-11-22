@@ -10,6 +10,8 @@ from .views import proverka_ker
 from .views import edit_glav
 from .views import proverka_glav
 from .views import help
+from .views import start_page
+# from .views import kis_patient_list
 
 from .views import login_view
 
@@ -17,15 +19,16 @@ from django.contrib.auth.decorators import login_required
 
 # from .views import MyprojectLogout
     # edit_record  # Импортируйте ваше новое представление
+app_name = 'my_app_smp'
 
 urlpatterns = [
     path('', login_view, name='login'),
+    path('start/', start_page, name='start_page'),
     path('home/', home, name='home'),
+    # path('kis_patient_list/', kis_patient_list, name='kis_patient_list'),
     path('edit/<int:id>/', edit_patient, name='edit_patient'),  # Новый маршрут для редактирования
-
     path('patient/<int:id>/', patient_detail, name='patient_detail'),  # Новый маршрут для деталей пациента
 
-    # path('login/', login_view, name='login'),  # авторизац
 
     #     ------- logout-----
     # path('logout/', auth_views.LogoutView.as_view(), name='logout'),# выход

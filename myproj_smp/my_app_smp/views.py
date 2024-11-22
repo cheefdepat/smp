@@ -22,7 +22,8 @@ def login_view(request):
 
         if user is not None:
             auth_login(request, user)
-            return redirect('home')
+            return redirect('my_app_smp:start_page')
+            # return redirect('start_page')
         else:
             error_message = "Вас нет в списке"
             return render(request, 'login.html', {'error_message': error_message})
@@ -35,6 +36,9 @@ def logout(request):
     print("User logged out")  # Отладочное сообщение
     return redirect('login')  # Перенаправление на главную страницу
     # return render(request, 'login.html')
+
+def start_page(request):
+    return render(request, 'start.html')
 
 
 # class MyprojectLogout(LogoutView):
@@ -129,13 +133,15 @@ def home(request):
         'groups': user_groups_list, # Получаем все группы
     })
 
+
+
 # @login_required
 def patient_detail(request, id):
     patient = get_object_or_404(SmpRazborTab, id=id)  # Получаем запись по ID
 
     return render(request, 'patient_detail.html', {'patient': patient})
 
-# @login_required
+
 def edit_patient(request, id):
     patient = get_object_or_404(SmpRazborTab, id=id)
 

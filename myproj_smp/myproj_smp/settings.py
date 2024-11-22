@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 'app_smp',
     'my_app_smp',
+    'app_kis_long',
+    'app_planfact',
+
 ]
 
 MIDDLEWARE = [
@@ -84,6 +87,24 @@ WSGI_APPLICATION = 'myproj_smp.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
+        # ------------------ sqlite3
+    # 'default': {
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': BASE_DIR / "db.sqlite3",
+    #     }
+
+    # ----------------- на mysql -----------------
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'mysql_smp',
+    #     'USER': 'cheef',  # Замените на ваше имя пользователя
+    #     # 'PASSWORD': 'mysql_oa',  # Замените на ваш пароль
+    #     'PASSWORD': 'cheef',  # Замените на ваш пароль
+    #     'HOST': '10.159.8.163',  # Или другой хост, если необходимо
+    #     'PORT': '3306',  # Порт по умолчанию для PostgreSQL
+    # }
+
+    # ----------------- на сервере ДИТа -----------------
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
@@ -136,8 +157,9 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Путь, куда будут собираться статические файлы
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'my_app_smp/static'),
+    os.path.join(BASE_DIR, 'my_app_smp/static/css'),
 ]
 
 
@@ -145,5 +167,13 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGIN_REDIRECT_URL = 'home'  # Замените 'home' на имя вашего представления
-LOGOUT_REDIRECT_URL = 'login'  # Замените 'login' на имя вашего представления
+
+# LOGIN_REDIRECT_URL = 'home'  # Замените 'home' на имя вашего представления
+# LOGIN_REDIRECT_URL = '/login/'  # Замените 'home' на имя вашего представления
+LOGIN_REDIRECT_URL = '/'  # Замените 'home' на имя вашего представления
+# LOGOUT_REDIRECT_URL = 'login'  # Замените 'login' на имя вашего представления
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+# LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/start/'  # Укажите путь к вашей начальной странице
