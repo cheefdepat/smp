@@ -12,7 +12,7 @@
         </script>
 </head>
 <body>
-   <header style="background-color: #008000;">
+   <header style="background-color: #004b00;">
         <h4>Данные таблицы ПЛАН-ФАКТ</h4>
         <div style="text-align: right; margin-top: -30px; margin-bottom: 20px;">
             <strong>Общее количество записей: {{ total_records }}</strong>
@@ -50,7 +50,7 @@
         <div style="width: 100%;">
             <div>
                     <input style="background-color: #b5cfde;" type="text" name="search_fio" placeholder="Введите  фамилию пациента" value="{{ search_fio }}">
-<input style="background-color: #b5cfde;" type="date" name="search_data_zamecaniya" placeholder="Введите search_data_zamecaniya" value="{{ search_data_zamecaniya }}">
+<input style="background-color: #b5cfde; width: 100px;" type="date" name="search_data_zamecaniya" placeholder="Введите search_data_zamecaniya" value="{{ search_data_zamecaniya }}">
 
                     <select name="search_kurir" onchange="submitForm()">
                     <option value="">Фильтр ВПС(Все ВПС)</option>
@@ -81,7 +81,7 @@
         {% block content %}
         <!-- Основной контент будет вставлен сюда -->
 
-<table>
+<table class="table_home">
     <thead>
         <tr>
             <!--------------- Заголовки -------------------------->
@@ -104,14 +104,14 @@
                 <td>
 
                     {% if user.is_authenticated %}
-                    {% if 'vps' in groups %}
-                    <a href="{% url 'app_planfact:plf_edit_patient' item.id %}" class="btn_save">Правки(ВПС)pf</a> <!-- Ссылка на редактирование -->
-                    {% endif  %}
+<!--                    {% if 'vps' in groups %}-->
+                    <a href="{% url 'app_planfact:plf_edit_patient' item.id %}" class="btn_save">Правки(ВПС)</a> <!-- Ссылка на редактирование -->
+<!--                    {% endif  %}-->
                     {% if 'ker' in groups %}
-                    <a href="{% url 'my_app_smp:edit_ker' item.id %}" class="btn_save">Правки(КЭР)</a><!-- Ссылка на редактирование -->
+<!--                    <a href="{% url 'my_app_smp:edit_ker' item.id %}" class="btn_save">Правки(КЭР)</a>&lt;!&ndash; Ссылка на редактирование &ndash;&gt;-->
                     {% endif  %}
                      {% if 'glav' in groups %}
-                    <a href="{% url 'my_app_smp:edit_glav' item.id %}" class="btn_save">Правки(Главврач)</a><!-- Ссылка на редактирование -->
+<!--                    <a href="{% url 'my_app_smp:edit_glav' item.id %}" class="btn_save">Правки(Главврач)</a>&lt;!&ndash; Ссылка на редактирование &ndash;&gt;-->
                     {% endif  %}
                     {% endif  %}
                 </td>
@@ -151,7 +151,7 @@
 <!-- ко----------------------------------------нец блока endblock------------------------>
     {% endblock %}
     </main>
-    <footer style="background-color: #008000;">
+    <footer style="background-color: #004b00;">
         <p>&copy; 2024 ЦПП. Все права защищены.</p>
     </footer>
 </body>

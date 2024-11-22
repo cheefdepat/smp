@@ -22,6 +22,7 @@ def login_view(request):
 
         if user is not None:
             auth_login(request, user)
+            print(f"-----------------------------------------------------User {user} вошел")
             return redirect('my_app_smp:start_page')
             # return redirect('start_page')
         else:
@@ -38,6 +39,7 @@ def logout(request):
     # return render(request, 'login.html')
 
 def start_page(request):
+
     return render(request, 'start.html')
 
 
@@ -458,3 +460,9 @@ def proverka_glav(request, id):
             return redirect('my_app_smp:home')  # Возвращаем на страницу редактирования
 
     return render(request, 'proverka_ot_glav.html', {'patient': patient})
+
+def custom_404_view(request, exception):
+    return render(request, '404.html', status=404)
+
+def custom_500_view(request):
+    return render(request, '500.html', status=500)

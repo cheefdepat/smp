@@ -24,6 +24,7 @@ from app_planfact import views_plf
 # from app_kis_long import views_kis
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import handler404, handler500
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,6 +38,8 @@ urlpatterns = [
 
 ]
 
+# handler404 = 'my_app_smp.views.custom_404_view'
+# handler404 = 'my_app_smp.views.custom_500_view'
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
