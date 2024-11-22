@@ -34,7 +34,7 @@ def login_view(request):
 
 def logout(request):
     auth_logout(request)  # Выход из аккаунта
-    print("----------------------------------------------User logged out")  # Отладочное сообщение
+    print("-----------------------------------------00-----User logged out")  # Отладочное сообщение
     return redirect('login')  # Перенаправление на главную страницу
     # return render(request, 'login.html')
 
