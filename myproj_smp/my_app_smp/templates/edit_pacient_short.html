@@ -6,7 +6,7 @@
     <form method="POST">
         <a href="{% url 'my_app_smp:home' %}" class="btn_save">Назад к списку пациентов </a>
         <button class="btn_save" type="submit" name="save" >Сохранить</button>
-        <button class="btn_save" type="submit" name="send_to_ker" name="send_to_ker">Отправить в КЭР</button>
+        <button class="btn_save" type="submit" name="send_to_ker" >Отправить в КЭР</button>
 
         {% csrf_token %}
 Статус записи о пациенте: "{{patient.ok_vps }}"
@@ -161,7 +161,8 @@
                     <table>
                         <tr>
                             <th>6. Дата получения сведений по вызовам СМП от КЦ</th>
-                            <td><input type="date" name="data_polucheniya_svedenij_po_vyzovam_smp_ot_kc"  value="{{ patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc|date:'Y-m-d' }}" ></td>
+<!--                            <td><input type="date" name="data_polucheniya_svedenij_po_vyzovam_smp_ot_kc"  value="{{ patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc|date:'Y-m-d' }}" ></td>-->
+                             <td><input type="date" name="data_polucheniya_svedenij_po_vyzovam_smp_ot_kc"  value="{{ patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc|date:'Y-m-d' }}" > </td>
                         </tr>
                         <tr>
                             <th>7. Дата аудиопротокола после получения данных о вызове СМП?</th>

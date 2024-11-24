@@ -24,6 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-kiytz94(_7#$gy*tl8f)q=oir-rcb-u9ra-@h%v#71c#3mpbhw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 # DEBUG = False
 DEBUG = True
 
@@ -87,27 +88,27 @@ WSGI_APPLICATION = 'myproj_smp.wsgi.application'
 
 DATABASES = {
 # ----------------------------mysql
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mysql_smp',
-        'USER': 'cheef',  # Замените на ваше имя пользователя
-        'PASSWORD': 'cheef',  # Замените на ваш пароль
-        # 'HOST': '10.159.8.163',  # Или другой хост, если необходимо
-        # 'HOST': 'localhost',  # Или другой хост, если необходимо
-        'HOST': '127.0.0.1',  # Или другой хост, если необходимо
-        'PORT': '3306',  # Порт по умолчанию для PostgreSQL
-    }
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'mysql_smp',
+#         'USER': 'cheef',  # Замените на ваше имя пользователя
+#         'PASSWORD': 'cheef',  # Замените на ваш пароль
+#         # 'HOST': '10.159.8.163',  # Или другой хост, если необходимо
+#         # 'HOST': 'localhost',  # Или другой хост, если необходимо
+#         'HOST': '127.0.0.1',  # Или другой хост, если необходимо
+#         'PORT': '3306',  # Порт по умолчанию для PostgreSQL
+#     }
 # ----------------------------postgresql
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'postgres',
-    #     'USER': 'postgres',  # Замените на ваше имя пользователя
-    #     'PASSWORD': 'postgres_oa',  # Замените на ваш пароль
-    #     # 'HOST': '10.159.8.163',  # Или другой хост, если необходимо
-    #     # 'HOST': 'localhost',  # Или другой хост, если необходимо
-    #     'HOST': '127.0.0.1',  # Или другой хост, если необходимо
-    #     'PORT': '5432',  # Порт по умолчанию для PostgreSQL
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',  # Замените на ваше имя пользователя
+        'PASSWORD': 'postgres_oa',  # Замените на ваш пароль
+        'HOST': '10.159.8.163',  # Или другой хост, если необходимо
+        # 'HOST': 'localhost',  # Или другой хост, если необходимо
+        # 'HOST': '127.0.0.1',  # Или другой хост, если необходимо
+        'PORT': '5432',  # Порт по умолчанию для PostgreSQL
+    }
 }
 
 
@@ -152,13 +153,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 
-STATIC_URL = 'my_app_smp/static/'
-# STATIC_URL = '/'
+# STATIC_URL = 'my_app_smp/static/'
 STATICFILES_DIRS = [
     # os.path.join(BASE_DIR, 'my_app_smp/static'),
-    os.path.join(BASE_DIR / 'static'),
+    os.path.join(BASE_DIR, 'my_app_smp',  'static'),
 ]
 
+# STATIC_URL = '/static/'
+# STATIC_ROOT = BASE_DIR / '/staticfiles'  # Путь к папке, куда будут собираться статические файлы
+
+STATIC_URL = '/static/'
+# STATIC_URL = '/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'my_app_smp', 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

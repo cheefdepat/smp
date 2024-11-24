@@ -11,6 +11,41 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 
+# -----------------отслеж пользовательских входов ------------
+from django.contrib.sessions.models import Session
+from django.utils import timezone
+
+# -----------------отслеж пользовательских входов ------------
+def active_users_count(request):
+    # Получаем текущее время
+    now = timezone.now()
+    # Устанавливаем время, после которого сессия считается неактивной (например, 5 минут)
+    active_threshold = now - timezone.timedelta(minutes=0.5)
+
+    # Получаем все активные сессии
+    active_sessions = Session.objects.filter(expire_date__gte=now)
+
+    # Подсчитываем количество уникальных пользователей
+    active_user_ids = set()
+    for session in active_sessions:
+        data = session.get_decoded()
+        user_id = data.get('_auth_user_id')
+        if user_id:
+            active_user_ids.add(user_id)
+
+    active_user_count = len(active_user_ids)
+    # return active_user_count
+    return render(request, 'login_statistics.html', {'active_user_count': active_user_count})
+
+# -----------------отслеж пользовательских входов ------------
+
+
+
+def custom_404_view(request, exception):
+    return render(request, '404.html', status=404)
+
+def custom_500_view(request):
+    return render(request, '500.html', status=500)
 
 
 
@@ -38,6 +73,9 @@ def logout(request):
     return redirect('login')  # Перенаправление на главную страницу
     # return render(request, 'login.html')
 
+
+
+
 def start_page(request):
 
     return render(request, 'start.html')
@@ -48,6 +86,7 @@ def start_page(request):
 
 def zamena_pustot(pole_proverki_daty):
     # Функция проверки является ли значение в поле ДАТЫ - пустым??? для ВСЕХ ДАТ проверку!!!!
+    # Проверяем ДАТУ, является ли значение None ---------------- для ВСЕХ ДАТ проверку!!!!
     if pole_proverki_daty == "":
         pole_proverki_daty = None
     else:
@@ -200,12 +239,14 @@ def edit_patient(request, id):
         patient.otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme = request.POST.get(
             'otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme')
         patient.dinamika_sostoyaniya = request.POST.get('dinamika_sostoyaniya')
+
+        # -----Начало блока проверки даты------ получение ДАТЫ и ее проверка на пустоту!!!--------
         patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v = request.POST.get(
             'data_naznachenogo_audioprotokola_soglasno_protokolu_v')
-
-        # Проверяем ДАТУ, является ли значение None ---------------- для ВСЕХ ДАТ проверку!!!!
         patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v = zamena_pustot(
             patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v)
+        # ---------Конец блока проверки даты- получение ДАТЫ и ее проверка на пустоту!!!-----------
+
 
         # -----------------------------Проверка заведующего --------------------------
 
@@ -230,15 +271,19 @@ def edit_patient(request, id):
         # 'trebovanie_gospitalizacii_na_dannyj_moment',
         # 'vyyavlennye_defekty_v_rabote_vracha',
 
-
-        # --------------------Проверяем ДАТУ !!!!--------------------------------------------------
+        # -----Начало блока проверки даты------ получение ДАТЫ и ее проверка на пустоту!!!--------
+        patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc = request.POST.get(
+            'data_polucheniya_svedenij_po_vyzovam_smp_ot_kc')
         patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc = zamena_pustot(
-                                                                patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc)
+            patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc)
+        # ---------Конец блока проверки даты- получение ДАТЫ и ее проверка на пустоту!!!-----------
 
-
-        # --------------------Проверяем ДАТУ !!!!--------------------------------------------------
+        # -----Начало блока проверки даты------ получение ДАТЫ и ее проверка на пустоту!!!--------
+        patient.data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp = request.POST.get(
+            'data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp')
         patient.data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp = zamena_pustot(
             patient.data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp)
+        # ---------Конец блока проверки даты- получение ДАТЫ и ее проверка на пустоту!!!-----------
 
 
         patient.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya = request.POST.get(
@@ -361,6 +406,17 @@ def edit_ker(request, id):
 
 def proverka(request, id):
     patient = get_object_or_404(SmpRazborTab, id=id)
+    # --------------- вычсление перес=менных по ДНЯМ!!! ------------
+
+    if patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu and patient.data_vklyucheniya_v_registr:
+        koli4_dney_ot_proshlogo_vizita_vracha = patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu - patient.data_vklyucheniya_v_registr
+    else:
+        koli4_dney_ot_proshlogo_vizita_vracha = 'нет даты визита врача'
+
+    if patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc and patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v:
+        dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc - patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v
+    else:
+        dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = 'нет звонка или  врача'
 
     if request.method == 'POST':
         if 'ot_vps_v_ker' in request.POST:  # Кнопка "Отправить в КЭР"
@@ -371,7 +427,10 @@ def proverka(request, id):
         elif 'korrektirovat' in request.POST:  # Кнопка "Корректировать"
             return redirect('my_app_smp:edit_patient', id=id)  # Возвращаем на страницу редактирования
 
-    return render(request, 'patient_detail.html', {'patient': patient})
+    return render(request, 'patient_detail.html', {'patient': patient,
+                                                       'koli4_dney_ot_proshlogo_vizita_vracha': koli4_dney_ot_proshlogo_vizita_vracha,
+                                                       'dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover':dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover,
+                                                       })
 
 
 
