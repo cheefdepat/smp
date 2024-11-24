@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # 'app_smp',
     'my_app_smp',
     'app_planfact',
+    'app_kis_long',
 ]
 
 MIDDLEWARE = [
@@ -86,28 +87,32 @@ WSGI_APPLICATION = 'myproj_smp.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-# ----------------------------mysql
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mysql_smp',
-        'USER': 'cheef',  # Замените на ваше имя пользователя
-        'PASSWORD': 'cheef',  # Замените на ваш пароль
-        # 'HOST': '10.159.8.163',  # Или другой хост, если необходимо
-        # 'HOST': 'localhost',  # Или другой хост, если необходимо
-        'HOST': '127.0.0.1',  # Или другой хост, если необходимо
-        'PORT': '3306',  # Порт по умолчанию для PostgreSQL
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+# ----------------------------mysql
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'mysql_smp',
+#         'USER': 'cheef',  # Замените на ваше имя пользователя
+#         'PASSWORD': 'cheef',  # Замените на ваш пароль
+#         # 'HOST': '10.159.8.163',  # Или другой хост, если необходимо
+#         # 'HOST': 'localhost',  # Или другой хост, если необходимо
+#         'HOST': '127.0.0.1',  # Или другой хост, если необходимо
+#         'PORT': '3306',  # Порт по умолчанию для PostgreSQL
+#     }
 # ----------------------------postgresql
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'postgres',
-    #     'USER': 'postgres',  # Замените на ваше имя пользователя
-    #     'PASSWORD': 'postgres_oa',  # Замените на ваш пароль
-    #     # 'HOST': '10.159.8.163',  # Или другой хост, если необходимо
-    #     # 'HOST': 'localhost',  # Или другой хост, если необходимо
-    #     'HOST': '127.0.0.1',  # Или другой хост, если необходимо
-    #     'PORT': '5432',  # Порт по умолчанию для PostgreSQL
-    # }
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',  # Замените на ваше имя пользователя
+#         'PASSWORD': 'postgres_oa',  # Замените на ваш пароль
+#         'HOST': '10.159.8.163',  # Или другой хост, если необходимо
+#         # 'HOST': 'localhost',  # Или другой хост, если необходимо
+#         # 'HOST': '127.0.0.1',  # Или другой хост, если необходимо
+#         'PORT': '5432',  # Порт по умолчанию для PostgreSQL
+#     }
 }
 
 

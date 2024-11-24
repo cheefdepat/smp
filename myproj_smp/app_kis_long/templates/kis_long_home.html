@@ -1,0 +1,19 @@
+<h1>Пациенты</h1>
+<table>
+    <tr>
+        <th>ФИО пациента</th>
+        <th>Дата госпитализации</th>
+    </tr>
+    {% for patient in patients %}
+    <tr>
+        <td>{{ patient.FIO_pac }}</td>
+        <td>{{ patient.date_hosp }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!--<form method="post">-->
+<!--    {% csrf_token %}-->
+<!--    {{ form.as_p }}-->
+<!--    <button type="submit">Сохранить</button>-->
+<!--</form>-->

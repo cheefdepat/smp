@@ -21,7 +21,7 @@ from django.contrib.auth.views import LogoutView
 from my_app_smp import views
 # from app_kis_long import views_kis
 from app_planfact import views_plf
-# from app_kis_long import views_kis
+from app_kis_long import views_kis
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import handler404, handler500
@@ -31,7 +31,7 @@ urlpatterns = [
 
     path('', include('my_app_smp.url_smp')),  # Подключаем маршруты приложения
     path('my_app_smp/', include('my_app_smp.url_smp')),
-    # path('app_kis_long/', include('app_kis_long.url_kis_long')),
+    path('app_kis_long/', include('app_kis_long.urls_kis')),
     path('app_planfact/', include('app_planfact.url_plf')),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('login/', views.login_view, name='login'),  # Предполагается, что у вас есть представление для входа
