@@ -36,8 +36,8 @@
                             <td> {{ patient.kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij }}  </td>
                         </tr>
                         <tr>
-                            <th>Вывод:</th>
-                            <td> {{ patient.vyvod  }}  </td>
+<!--                            <th>Вывод:</th>-->
+<!--                            <td> {{ patient.vyvod  }}  </td>-->
                         </tr>
                     </table>
                 </fieldset>
@@ -203,9 +203,14 @@
                     <legend>Поля для внесения данных</legend>
                     <table>
                         <tr>
-                            <th>Анализ действий главным врачом</th>
+                            <th>Анализ действий главным врачом:</th>
                             <td><input type="text" name="analiz_dejstvij_glavnym_vrachom" value="{{ patient.analiz_dejstvij_glavnym_vrachom }}" > </td>
                         </tr>
+                           <tr>
+                            <th>Вывод:</th>
+                            <td><input type="text" name="vyvod"  value="{{ patient.vyvod }}" ></td>
+                        </tr>
+
                     </table>
                 </fieldset>
             <br>

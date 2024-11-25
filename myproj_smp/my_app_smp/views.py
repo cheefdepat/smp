@@ -54,6 +54,14 @@ def zamena_pustot(pole_proverki_daty):
         pole_proverki_daty = pole_proverki_daty
     return pole_proverki_daty
 
+def calculate_date(chislo1, chislo2):
+    #--------------- функция вычисления расчетных значений ДАТ:
+    if chislo1 and chislo2:
+        result = chislo1 - chislo2
+    else:
+        result = 'нет даты'
+    return result
+
 def help(request):
     return render(request, 'help.html', {
         # 'data_smp': page_obj,
@@ -88,7 +96,7 @@ def home(request):
     query_fio = request.GET.get('search_fio', '')  # Получаем строку поиска по FIO
     query_kurir = request.GET.get('search_kurir', '')  # Получаем строку поиска по курирующему подразделению
     query_otrabot = request.GET.get('search_otrabot', '')  # Получаем строку поиска по отработанным записям
-    records_per_page = request.GET.get('records_per_page', 10)  # Получаем количество записей на странице
+    records_per_page = request.GET.get('records_per_page', 20)  # Получаем количество записей на странице
 
     # Фильтруем данные по обоим полям и сортируем по p_p
     # data_smp = SmpRazborTab.objects.all().order_by('p_p')  # Сортировка по возрастанию p_p
@@ -149,26 +157,14 @@ def edit_patient(request, id):
 
     # --------------- вычсление перес=менных по ДНЯМ!!! ------------
 
-    if patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu and patient.data_vklyucheniya_v_registr:
-        koli4_dney_ot_proshlogo_vizita_vracha = patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu - patient.data_vklyucheniya_v_registr
-    else:
-        koli4_dney_ot_proshlogo_vizita_vracha = 'нет даты визита врача'
-
-    if patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc and patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v:
-        dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc - patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v
-    else:
-        dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = 'нет звонка или  врача'
-
+    koli4_dney_ot_proshlogo_vizita_vracha = calculate_date(patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu,
+                                                           patient.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias)
+    dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = calculate_date(patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc,
+                                                           patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v)
 
     if request.method == 'POST':
         # Обновляем поля, которые можно редактировать
         # ------------------- поля для редактирования и сохранения --------
-
-        # 'fio_vracha',
-        # 'sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle',
-        # 'dejstviya_cpp',
-        # 'kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij',
-        # 'vyvod',
 
         patient.fio_vracha = request.POST.get('fio_vracha')
         patient.sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle = request.POST.get(
@@ -176,16 +172,8 @@ def edit_patient(request, id):
         patient.dejstviya_cpp = request.POST.get('dejstviya_cpp')
         patient.kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij = request.POST.get(
             'kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij')
-        patient.vyvod = request.POST.get('vyvod')
 
         # -----------------------------Данные из последнего протокола врача --------------------------
-        # 'byl_li_ustanovlen_bazovyj_plan_na_poslednem_vizite',
-        # 'kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu',
-        # 'kolichestvo_dnej_ot_proshlogo_vizita_vracha',
-        # 'otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme',
-        # 'dinamika_sostoyaniya',
-        # 'data_naznachenogo_audioprotokola_soglasno_protokolu_v',
-
         patient.byl_li_ustanovlen_bazovyj_plan_na_poslednem_vizite = request.POST.get(
             'byl_li_ustanovlen_bazovyj_plan_na_poslednem_vizite')
         patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu = request.POST.get(
@@ -209,36 +197,20 @@ def edit_patient(request, id):
 
         # -----------------------------Проверка заведующего --------------------------
 
-        # 'data_polucheniya_svedenij_po_vyzovam_smp_ot_kc',
-        # 'data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp',
-        # 'kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover',
-        #
-        # 'kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya',
-        # 'kakie_dejstviya_byli_predprinyaty_smp',
-        # 'tekushchee_sostoyanie_pacienta_posle_vyzova_smp',
-        # 'ostalis_li_zhaloby_posle_vyzova_smp',
-        # 'opisanie_zhalob',
-        # 'byli_li_lekarstvennye_sredstva_otovareny_po_receptu',
-        # 'pacient_prinimaet_naznachennye_lekarstvennye_sredstva',
-        # 'ehffektivna_li_naznachennaya_medikamentoznaya_terapiya',
-        # 'est_li_pobochnye_dejstviya_ot_naznachennykh_lekarstvennykh',
-        # 'pacientu_byla_ozvuchena_data_sleduyushchego_vizita',
-        # 'pacientu_byli_predostavleny_kontaktnye_nomera_cpp',
-        # 'pacient_zvonil_po_ukazannym_kontaktnym_nomera_do_vyzova_smp',
-        # 'prichina_po_kotoroj_pacient_ne_zvonil_po_ukazannym_nomeram',
-        # 'sootvetstvuet_li_naznachennyj_bazovyj_plan_sostoyaniyu_pacie',
-        # 'trebovanie_gospitalizacii_na_dannyj_moment',
-        # 'vyyavlennye_defekty_v_rabote_vracha',
-
-
         # --------------------Проверяем ДАТУ !!!!--------------------------------------------------
+        # -----Начало блока проверки даты------ получение ДАТЫ и ее проверка на пустоту!!!--------
+        patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc = request.POST.get(
+            'data_polucheniya_svedenij_po_vyzovam_smp_ot_kc')
         patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc = zamena_pustot(
-                                                                patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc)
+            patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc)
+        # ---------Конец блока проверки даты- получение ДАТЫ и ее проверка на пустоту!!!-----------
 
-
-        # --------------------Проверяем ДАТУ !!!!--------------------------------------------------
+        # -----Начало блока проверки даты------ получение ДАТЫ и ее проверка на пустоту!!!--------
+        patient.data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp = request.POST.get(
+            'data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp')
         patient.data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp = zamena_pustot(
             patient.data_audioprotokola_posle_polucheniya_dannykh_o_vyzove_smp)
+        # ---------Конец блока проверки даты- получение ДАТЫ и ее проверка на пустоту!!!-----------
 
 
         patient.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya = request.POST.get(
@@ -271,19 +243,22 @@ def edit_patient(request, id):
         patient.vyyavlennye_defekty_v_rabote_vracha = request.POST.get('vyyavlennye_defekty_v_rabote_vracha')
 
         # -----------------------
-        # patient.kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = request.POST.get(
-        #     'kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover')
-        # -----------------------
+
         print('1ssssss-----------------')
         if 'save' in request.POST:  # Кнопка "Сохранить"
             print('ssssss-----------------')
-            # if patient.is_valid():
+            patient.kolichestvo_dnej_ot_proshlogo_vizita_vracha = koli4_dney_ot_proshlogo_vizita_vracha
+            patient.kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover
+
             patient.save()
             return redirect('my_app_smp:home')
 
         elif 'send_to_ker' in request.POST:  # Кнопка "Отправить в КЭР"
             # if patient.is_valid():
             print('send_to_ker-----------------')
+            patient.kolichestvo_dnej_ot_proshlogo_vizita_vracha = koli4_dney_ot_proshlogo_vizita_vracha
+            patient.kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover
+
             patient.save()  # Сохраняем изменения
             return redirect('my_app_smp:proverka', id=patient.id)  # Переходим на страницу проверки
 
@@ -300,28 +275,12 @@ def edit_patient(request, id):
 def edit_ker(request, id):
     patient = get_object_or_404(SmpRazborTab, id=id)
     #  ----- отображение рассчетных ДННЕЙ+++++++--------------------
-
-    if patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu and patient.data_vklyucheniya_v_registr:
-        koli4_dney_ot_proshlogo_vizita_vracha = patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu - patient.data_vklyucheniya_v_registr
-    else:
-        koli4_dney_ot_proshlogo_vizita_vracha = 'нет даты визита врача'
-
-    if patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc and patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v:
-        dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc - patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v
-    else:
-        dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = 'нет звонка или  врача'
-
-
+    koli4_dney_ot_proshlogo_vizita_vracha = calculate_date(patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu,
+                                                           patient.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias)
+    dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = calculate_date(patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc,
+                                                           patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v)
 
     if request.method == 'POST':
-        # Обновляем поля, которые можно редактировать и СОХРАНЯТЬ!!!
-        # 'bazovyj_plan_naznachen_korrektno',
-        # 'ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu',
-        # 'zhaloby_opisany_v_polnom_obeme',
-        # 'ocenka_zaveduyushchego_proizvedena_korrektno',
-        # 'ocenka_dejstvij_vracha_do_vyzova_smp',
-        # 'ocenka_dejstvij_posle_vyzova_smp',
-        # 'vyvody_po_rezultatm_ocenki',
         # --------------- поля для редактирования и сохранения --------
         patient.bazovyj_plan_naznachen_korrektno = request.POST.get('bazovyj_plan_naznachen_korrektno')
         patient.ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu = request.POST.get('ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu')
@@ -335,12 +294,17 @@ def edit_ker(request, id):
 
         print('1ker-----------------')
         if 'save_ker' in request.POST:  # Кнопка "Сохранить"
-            # if patient.is_valid():
+            patient.kolichestvo_dnej_ot_proshlogo_vizita_vracha = koli4_dney_ot_proshlogo_vizita_vracha
+            patient.kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover
+
             patient.save()
             return redirect('my_app_smp:home')
 
         elif 'return_na_vps' in request.POST:  # Кнопка "Отправить в КЭР"
             patient.ok_vps = "впс"
+            patient.kolichestvo_dnej_ot_proshlogo_vizita_vracha = koli4_dney_ot_proshlogo_vizita_vracha
+            patient.kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover
+
             patient.save()  # Сохраняем изменения
             return redirect('my_app_smp:home')  # Переходим на страницу проверки
 
@@ -361,6 +325,11 @@ def edit_ker(request, id):
 
 def proverka(request, id):
     patient = get_object_or_404(SmpRazborTab, id=id)
+    # --------------- вычсление перес=менных по ДНЯМ!!! ------------
+    koli4_dney_ot_proshlogo_vizita_vracha = calculate_date(patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu,
+                                                           patient.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias)
+    dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = calculate_date(patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc,
+                                                           patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v)
 
     if request.method == 'POST':
         if 'ot_vps_v_ker' in request.POST:  # Кнопка "Отправить в КЭР"
@@ -371,7 +340,10 @@ def proverka(request, id):
         elif 'korrektirovat' in request.POST:  # Кнопка "Корректировать"
             return redirect('my_app_smp:edit_patient', id=id)  # Возвращаем на страницу редактирования
 
-    return render(request, 'patient_detail.html', {'patient': patient})
+    return render(request, 'patient_detail.html', {'patient': patient,
+                                                       'koli4_dney_ot_proshlogo_vizita_vracha': koli4_dney_ot_proshlogo_vizita_vracha,
+                                                       'dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover':dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover,
+                                                       })
 
 
 
@@ -393,16 +365,11 @@ def proverka_ker(request, id):
 def edit_glav(request, id):
     patient = get_object_or_404(SmpRazborTab, id=id)
     #  ----- отображение рассчетных ДННЕЙ+++++++--------------------
+    koli4_dney_ot_proshlogo_vizita_vracha = calculate_date(patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu,
+                                                           patient.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias)
+    dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = calculate_date(patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc,
+                                                           patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v)
 
-    if patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu and patient.data_vklyucheniya_v_registr:
-        koli4_dney_ot_proshlogo_vizita_vracha = patient.kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu - patient.data_vklyucheniya_v_registr
-    else:
-        koli4_dney_ot_proshlogo_vizita_vracha = 'нет даты визита врача'
-
-    if patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc and patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v:
-        dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc - patient.data_naznachenogo_audioprotokola_soglasno_protokolu_v
-    else:
-        dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = 'нет звонка или  врача'
 
 
 
@@ -412,6 +379,7 @@ def edit_glav(request, id):
 
         # --------------- поля для редактирования и сохранения --------
         patient.analiz_dejstvij_glavnym_vrachom = request.POST.get('analiz_dejstvij_glavnym_vrachom')
+        patient.vyvod = request.POST.get('vyvod')
 
 
         # patient.save()  # Сохраняем изменения

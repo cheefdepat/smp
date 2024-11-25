@@ -15,7 +15,7 @@ class SmpRazborTab(models.Model):
     otobrazheny_li_vse_zhaloby_pacienta_v_polnom_obeme = models.CharField(max_length=255, blank=True, null=True)
     dinamika_sostoyaniya = models.CharField(max_length=255, blank=True, null=True)
     fio_vracha = models.CharField(max_length=255, blank=True, null=True)
-    sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle = models.CharField(max_length=255, blank=True, null=True)
+    sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle = models.TextField( blank=True, null=True)
     kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij = models.CharField(max_length=255, blank=True, null=True)
 
 
@@ -54,8 +54,8 @@ class SmpRazborTab(models.Model):
     # Целочисленные поля
     p_p = models.IntegerField( blank=True, null=True)
     kolichestvo_vyezdov_v_den = models.IntegerField( blank=True, null=True)
-    kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = models.IntegerField( blank=True, null=True)
-    kolichestvo_dnej_ot_proshlogo_vizita_vracha = models.IntegerField( blank=True, null=True)
+    kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = models.CharField(max_length=255, blank=True, null=True)
+    kolichestvo_dnej_ot_proshlogo_vizita_vracha = models.CharField(max_length=255, blank=True, null=True)
 
     # Поля для даты
     kakaya_data_sleduyushchego_vizita_vracha_soglasno_protokolu = models.DateField(blank=True, null=True)
