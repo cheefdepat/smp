@@ -78,25 +78,42 @@ def help(request):
 # @login_required
 def home(request):
     # --------------
-    # user_groups = request.user.groups.all()
-    # print(user_groups)
     user_groups_list = []
     for i in request.user.groups.all():
         print(i)
         user_groups_list.append(str(i))
     # groups = Group.objects.all()
     print(user_groups_list)
-    #
-    # print(groups[1])
-    # print(groups)
-    # print('ker' not in groups)
-    # --------------
+    # -------------------------
+    # ------------------------------------------- фильтр по ВПС -------------
+    dict_vps = {'butovo':	'Бутово ОВПП',
+                'voronovo':	'Вороново ОВПП',
+                'danilovskij'	:'Даниловский ОВПП',
+                'degunino'	:'Дегунино ОВПП',
+                'zelenograd'	:'Зеленоград ОВПП',
+                'kolomenskoe':	'Коломенское ОВПП',
+                'kurkino':	'Куркино ОВПП',
+                'lyublino'	: 'Люблино ОВПП',
+                'nekrasovka':	'Некрасовка ОВПП',
+                'ovprp'	:'ОВПРП',
+                'pmdkh':	'ПМДХ ОВПП',
+                'pmkh'	:'ПМХ ОВПП',
+                'preobrazhenskoe':	'Преображенское ОВПП',
+                'rostokino':'Ростокино ОВПП',
+                'savelovskij'	:'Савеловский ОВПП',
+                'solncevo'	: 'Солнцево ОВПП',
+                'khoroshevo':	'Хорошево ОВПП',
+                'caricyno':	'Царицыно ОВПП',}
+
 
     is_vps_group = request.user.groups.filter(name='vps').exists()
     query_fio = request.GET.get('search_fio', '')  # Получаем строку поиска по FIO
     query_kurir = request.GET.get('search_kurir', '')  # Получаем строку поиска по курирующему подразделению
     query_otrabot = request.GET.get('search_otrabot', '')  # Получаем строку поиска по отработанным записям
     records_per_page = request.GET.get('records_per_page', 20)  # Получаем количество записей на странице
+
+    # ------------------------------ применим фильтр из СЛОВАРЯ ВПС ----------------
+    query_kurir = dict_vps.get(str(request.user))
 
     # Фильтруем данные по обоим полям и сортируем по p_p
     # data_smp = SmpRazborTab.objects.all().order_by('p_p')  # Сортировка по возрастанию p_p
