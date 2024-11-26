@@ -2,14 +2,14 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Редактировать запись пациента</title>
+    <title> Редактировать запись пациента </title>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 
 </head>
 <body>
     <header>
-        <h2>Редактировать запись пациента </h2>
+        <h3>{% block title %} Редактировать запись пациента {% endblock %} </h3>
         Вы авторизованы как " {{user}} "<br>
     </header>
 

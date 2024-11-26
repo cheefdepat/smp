@@ -5,22 +5,26 @@ from django.core.paginator import Paginator
 
 
 
-
-# def plf_start_list(request):
-#     return render(request, 'planfact_home_page.html')
-
-# def start_page(request):
-#     return render(request, 'start.html')
-
-# def zamena_pustot(pole_proverki_daty):
-#     # Функция проверки является ли значение в поле ДАТЫ - пустым??? для ВСЕХ ДАТ проверку!!!!
-#     if pole_proverki_daty == "":
-#         pole_proverki_daty = None
-#     else:
-#         pole_proverki_daty = pole_proverki_daty
-#     return pole_proverki_daty
-
 def plf_start_list(request):
+    dict_vps_plf = {'butovo': 'Бутово',
+                'voronovo': 'Вороново ОВПП',
+                'danilovskij': 'Даниловский ОВПП',
+                'degunino': 'Филиал "Дегунино" ММЦПП ДЗМ',
+                'zelenograd': 'Филиал "Зеленоград" ММЦПП ДЗМ',
+                'kolomenskoe': 'Филиал "Коломенское" ММЦПП ДЗМ',
+                'kurkino': 'Куркино ОВПП',
+                'lyublino': 'Люблино ОВПП',
+                'nekrasovka': 'Некрасовка ОВПП',
+                'ovprp': 'ОВПРП',
+                'pmdkh': 'ПМДХ ОВПП',
+                'pmkh': 'ПМХ ОВПП',
+                'preobrazhenskoe': 'Преображенское ОВПП',
+                'rostokino': 'Ростокино ОВПП',
+                'savelovskij': 'Савеловский ОВПП',
+                'solncevo': 'Солнцево ОВПП',
+                'khoroshevo': 'Хорошево ОВПП',
+                'caricyno': 'Царицыно ОВПП', }
+
     # --------------
     # user_groups = request.user.groups.all()
     # print(user_groups)
@@ -48,8 +52,8 @@ def plf_start_list(request):
     # Фильтруем данные по обоим полям
     print(request.user.groups)
 
-    # if user_groups_list == ['vps']:   # ------------------------- ВКЛЮЧИТЬ визмость ОТПРАВКИ В КЭР
-    if user_groups_list == ['#']:     # ------------------------- отключить визмость ОТПРАВКИ В КЭР
+    if user_groups_list == ['vps']:   # ------------------------- ВКЛЮЧИТЬ визмость ОТПРАВКИ В КЭР
+    # if user_groups_list == ['#']:     # ------------------------- отключить визмость ОТПРАВКИ В КЭР
         # Исключаем записи, у которых ok_vps равно "ВПС"
         data_plf = PlanFactTab.objects.filter(ok_status_zapolnenia="Заполняется ВПС").order_by('data_planfakta',
                                                                                   'fio_pacienta')  # Сортировка по возрастанию

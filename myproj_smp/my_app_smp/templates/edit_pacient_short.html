@@ -5,8 +5,10 @@
 
     <form method="POST">
         <a href="{% url 'my_app_smp:home' %}" class="btn_save">Назад к списку пациентов </a>
-        <button class="btn_save" type="submit" name="save" >Сохранить</button>
+        <button href="javascript:history.back()" class="btn_save" type="submit" name="save" >Сохранить</button>
         <button class="btn_save" type="submit" name="send_to_ker" >Отправить в КЭР</button>
+
+<!--        <a href="javascript:history.back()" class="btn">Вернуться назад</a>-->
 
         {% csrf_token %}
 Статус записи о пациенте: "{{patient.ok_vps }}"

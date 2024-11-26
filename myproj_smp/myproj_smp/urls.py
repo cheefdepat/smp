@@ -31,7 +31,7 @@ urlpatterns = [
 
     path('', include('my_app_smp.url_smp')),  # Подключаем маршруты приложения
     path('my_app_smp/', include('my_app_smp.url_smp')),
-    # path('app_kis_long/', include('app_kis_long.url_kis_long')),
+    path('app_kis_long/', include('app_kis_long.url_kis_long')),
     path('app_planfact/', include('app_planfact.url_plf')),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('login/', views.login_view, name='login'),  # Предполагается, что у вас есть представление для входа

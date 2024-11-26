@@ -15,6 +15,7 @@ from .views import start_page
 from .views import login_view
 from .views import active_users_count
 from .views import custom_404_view
+from .views import results
 # from django.conf.urls import handler404, handler500
 
 app_name = 'my_app_smp'  # Убедитесь, что это указано
@@ -38,7 +39,7 @@ urlpatterns = [
     path('help', help, name='help'),
     path('active_users/', active_users_count, name='active_users_count'),
     path('custom_404_view/', custom_404_view, name='custom_404_view'),
-
+    path('results/', results, name='results'),  # Добавьте этот путь
 
 ]
 
