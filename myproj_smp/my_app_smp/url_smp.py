@@ -13,7 +13,8 @@ from .views import help
 from .views import start_page
 # from .views import kis_patient_list
 from .views import login_view
-from django.conf.urls import handler404, handler500
+from .views import results
+
 
 app_name = 'my_app_smp'  # Убедитесь, что это указано
 
@@ -36,9 +37,10 @@ urlpatterns = [
     path('proverka_ker/<int:id>/', proverka_ker, name='proverka_ker'),
     path('proverka_glav/<int:id>/', proverka_glav, name='proverka_glav'),
     path('help', help, name='help'),
-
+    path('results', results, name='results'),
 
 
 ]
+
 handler404 = 'my_app_smp.views.custom_404_view'
 handler500 = 'my_app_smp.views.custom_500_view'

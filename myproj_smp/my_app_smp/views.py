@@ -75,7 +75,11 @@ def help(request):
         # 'groups': user_groups_list,  # Получаем все группы
     })
 
-# @login_required
+
+def results(request):
+    return render(request, 'results.html')
+
+
 def home(request):
     # --------------
     user_groups_list = []
@@ -113,7 +117,7 @@ def home(request):
     records_per_page = request.GET.get('records_per_page', 20)  # Получаем количество записей на странице
 
     # ------------------------------ применим фильтр из СЛОВАРЯ ВПС ----------------
-    query_kurir = dict_vps.get(str(request.user))
+    # query_kurir = dict_vps.get(str(request.user))
 
     # Фильтруем данные по обоим полям и сортируем по p_p
     # data_smp = SmpRazborTab.objects.all().order_by('p_p')  # Сортировка по возрастанию p_p

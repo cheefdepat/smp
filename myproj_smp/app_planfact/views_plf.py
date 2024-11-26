@@ -5,21 +5,6 @@ from django.core.paginator import Paginator
 
 
 
-
-# def plf_start_list(request):
-#     return render(request, 'planfact_home_page.html')
-
-# def start_page(request):
-#     return render(request, 'start.html')
-
-# def zamena_pustot(pole_proverki_daty):
-#     # Функция проверки является ли значение в поле ДАТЫ - пустым??? для ВСЕХ ДАТ проверку!!!!
-#     if pole_proverki_daty == "":
-#         pole_proverki_daty = None
-#     else:
-#         pole_proverki_daty = pole_proverki_daty
-#     return pole_proverki_daty
-
 def plf_start_list(request):
     # --------------
     # user_groups = request.user.groups.all()
@@ -41,15 +26,15 @@ def plf_start_list(request):
     query_kurir = request.GET.get('search_kurir', '')  # Получаем строку поиска по курирующему подразделению
     query_otrabot = request.GET.get('search_otrabot', '')  # Получаем строку поиска по отработанным записям
     query_data_zamecaniya = request.GET.get('search_data_zamecaniya', '')  # Получаем строку поиска по отработанным записям
-    records_per_page = request.GET.get('records_per_page', 10)  # Получаем количество записей на странице
+    records_per_page = request.GET.get('records_per_page', 20)  # Получаем количество записей на странице
     print(query_data_zamecaniya)
     # Фильтруем данные по обоим полям и сортируем по p_p
     # data_smp = SmpRazborTab.objects.all().order_by('p_p')  # Сортировка по возрастанию p_p
     # Фильтруем данные по обоим полям
     print(request.user.groups)
 
-    # if user_groups_list == ['vps']:   # ------------------------- ВКЛЮЧИТЬ визмость ОТПРАВКИ В КЭР
-    if user_groups_list == ['#']:     # ------------------------- отключить визмость ОТПРАВКИ В КЭР
+    if user_groups_list == ['vps']:   # ------------------------- ВКЛЮЧИТЬ визмость ОТПРАВКИ В КЭР
+    # if user_groups_list == ['#']:     # ------------------------- отключить визмость ОТПРАВКИ В КЭР
         # Исключаем записи, у которых ok_vps равно "ВПС"
         data_plf = PlanFactTab.objects.filter(ok_status_zapolnenia="Заполняется ВПС").order_by('data_planfakta',
                                                                                   'fio_pacienta')  # Сортировка по возрастанию

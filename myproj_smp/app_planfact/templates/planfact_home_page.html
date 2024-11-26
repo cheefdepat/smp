@@ -108,10 +108,10 @@
                     <a href="{% url 'app_planfact:plf_edit_patient' item.id %}" class="btn_save">Правки(ВПС)</a> <!-- Ссылка на редактирование -->
 <!--                    {% endif  %}-->
                     {% if 'ker' in groups %}
-<!--                    <a href="{% url 'my_app_smp:edit_ker' item.id %}" class="btn_save">Правки(КЭР)</a>&lt;!&ndash; Ссылка на редактирование &ndash;&gt;-->
+                    <a href="{% url 'app_planfact:plf_proverka_to_ker' item.id %}" class="btn_save">Правки(КЭР)</a><!-- Ссылка на редактирование -->
                     {% endif  %}
                      {% if 'glav' in groups %}
-<!--                    <a href="{% url 'my_app_smp:edit_glav' item.id %}" class="btn_save">Правки(Главврач)</a>&lt;!&ndash; Ссылка на редактирование &ndash;&gt;-->
+                    <a href="{% url 'app_planfact:plf_proverka_to_ker' item.id %}" class="btn_save">Правки(Главврач)</a><!-- Ссылка на редактирование -->
                     {% endif  %}
                     {% endif  %}
                 </td>
