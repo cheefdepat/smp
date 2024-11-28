@@ -109,24 +109,24 @@ def help(request):
 # @login_required
 def home(request):
 
-    dict_vps = {'butovo':	'Бутово',
-                'voronovo':	'Вороново',
-                'danilovskij'	:'Даниловский',
-                'degunino'	:'Дегунино',
-                'zelenograd'	:'Зеленоград ОВПП',
-                'kolomenskoe':	'Коломенское ОВПП',
-                'kurkino':	'Куркино ОВПП',
-                'lyublino'	: 'Люблино ОВПП',
-                'nekrasovka':	'Некрасовка ОВПП',
-                'ovprp'	:'ОВПРП',
-                'pmdkh':	'ПМДХ ОВПП',
-                'pmkh'	:'ПМХ ОВПП',
-                'preobrazhenskoe':	'Преображенское ОВПП',
-                'rostokino':'Ростокино ОВПП',
-                'savelovskij'	:'Савеловский ОВПП',
-                'solncevo'	: 'Солнцево',
-                'khoroshevo':	'Хорошево ОВПП',
-                'caricyno':	'Царицыно ОВПП',}
+    # dict_vps = {'butovo':	'Бутово',
+    #             'voronovo':	'Вороново',
+    #             'danilovskij'	:'Даниловский',
+    #             'degunino'	:'Дегунино',
+    #             'zelenograd'	:'Зеленоград ОВПП',
+    #             'kolomenskoe':	'Коломенское ОВПП',
+    #             'kurkino':	'Куркино ОВПП',
+    #             'lyublino'	: 'Люблино ОВПП',
+    #             'nekrasovka':	'Некрасовка ОВПП',
+    #             'ovprp'	:'ОВПРП',
+    #             'pmdkh':	'ПМДХ ОВПП',
+    #             'pmkh'	:'ПМХ ОВПП',
+    #             'preobrazhenskoe':	'Преображенское ОВПП',
+    #             'rostokino':'Ростокино ОВПП',
+    #             'savelovskij'	:'Савеловский ОВПП',
+    #             'solncevo'	: 'Солнцево',
+    #             'khoroshevo':	'Хорошево ОВПП',
+    #             'caricyno':	'Царицыно ОВПП',}
 
     # --------------
     user_groups_list = []
@@ -160,9 +160,9 @@ def home(request):
 
     print('-----------')
     print(unique_kurir)
-    user_vps_substring = dict_vps.get(str(request.user))
-    print(user_vps_substring)
-    query_kurir = list(filter(lambda item: user_vps_substring in item, unique_kurir))
+    # user_vps_substring = dict_vps.get(str(request.user))
+    # print(user_vps_substring)
+    # query_kurir = list(filter(lambda item: user_vps_substring in item, unique_kurir))
 
     print(query_kurir)  # Вывод: ['banana', 'grape']
 

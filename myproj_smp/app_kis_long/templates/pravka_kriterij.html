@@ -1,0 +1,166 @@
+{% extends 'kis_long_home.html' %}
+{% block title %} Детали о пациенте: {{ patient.fio_pacienta }}.{% endblock %}
+
+{% block content %}
+
+    <form method="POST">
+<!--        <a href="{% url 'my_app_smp:home' %}" class="btn_save">Назад к списку пациентов@@@@ </a>-->
+<!--        <button href="#" class="btn_save" type="submit" name="save!!!" >Сохранить@@@@</button>-->
+<!--        <button class="btn_save" type="submit" name="send_to_ker" >Отправить в КЭР@@@@</button>-->
+
+<!--        <a href="javascript:history.back()" class="btn">Вернуться назад</a>-->
+
+        {% csrf_token %}
+
+<nav>
+    <a href="{% url 'app_kis_long:v_kis_home' %}" class="btn">Вернуться к общему списку</a>
+
+</nav>
+
+<div class="field-group-2-columns">
+        <div>
+            <fieldset >
+                <!------------------------------------------ -->
+                <legend>Данные по пациенту (из КИС)</legend>
+                <table >
+                    <tr>   <th >ФИО:</th>
+                        <td > {{ patient.fio_pacienta  }} </td>     </tr>
+                    <tr>     <th >Дата рождения</th>
+                        <td > {{ patient.data_rozhdeniya }} </td>    </tr>
+                    <tr>    <th>отделение:</th>
+                        <td> {{ patient.otdelenie  }}  </td>  </tr>
+                    <tr>     <th>Дата госпит:</th>
+                        <td> {{ patient.data_gospit  }}  </td>   </tr>
+                    <tr> <th>койко_дни:</th>
+                        <td> {{ patient.data_rozhdeniya  }}  </td>   </tr>
+                    <tr> <th>Диагноз основной:</th>
+                        <td> {{ patient.diagnoz_osnovnoj  }}  </td>  </tr>
+                    <tr>  <th>Дата выписки:</th>
+                        <td> {{ patient.data_vypiski  }}  </td>  </tr>
+                    <tr>  <th>Исход госпит:</th>
+                        <td> {{ patient.iskhod_gospit  }}  </td>  </tr>
+                    <tr> <th>№ истории болезни:</th>
+                        <td> {{ patient.n_istorii_bolezni  }}  </td>   </tr>
+                <!------------------------------------------ -->
+                </table>
+            </fieldset>
+<br>
+            <fieldset>
+                              <!------------------------------------------ -->
+                 <legend>КРИТЕРИИ оценки</legend>
+                <button class="btn_save" type="submit" name="btn_otmena_pravki_kriter" >Отменить изменения</button>
+                <button class="btn_save" type="submit" name="btn_save_kriter" >Сохранить изменения</button>
+                <table>
+                <tr> <th>PPI :</th>
+                    <td><input type="text" name="ppi"  value="{{ patient.ppi }}" ></td>         </tr>
+                <tr>   <th>Медиц_критерии :</th>
+<!--                    <td><input type="text" name="medic_kriterii"  value="{{ patient.medic_kriterii }}" ></td>  </tr>-->
+                    <td> <select name="medic_kriterii">
+                                <option value="1.1. Стабильное состояние здоровья ">1.1. Стабильное состояние здоровья </option>
+                                <option value="1.2. Прогрессирующее заболевание">1.2. Прогрессирующее заболевание</option>
+                                <option value="1.3. Нарушение когнитивных функций">1.3. Нарушение когнитивных функций</option>
+                                <option value="1.4. Ограниченная подвижность">1.4. Ограниченная подвижность</option>
+                            </select></td>
+
+                  <tr>  <th>Соц.критерии :</th>
+                        <td>  <select name="soc_kriterii">
+                                    <option value="2.1. Отсутствие близких или родственников">2.1. Отсутствие близких или родственников</option>
+                                    <option value="2.2. Неспособность семьи обеспечить уход">2.2. Неспособность семьи обеспечить уход</option>
+                                    <option value="2.3. Наличие социального конфликта">2.3. Наличие социального конфликта</option>
+                                    <option value="2.4. Отказ от ухода">2.4. Отказ от ухода</option>
+                                </select> </td> </tr>
+                <tr>   <th>Функцииональн.критерии :</th>
+                       <td>  <select name="funkciional_kriterii">
+                                    <option value="3.1. Неспособность к самообслуживанию">3.1. Неспособность к самообслуживанию</option>
+                                    <option value="3.2. Полная зависимость от помощи извне">3.2. Полная зависимость от помощи извне</option>
+                                    <option value="3.3. Сложности в организации ухода на дому ">3.3. Сложности в организации ухода на дому </option>
+
+                                </select> </td> </tr>
+                <tr>     <th>Псих.критерии :</th>
+                      <td>  <select name="psikh_kriterii">
+                                    <option value="4.1. Психоэмоциональная нестабильность пациента">4.1. Психоэмоциональная нестабильность пациента</option>
+                                    <option value="4.2. Эмоциональное выгорание родственников">4.2. Эмоциональное выгорание родственников</option>
+
+                                </select> </td> </tr>
+                <tr>    <th>Орг.критерии :</th>
+                    <td>  <select name="org_kriterii">
+                                    <option value="5.1. Наличие показаний для перевода в социальное учреждение">5.1. Наличие показаний для перевода в социальное учреждение</option>
+                                    <option value="5.2. Доступность социальных учреждений">5.2. Доступность социальных учреждений</option>
+
+                                </select> </td> </tr>
+                 <tr>      <th>Наличие заявки в соц службу :</th>
+<!--                    <td><input type="text" name="nalichie_zayavki_v_soc_sluzhbu"  value="{{ patient.nalichie_zayavki_v_soc_sluzhbu }}" >-->
+                        <td>  <select name="nalichie_zayavki_v_soc_sluzhbu">
+                                    <option value="Заявка подана">Заявка подана</option>
+                                    <option value="Заявка отсутствует">Заявка отсутствует</option>
+
+                                </select> </td> </tr>
+
+
+
+                <tr>    <th>Состояние заявки :</th>
+<!--                    <td> <input type="text" name="sostoyanie_zayavki"  value="{{ patient.sostoyanie_zayavki }}" >-->
+                      <td>  <select name="sostoyanie_zayavki">
+                                    <option value="Заявка отсутствует">Заявка отсутствует</option>
+                                    <option value="Оформление МСЭ">Оформление МСЭ</option>
+                                    <option value="Оформление медкарты"> Оформление медкарты</option>
+                                    <option value="Ожидание путевки"> Ожидание путевки</option>
+
+                                </select> </td> </tr>
+
+
+
+                    Оформление МСЭ
+Оформление медкарты
+Ожидание путевки
+
+
+                 <tr>   <th>Прична отсутствия заявки :</th>
+                    <td><input type="text" name="prichna_otsutstviya_zayavki"  value="{{ patient.prichna_otsutstviya_zayavki }}" ></td> </tr>
+                 <tr>   <th>Комментарий :</th>
+                    <td><input type="text" name="kommentarij"  value="{{ patient.kommentarij }}" ></td> </tr>
+                </table>
+            </fieldset>
+        </div>
+        <div>
+            <fieldset>
+              <!------------------------------------------ -->
+                <legend>Данные по состоянию заявки</legend>
+<!--                               <a href="javascript:history.back()" class="btn">Внести правки в раздел "Заявка"</a>-->
+                <table>
+                    <tr>
+                        <th>Тема заявки_Помощь в жизнеустройстве</th>
+                        <td>{{ patient.tema_zayavki_pomosh_v_zhizneustrojstve }}</td></tr>
+                        <th>Наличие родственников</th>
+                        <td>{{ patient.nalichie_rodstvennikov }}</td></tr>
+                        <th>Дата передачи соц координаторам ДТСЗН</th>
+                        <td>{{ patient.data_peredachi_soc_koordinatoram_dtszn }}</td><tr>
+                        <th>ФИО заведующего отд</th>
+                        <td>{{ patient.fio_zaveduyushchego_otd }}</td> <tr>
+                        <th>ФИО лечащего врача</th>
+                        <td>{{ patient.fio_lechashchego_vracha }}</td>  <tr>
+                        <th>Комментарий_соц</th>
+                        <td>{{ patient.kommentarij_soc }}</td> <tr>
+                        <th>Дата принятия в работу соц координаторами ДТСЗН</th>
+                        <td>{{ patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn }}</td> <tr>
+                        <th>Статус пациента</th>
+                        <td>{{ patient.status_pacienta }}</td>   <tr>
+                        <th>Соц_координатор</th>
+                        <td>{{ patient.soc_koordinator }}</td> <tr>
+                        <th>Комментарий соц координаторов ДТСЗН</th>
+                        <td>{{ patient.kommentarij_soc_koordinatorov_dtszn }}</td>  <tr>
+                        <th>Решение по пациенту </th>
+                        <td>{{ patient.reshenie_po_pacientu }}</td>  <tr>
+                        <th>Дата принятия решения по пациенту</th>
+                        <td>{{ patient.data_prinyatiya_resheniya_po_pacientu }}</td> <tr>
+                        <th>Пациент не может выразить свое согласие</th>
+                        <td>{{ patient.pacient_ne_mozhet_vyrazit_svoe_soglasie }}</td> <tr>
+                        <th>Отказ родственников</th>
+                        <td>{{ patient.otkaz_rodstvennikov }}</td> <tr>
+                </table>
+            </fieldset>
+            </br>
+
+        </div>
+    </div>
+{% endblock %}

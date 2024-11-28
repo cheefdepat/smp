@@ -6,17 +6,11 @@
     <title>Данные из БД</title>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-    <script>
-            function submitForm() {
-                document.getElementById('searchForm').submit();
-            }
-        </script>
-
 
 </head>
 <body>
    <header>
-        <h4>Данные пациентов, госпитализация которых превысила 60 суток</h4>
+        <h4>{% block title %} Данные пациентов, госпитализация которых превысила 60 суток {% endblock %} </h4>
         <div style="text-align: right; margin-top: -30px; margin-bottom: 20px;">
             <strong>Общее количество записей: {{ total_records }}</strong>
         </br>
@@ -24,114 +18,97 @@
        Вы авторизованы как " {{user}} "
         </div>
     </header>
-
+{% block content %}
     <nav>
         <a href="{% url 'my_app_smp:start_page' %}" class="btn">Возврат к списку ТАБЛИЦ</a>
         <a href="{% url 'my_app_smp:help' %}" class="btn">Помощь</a>
+
         <a href="{% url 'my_app_smp:results' %}" class="btn">Дашборд
+        <a href="{% url 'app_kis_long:run_calculate_koiko_dni' %}" class="btn">Расчет койко-дней
         <a  href="{% url 'my_app_smp:logout' %}" class="btn">Выход</a>
     </nav>
 
-
     <!-- Форма поиска и количество записей на странице -->
     <form method="GET" action="" class="search-container">
-        <div style="width: 100%;">
-            <div>
-                    <input style="background-color: #b5cfde;" type="text" name="search_fio" placeholder="Введите  фамилию пациента" value="{{ search_fio }}">
 
-                    <select name="search_kurir" onchange="submitForm()">
-                    <option value="">Фильтр ВПС(Все ВПС)</option>
-                                {% for kurir in unique_kurir %}
-                                    <option value="{{ kurir }}" {% if kurir == search_kurir %}selected{% endif %}>{{ kurir }}</option>
-                                {% endfor %}
-                    </select>
-                    <!----------- ПЕРЕДАННЫЕ В КЭР------------------->
-                    {% if 'ker' or 'glav' or 'admin' in groups %}
-                    <select name="search_otrabot" onchange="submitForm()">
-                    <option value="">Статус отработки(ВСП/КЭР/ГВ)</option>
-                                {% for otrab_ in unique_otrab %}
-                                    <option value="{{ otrab_ }}" {% if otrab_ == search_otrabot %}selected{% endif %}>{{ otrab_ }}</option>
-                                {% endfor %}
-                    </select>
-                    {% endif %}
-                    <!----------- ПЕРЕДАННЫЕ В КЭР------------------->
-                    <button class="btn_save" type="submit">Применить фильтр</button>
-            </div>
             <div style="text-align: right;">
                 Количество строк: <input type="number" style="width: 50px;" name="records_per_page" placeholder="Записей на странице" value="{{ records_per_page }}" min="1">
             </div>
 
        </div>
-
-
     </form>
+   <!-- kis_long_home.html -->
+<form method="get">
+    {{ form.as_table }}
+    <button type="submit">Фильтровать</button>
+</form>
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Действия с записями</th>  <!-- Изменено на "Действия" для ясности -->
-                <th>№ истории болезни</th>
-                <th>ФИО</th>
+<table>
+    <thead>
+        <tr>
+            <th>Действия с записями</th>  <!-- Изменено на "Действия" для ясности -->
+             <th>ФИО</th>
+                <th>ДР</th>
                 <th>Отделение</th>
                 <th>Дата госпитализации</th>
-                <th>Основной диагноз</th>
-                <th>Дата рождения</th>
-                <th>Дата выписки</th>
+                <th>Койко-дни</th>
+                <th>Статус пациента</th>
+                <th>Состояние заявки</th>
                 <!-- Добавьте другие заголовки для всех полей модели -->
             </tr>
-        </thead>
-        <tbody>
-            {% for patient in patients %}
-            <tr>
-            <td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for patient in page_obj %}
+        <tr>
+        <td>
                <!--  Поле для ПРАВОК  -->
                     {% if user.is_authenticated %}
-                    {% if 'vps' in groups %}
-                    <a href="{% url 'my_app_smp:edit_patient' item.id %}" class="btn_save">Правки(ВПС)</a> <!-- Ссылка на редактирование -->
+                    {% if 'stacionar' in groups %}
+                    <a href="{% url 'app_kis_long:v_kis_pac_detail' patient.id %}" class="btn_save">Внести_сведения</a> <!-- Ссылка на редактирование -->
                     {% endif  %}
                     {% if 'ker' in groups %}
-                    <a href="{% url 'my_app_smp:edit_ker' item.id %}" class="btn_save">Правки(КЭР)</a><!-- Ссылка на редактирование -->
+                    <a href="{% url 'app_kis_long:v_kis_pac_detail' patient.id %}" class="btn_save">Правки(КЭР)</a><!-- Ссылка на редактирование -->
                     {% endif  %}
                      {% if 'glav' in groups %}
-                    <a href="{% url 'my_app_smp:edit_glav' item.id %}" class="btn_save">Правки(Главврач)</a><!-- Ссылка на редактирование -->
+                    <a href="{% url 'app_kis_long:v_kis_pac_detail' patient.id %}" class="btn_save">Правки(Главврач)</a><!-- Ссылка на редактирование -->
                     {% endif  %}
                     {% endif  %}
                 </td>
-                <td>{{ patient.n_istorii_bolezni }}</td>
                 <td>{{ patient.fio_pacienta }}</td>
+                <td>{{ patient.data_rozhdeniya }}</td>
                 <td>{{ patient.otdelenie }}</td>
                 <td>{{ patient.data_gospit }}</td>
-                <td>{{ patient.diagnoz_osnovnoj }}</td>
-                <td>{{ patient.data_rozhdeniya }}</td>
-                <td>{{ patient.data_vypiski }}</td>
+                <td>{{ patient.kojko_dni }}</td>
+                <td>{{ patient.status_pacienta }}</td>
+                <td>{{ patient.sostoyanie_zayavki }}</td>
                 <!-- Добавьте другие ячейки для всех полей модели -->
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="7">Нет данных о пациентах.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <!-- Пагинация -->
-    <div class="pagination">
-        <span class="step-links">
-            {% if data_smp.has_previous %}
-                <a href="?page=1">&laquo; Первая</a>
-                <a href="?page={{ data_smp.previous_page_number }}">Предыдущая</a>
-            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<!-- Пагинация -->
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Предыдущая</a>
+    {% endif %}
 
-            <span class="current">
-                Страница {{ data_smp.number }} из {{ data_smp.paginator.num_pages }}.
-            </span>
+    {% for num in paginator.page_range %}
+        {% if num == page_obj.number %}
+            <span>{{ num }}</span>
+        {% else %}
+            <a href="?page={{ num }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
 
-            {% if data_smp.has_next %}
-                <a href="?page={{ data_smp.next_page_number }}">Следующая</a>
-                <a href="?page={{ data_smp.paginator.num_pages }}">Последняя &raquo;</a>
-            {% endif %}
-        </span>
-    </div>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Следующая</a>
+    {% endif %}
+</div>
+<!-- Пагинация -->
 
+
+ {% endblock %}  <!--#---------------------- конец КОНТЕНТА   -->
     <footer>
         <p>&copy; 2024 ЦПП. Все права защищены.</p>
     </footer>
