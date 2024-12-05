@@ -10,9 +10,33 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
+import logging
 
+# ------------------------------------------------- Зона логгирования ----------------
+class MyFilter(logging.Filter):
+    def filter(self, record):
+        return not record.getMessage().startswith('GET') and not record.getMessage().startswith('POST')
 
+# Создайте логгер
+logger = logging.getLogger(__name__)
 
+# Установите уровень логирования
+logger.setLevel(logging.INFO)
+
+# Создайте обработчик логирования для файла
+file_handler = logging.FileHandler('log.txt')
+
+# Установите формат логирования
+# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# formatter = logging.Formatter('%(asctime)s - %(name)s -  %(message)s')
+# file_handler.setFormatter(formatter)
+# Добавьте фильтр логирования к обработчику логирования
+file_handler.addFilter(MyFilter())
+
+# Добавьте обработчик логирования к логгеру
+logger.addHandler(file_handler)
+
+# -------------------------------------------------  логгирования -----------------------
 
 def login_view(request):
     if request.method == 'POST':
@@ -23,6 +47,7 @@ def login_view(request):
         if user is not None:
             auth_login(request, user)
             print(f"-----------------------------------------------------User {user} вошел")
+            logger.info(f'пользователь {request.user} вошел в приложение')
             return redirect('my_app_smp:start_page')
             # return redirect('start_page')
         else:
@@ -34,6 +59,7 @@ def login_view(request):
 
 def logout(request):
     auth_logout(request)  # Выход из аккаунта
+    logger.info(f'пользователь {request.user} вышел из приложения')
     print("-----------------------------------------00-----User logged out")  # Отладочное сообщение
     return redirect('login')  # Перенаправление на главную страницу
     # return render(request, 'login.html')
@@ -80,35 +106,105 @@ def results(request):
     return render(request, 'results.html')
 
 
+# def home(request):
+#     # --------------
+#     user_groups_list = []
+#     for i in request.user.groups.all():
+#         print(i)
+#         user_groups_list.append(str(i))
+#     # groups = Group.objects.all()
+#     print(user_groups_list)
+#     # -------------------------
+#     # ------------------------------------------- фильтр по ВПС -------------
+#     # dict_vps = {'butovo':	'Бутово ОВПП',
+#     #             'voronovo':	'Вороново ОВПП',
+#     #             'danilovskij'	:'Даниловский ОВПП',
+#     #             'degunino'	:'Дегунино ОВПП',
+#     #             'zelenograd'	:'Зеленоград ОВПП',
+#     #             'kolomenskoe':	'Коломенское ОВПП',
+#     #             'kurkino':	'Куркино ОВПП',
+#     #             'lyublino'	: 'Люблино ОВПП',
+#     #             'nekrasovka':	'Некрасовка ОВПП',
+#     #             'ovprp'	:'ОВПРП',
+#     #             'pmdkh':	'ПМДХ ОВПП',
+#     #             'pmkh'	:'ПМХ ОВПП',
+#     #             'preobrazhenskoe':	'Преображенское ОВПП',
+#     #             'rostokino':'Ростокино ОВПП',
+#     #             'savelovskij'	:'Савеловский ОВПП',
+#     #             'solncevo'	: 'Солнцево ОВПП',
+#     #             'khoroshevo':	'Хорошево ОВПП',
+#     #             'caricyno':	'Царицыно ОВПП',}
+#
+#
+#     is_vps_group = request.user.groups.filter(name='vps').exists()
+#     query_fio = request.GET.get('search_fio', '')  # Получаем строку поиска по FIO
+#     query_kurir = request.GET.get('search_kurir', '')  # Получаем строку поиска по курирующему подразделению
+#     query_otrabot = request.GET.get('search_otrabot', '')  # Получаем строку поиска по отработанным записям
+#     records_per_page = request.GET.get('records_per_page', 20)  # Получаем количество записей на странице
+#
+#     # ------------------------------ применим фильтр из СЛОВАРЯ ВПС ----------------
+#
+#     # Фильтруем данные по обоим полям
+#     print(request.user.groups)
+#
+#     if user_groups_list == ['vps']:
+#         # Исключаем записи, у которых ok_vps равно "ВПС"
+#         data_smp = SmpRazborTab.objects.filter(ok_vps="впс").order_by('data_vyzova_smp',
+#                                                                                   'fio_pacienta')  # Сортировка по возрастанию
+#     else:
+#         data_smp = SmpRazborTab.objects.all().order_by('data_vyzova_smp', 'fio_pacienta')  # Сортировка по возрастанию
+#     total_records = data_smp.count()  # Общее количество записей
+#
+#     if query_fio:
+#         data_smp = data_smp.filter(fio_pacienta__icontains=query_fio)
+#
+#     if query_kurir:
+#         data_smp = data_smp.filter(kuriruyushchee_podrazdelenie_ovpp__icontains=query_kurir)
+#
+#     if query_otrabot:
+#         data_smp = data_smp.filter(ok_vps=query_otrabot)
+#
+#
+#
+#     # data_smp = data_smp.filter(ok_vps=query_kurir)
+#     # Получаем уникальные значения для выпадающего списка
+#     unique_kurir = SmpRazborTab.objects.values_list('kuriruyushchee_podrazdelenie_ovpp', flat=True).distinct()
+#     unique_otrab = SmpRazborTab.objects.values_list('ok_vps', flat=True).distinct()
+#
+#     paginator = Paginator(data_smp, records_per_page)  # Показывать 10 записей на странице
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#
+#     return render(request, 'home.html', {
+#         'data_smp': page_obj,
+#         'search_fio': query_fio,
+#         'search_kurir': query_kurir,
+#         'search_otrabot': query_otrabot,
+#         'records_per_page': records_per_page,
+#         'total_records': total_records,  # Передаем общее количество записей
+#         'unique_kurir': unique_kurir,  # Передаем уникальные значения в контекст по курир. филиалу ВПС
+#         'unique_otrab': unique_otrab,  # Передаем уникальные значения в контекст по отработанным в КЭР
+#         'groups': user_groups_list, # Получаем все группы
+#     })
+
+
 def home(request):
+
     # --------------
     user_groups_list = []
     for i in request.user.groups.all():
         print(i)
         user_groups_list.append(str(i))
-    # groups = Group.objects.all()
-    print(user_groups_list)
-    # -------------------------
-    # ------------------------------------------- фильтр по ВПС -------------
-    dict_vps = {'butovo':	'Бутово ОВПП',
-                'voronovo':	'Вороново ОВПП',
-                'danilovskij'	:'Даниловский ОВПП',
-                'degunino'	:'Дегунино ОВПП',
-                'zelenograd'	:'Зеленоград ОВПП',
-                'kolomenskoe':	'Коломенское ОВПП',
-                'kurkino':	'Куркино ОВПП',
-                'lyublino'	: 'Люблино ОВПП',
-                'nekrasovka':	'Некрасовка ОВПП',
-                'ovprp'	:'ОВПРП',
-                'pmdkh':	'ПМДХ ОВПП',
-                'pmkh'	:'ПМХ ОВПП',
-                'preobrazhenskoe':	'Преображенское ОВПП',
-                'rostokino':'Ростокино ОВПП',
-                'savelovskij'	:'Савеловский ОВПП',
-                'solncevo'	: 'Солнцево ОВПП',
-                'khoroshevo':	'Хорошево ОВПП',
-                'caricyno':	'Царицыно ОВПП',}
+    # --------------
 
+    # ----------------------- отбор списка ВПС
+    unique_kurir = SmpRazborTab.objects.values_list('kuriruyushchee_podrazdelenie_ovpp', flat=True).distinct()
+    unique_kurir_list = []
+    for i in unique_kurir:
+        print(i)
+        unique_kurir_list.append(str(i))
+    print()
+    # -----------------------
 
     is_vps_group = request.user.groups.filter(name='vps').exists()
     query_fio = request.GET.get('search_fio', '')  # Получаем строку поиска по FIO
@@ -116,20 +212,38 @@ def home(request):
     query_otrabot = request.GET.get('search_otrabot', '')  # Получаем строку поиска по отработанным записям
     records_per_page = request.GET.get('records_per_page', 20)  # Получаем количество записей на странице
 
-    # ------------------------------ применим фильтр из СЛОВАРЯ ВПС ----------------
-    # query_kurir = dict_vps.get(str(request.user))
+
+    print('-----------')
+
+
+    # Обработка фильтров из GET-запроса
+
+    if request.method == 'GET':
+        if 'records_per_page' in request.GET and request.GET['records_per_page'] != '':
+            request.session['records_per_page'] = int(request.GET['records_per_page'])
+        records_per_page = request.GET.get('records_per_page', request.session.get('records_per_page', 15))
+
+        if 'search_fio' in request.GET:
+            query_fio = request.GET.get('search_fio', '')
+
+        if 'search_kurir' in request.GET:
+            query_kurir = request.GET.get('search_kurir', '')
+
+        if 'search_otrabot' in request.GET:
+            query_otrabot = request.GET.get('search_otrabot', '')
+        # -----------------------------------------------------------
+
 
     # Фильтруем данные по обоим полям и сортируем по p_p
     # data_smp = SmpRazborTab.objects.all().order_by('p_p')  # Сортировка по возрастанию p_p
     # Фильтруем данные по обоим полям
-    print(request.user.groups)
-
     if user_groups_list == ['vps']:
         # Исключаем записи, у которых ok_vps равно "ВПС"
         data_smp = SmpRazborTab.objects.filter(ok_vps="впс").order_by('data_vyzova_smp',
                                                                                   'fio_pacienta')  # Сортировка по возрастанию
     else:
         data_smp = SmpRazborTab.objects.all().order_by('data_vyzova_smp', 'fio_pacienta')  # Сортировка по возрастанию
+
     total_records = data_smp.count()  # Общее количество записей
 
     if query_fio:
@@ -141,9 +255,6 @@ def home(request):
     if query_otrabot:
         data_smp = data_smp.filter(ok_vps=query_otrabot)
 
-
-
-    # data_smp = data_smp.filter(ok_vps=query_kurir)
     # Получаем уникальные значения для выпадающего списка
     unique_kurir = SmpRazborTab.objects.values_list('kuriruyushchee_podrazdelenie_ovpp', flat=True).distinct()
     unique_otrab = SmpRazborTab.objects.values_list('ok_vps', flat=True).distinct()
@@ -154,6 +265,8 @@ def home(request):
 
     return render(request, 'home.html', {
         'data_smp': page_obj,
+        'paginator': paginator,
+
         'search_fio': query_fio,
         'search_kurir': query_kurir,
         'search_otrabot': query_otrabot,

@@ -130,29 +130,28 @@
     </tbody>
 </table>
 
-    <!-- Пагинация -->
-    <div class="pagination">
-        <span class="step-links">
-            {% if data_plf.has_previous %}
-                <a href="?page=1">&laquo; Первая</a>
-                <a href="?page={{ data_plf.previous_page_number }}">Предыдущая</a>
-            {% endif %}
+      <!-- Пагинация -->
+<div class="pagination">
+
+    {% if data_plf.has_previous %}
+        <a href="?page={{ data_plf.previous_page_number }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Предыдущая</a>
+    {% endif %}
 
             <span class="current">
                 Страница {{ data_plf.number }} из {{ data_plf.paginator.num_pages }}.
             </span>
 
-            {% if data_plf.has_next %}
-                <a href="?page={{ data_plf.next_page_number }}">Следующая</a>
-                <a href="?page={{ data_plf.paginator.num_pages }}">Последняя &raquo;</a>
-            {% endif %}
-        </span>
-    </div>
+    {% if data_plf.has_next %}
+        <a href="?page={{ data_plf.next_page_number }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Следующая</a>
+    {% endif %}
+</div>
+<!-- Пагинация -->
+
 <!-- ко----------------------------------------нец блока endblock------------------------>
     {% endblock %}
     </main>
     <footer style="background-color: #004b00;">
-        <p>&copy; 2024 ЦПП. Все права защищены.</p>
+        <p>&copy; 2024 ЦПП... Все права защищены.</p>
     </footer>
 </body>
 </html>

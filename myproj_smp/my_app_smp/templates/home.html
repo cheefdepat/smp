@@ -137,27 +137,52 @@
     </tbody>
 </table>
 
-    <!-- Пагинация -->
-    <div class="pagination">
-        <span class="step-links">
-            {% if data_smp.has_previous %}
-                <a href="?page=1">&laquo; Первая</a>
-                <a href="?page={{ data_smp.previous_page_number }}">Предыдущая</a>
-            {% endif %}
+<!--    &lt;!&ndash; Пагинация &ndash;&gt;-->
+<!--    <div class="pagination">-->
+<!--        <span class="step-links">-->
+<!--            {% if data_smp.has_previous %}-->
+<!--                <a href="?page=1">&laquo; Первая</a>-->
+<!--                <a href="?page={{ data_smp.previous_page_number }}">Предыдущая</a>-->
+<!--            {% endif %}-->
 
+<!--            <span class="current">-->
+<!--                Страница {{ data_smp.number }} из {{ data_smp.paginator.num_pages }}.-->
+<!--            </span>-->
+
+<!--            {% if data_smp.has_next %}-->
+<!--                <a href="?page={{ data_smp.next_page_number }}">Следующая</a>-->
+<!--                <a href="?page={{ data_smp.paginator.num_pages }}">Последняя &raquo;</a>-->
+<!--            {% endif %}-->
+<!--        </span>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; Пагинация &ndash;&gt;-->
+
+      <!-- Пагинация -->
+<div class="pagination">
+
+    {% if data_smp.has_previous %}
+        <a href="?page={{ data_smp.previous_page_number }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Предыдущая</a>
+    {% endif %}
+
+<!--    {% for num in paginator.page_range %}-->
+<!--        {% if num == data_smp.number %}-->
+<!--            <span>{{ num }}</span>-->
+<!--        {% else %}-->
+<!--            <a href="?page={{ num }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>-->
+<!--        {% endif %}-->
+<!--    {% endfor %}-->
             <span class="current">
                 Страница {{ data_smp.number }} из {{ data_smp.paginator.num_pages }}.
             </span>
 
-            {% if data_smp.has_next %}
-                <a href="?page={{ data_smp.next_page_number }}">Следующая</a>
-                <a href="?page={{ data_smp.paginator.num_pages }}">Последняя &raquo;</a>
-            {% endif %}
-        </span>
-    </div>
+    {% if data_smp.has_next %}
+        <a href="?page={{ data_smp.next_page_number }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Следующая</a>
+    {% endif %}
+</div>
+<!-- Пагинация -->
 
     <footer>
-        <p>&copy; 2024 ЦПП. Все права защищены.</p>
+        <p>&copy; 2024 ЦПП./ Все права защищены.</p>
     </footer>
 </body>
 </html>

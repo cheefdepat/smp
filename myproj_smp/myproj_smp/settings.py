@@ -164,3 +164,55 @@ STATICFILES_DIRS = [   os.path.join(BASE_DIR, 'my_app_smp',  'static'),
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'home'  # Замените 'home' на имя вашего представления
 LOGOUT_REDIRECT_URL = 'login'  # Замените 'login' на имя вашего представления
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            # 'format': '{levelname} {asctime} {module} {process} {thread} {message}',
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',        },
+        'simple': {
+            # 'format': '%(levelname)s %(message)s'
+            'format': '%(asctime)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            # 'formatter': 'verbose',  # добавлен параметр formatter
+            'formatter': 'simple',  # добавлен параметр formatter
+        },
+        'file': {
+            # 'class': 'logging.FileHandler',            'filename': '/path/to/django.log',
+            'class': 'logging.FileHandler',
+            # 'filename': 'django.log',
+            'filename': 'log.txt',
+            'formatter': 'verbose',
+            # 'formatter': 'simple',
+            'encoding':'UTF-8'
+        },
+    },
+    'loggers': {
+        'django': {
+                    'handlers': ['console', 'file'],
+                    'level': 'ERROR',
+                  },
+        'app_kis_long': {
+                        'handlers': ['console', 'file'],
+                        'level': 'INFO',
+                        'propagate': True,
+                          },
+        'my_app_smp': {
+                    'handlers': ['console', 'file'],
+                    'level': 'INFO',
+                    'propagate': True,
+                },
+        'http.server': {  # Отключаем логи для BaseHTTPServer
+            'handlers': ['console'],
+            'level': 'ERROR',  # Уровень логирования, ниже которого не будет записываться
+            'propagate': False,
+        },
+    },
+}

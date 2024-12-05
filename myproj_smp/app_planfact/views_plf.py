@@ -66,6 +66,7 @@ def plf_start_list(request):
 
     return render(request, 'planfact_home_page.html', {
         'data_plf': page_obj,
+        'paginator':paginator,
         'search_fio': query_fio,
         'search_kurir': query_kurir,
         'search_otrabot': query_otrabot,
