@@ -19,12 +19,21 @@
 </head>
 <body>
 <nav>
-    <a href="{% url 'my_app_smp:home' %}" class="btn">Вернуться на главную</a>
+    <a href="{% url 'my_app_smp:start_page' %}" class="btn">Вернуться на главную</a>
 
 </nav>
     <main>
-       <iframe class="metabase-dashboard" src="http://10.159.8.163:3210/public/dashboard/8c90dd25-b9ab-46d9-862c-05bc049ecbbd" allow="fullscreen"></iframe>
-     </main>
+         <div style="text-align: center;">
+        <h3>Выбрать дашборд для просмотра результатов:</h3>
+       </div >
+    <div style="text-align: left">
+
+    <a href="{% url 'my_app_smp:results_page_1' %}" class="btn_start">Сведения по выполнению СМП и план-факт (суточное заполнение)</a><br>
+    <a href="{% url 'my_app_smp:results_page_2' %}" class="btn_start">Итоги СМП</a><br>
+
+</div>
+
+    </main>
 
 </body>
 </html>

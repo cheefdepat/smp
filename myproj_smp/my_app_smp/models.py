@@ -24,7 +24,7 @@ class SmpRazborTab(models.Model):
     dinamika_sostoyaniya = models.CharField(max_length=255, blank=True, null=True)
     fio_vracha = models.CharField(max_length=255, blank=True, null=True)
     sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle = models.TextField( blank=True, null=True)
-    kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij = models.CharField(max_length=255, blank=True, null=True)
+    kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij = models.TextField( blank=True, null=True)
 
 
     vyvod = models.TextField( blank=True, null=True)

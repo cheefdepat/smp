@@ -6,11 +6,13 @@
     <title>Данные из БД</title>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-    <script>
-            function submitForm() {
-                document.getElementById('searchForm').submit();
-            }
-        </script>
+<!--    <script>-->
+<!--            function submitForm() {-->
+<!--                document.getElementById('searchForm').submit();-->
+<!--            }-->
+<!--            </script>-->
+
+<!--        </script>-->
 
 
 </head>
@@ -19,10 +21,11 @@
         <h4>Данные из таблицы СМП</h4>
         <div style="text-align: right; margin-top: -30px; margin-bottom: 20px;">
             <strong>Общее количество записей: {{ total_records }}</strong>
+
         </br>
         </br>
        Вы авторизованы как " {{user}} "
-        <!--       ** @2 {{groups}} ****<br>-->
+               ** @2 {{groups}} ****<br>
         <!--       ** @3 {{group_names}} ****<br>-->
         <!--       ** @4 {{group}} ****<br>-->
         <!--       ** @5 {{request.user.groups}} ****<br>-->
@@ -34,25 +37,22 @@
     </header>
 
     <nav>
+<!--        <a href="{% url 'my_app_smp:export_to_excel' %}" class="btn">Выгрузить в Excel</a>-->
+        <a href="{% url 'my_app_smp:export_to_excel' %}?search_data_vizova_smp={{ search_data_vizova_smp }}"
+                                                            class="btn">Выгрузить в Excel</a>
         <a href="{% url 'my_app_smp:start_page' %}" class="btn">Возврат к списку ТАБЛИЦ</a>
-<!--        <a href="#" class="btn">КЭР</a>-->
-<!--        <a href="#" class="btn">Контакты</a>-->
-<!--        <a href="#" class="btn">Помощь</a>-->
-
         <a href="{% url 'my_app_smp:help' %}" class="btn">Помощь</a>
-        <a href="{% url 'my_app_smp:results' %}" class="btn">Дашборд
-       <a  href="{% url 'my_app_smp:logout' %}" class="btn">Выход</a>
-
-
+        <a href="{% url 'my_app_smp:logout' %}" class="btn">Выход</a>
     </nav>
 
-
-
-
     <!-- Форма поиска и количество записей на странице -->
-    <form method="GET" action="" class="search-container">
+   Отфильтрованное количество записей: {{filter_records}}
+<!--    <form id="filterForm" method="GET" action="{% url 'my_app_smp:export_to_excel' %}" class="search-container">-->
+    <form id="filterForm" method="GET" action="" class="search-container">
         <div style="width: 100%;">
             <div>
+                <label for="search_data_vizova_smp">Дата замечания:</label>
+                    <input id="search_data_vizova_smp" style="background-color: #b5cfde; width: 100px;" type="date" name="search_data_vizova_smp" placeholder="Введите дату" value="{{ search_data_vizova_smp }}">
                     <input style="background-color: #b5cfde;" type="text" name="search_fio" placeholder="Введите  фамилию пациента" value="{{ search_fio }}">
 
                     <select name="search_kurir" onchange="submitForm()">
@@ -71,11 +71,18 @@
                     </select>
                     {% endif %}
                     <!----------- ПЕРЕДАННЫЕ В КЭР------------------->
-                    <button class="btn_save" type="submit">Применить фильтр</button>
+                <a href="{% url 'my_app_smp:home' %}?search_fio=&search_kurir=&search_otrabot=" class="">Сбросить фильтры</a>
+                <button class="btn_save" type="submit">Применить фильтр</button>
+
+    </form>
+</nav>
+
             </div>
             <div style="text-align: right;">
-                Количество строк: <input type="number" style="width: 50px;" name="records_per_page" placeholder="Записей на странице" value="{{ records_per_page }}" min="1">
+                 Количество строк: <input type="number" style="width: 50px;" name="records_per_page" placeholder="Записей на странице" value="{{ records_per_page }}" min="1">
             </div>
+
+
 
        </div>
 
@@ -141,28 +148,26 @@
     </tbody>
 </table>
 
-    <!-- Пагинация -->
-    <div class="pagination">
-        <span class="step-links">
-            {% if data_smp.has_previous %}
-                <a href="?page=1">&laquo; Первая</a>
-                <a href="?page={{ data_smp.previous_page_number }}">Предыдущая</a>
-            {% endif %}
 
+         <!-- Пагинация -->
+<div class="pagination">
+
+    {% if data_smp.has_previous %}
+        <a href="?page={{ data_smp.previous_page_number }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Предыдущая</a>
+    {% endif %}
             <span class="current">
                 Страница {{ data_smp.number }} из {{ data_smp.paginator.num_pages }}.
             </span>
 
-            {% if data_smp.has_next %}
-                <a href="?page={{ data_smp.next_page_number }}">Следующая</a>
-                <a href="?page={{ data_smp.paginator.num_pages }}">Последняя &raquo;</a>
-            {% endif %}
-        </span>
-    </div>
-   <!-- Пагинация -->
+    {% if data_smp.has_next %}
+        <a href="?page={{ data_smp.next_page_number }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Следующая</a>
+    {% endif %}
+</div>
+<!-- Пагинация -->
+
 
     <footer>
-        <p>&copy; 2024 ЦПП. Все права защищены.</p>
+        <p>&copy; 2024 ЦПП.. Все права защищены.</p>
     </footer>
 </body>
 </html>

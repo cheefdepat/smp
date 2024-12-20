@@ -3,41 +3,20 @@ from .models import PlanFactTab
 # import datetime
 from django.core.paginator import Paginator
 
+import openpyxl
+from io import BytesIO
+from openpyxl.styles import PatternFill
+from django.http import HttpResponse
+from openpyxl.styles import PatternFill, Alignment
 
 
 def plf_start_list(request):
-    dict_vps_plf = {'butovo': 'Бутово',
-                'voronovo': 'Вороново ОВПП',
-                'danilovskij': 'Даниловский ОВПП',
-                'degunino': 'Филиал "Дегунино" ММЦПП ДЗМ',
-                'zelenograd': 'Филиал "Зеленоград" ММЦПП ДЗМ',
-                'kolomenskoe': 'Филиал "Коломенское" ММЦПП ДЗМ',
-                'kurkino': 'Куркино ОВПП',
-                'lyublino': 'Люблино ОВПП',
-                'nekrasovka': 'Некрасовка ОВПП',
-                'ovprp': 'ОВПРП',
-                'pmdkh': 'ПМДХ ОВПП',
-                'pmkh': 'ПМХ ОВПП',
-                'preobrazhenskoe': 'Преображенское ОВПП',
-                'rostokino': 'Ростокино ОВПП',
-                'savelovskij': 'Савеловский ОВПП',
-                'solncevo': 'Солнцево ОВПП',
-                'khoroshevo': 'Хорошево ОВПП',
-                'caricyno': 'Царицыно ОВПП', }
 
     # --------------
-    # user_groups = request.user.groups.all()
-    # print(user_groups)
     user_groups_list = []
     for i in request.user.groups.all():
         print(i)
         user_groups_list.append(str(i))
-    # groups = Group.objects.all()
-    print(user_groups_list)
-    #
-    # print(groups[1])
-    # print(groups)
-    # print('ker' not in groups)
     # --------------
 
     is_vps_group = request.user.groups.filter(name='vps').exists()
@@ -82,18 +61,21 @@ def plf_start_list(request):
     paginator = Paginator(data_plf, records_per_page)  # Показывать 10 записей на странице
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    filter_records = data_plf.count()
 
     return render(request, 'planfact_home_page.html', {
         'data_plf': page_obj,
         'search_fio': query_fio,
         'search_kurir': query_kurir,
         'search_otrabot': query_otrabot,
+        'search_data_zamecaniya': query_data_zamecaniya, # Передаем дату замечания
+
         'records_per_page': records_per_page,
         'total_records': total_records,  # Передаем общее количество записей
         'unique_kurir': unique_kurir,  # Передаем уникальные значения в контекст по курир. филиалу ВПС
         'unique_otrab': unique_otrab,  # Передаем уникальные значения в контекст по отработанным в КЭР
-         'search_data_zamecaniya': query_data_zamecaniya,  # Передаем уникальные значения в контекст по отработанным в КЭР
 
+        'filter_records': filter_records, # Получаем все группы
         'groups': user_groups_list, # Получаем все группы
     })
 
@@ -148,3 +130,96 @@ def plf_proverka_to_ker(request, id):
             return redirect('app_planfact:plf_edit_patient', id=id)  # Возвращаем на страницу редактирования
 
     return render(request, 'plf_patient_detail.html', {'patient': patient})
+
+
+def plf_export_to_excel(request):
+    # Получите данные с учетом фильтров
+    search_data_zamecaniya = request.GET.get('search_data_zamecaniya', '')
+
+    # Примените фильтры к вашему запросу
+    data_plf = PlanFactTab.objects.all()  # Замените на ваш запрос
+    if search_data_zamecaniya:
+        data_plf = data_plf.filter(data_planfakta=search_data_zamecaniya)  # Замените на ваше поле
+
+    # Создание Excel файла
+    workbook = openpyxl.Workbook()
+    worksheet = workbook.active
+    worksheet.title = 'Patients Data'
+
+    # Заголовки столбцов
+    headers = [
+        'Дата план-факта',
+        'ОМС',    'ФИО',    'ДР',    'ОВПП',
+        'Плановая дата визита согласно ЕМИАС/реестру',
+        'Фактическая дата визита согласно ЕМИАС',
+        'Вопрос для разбора',
+        'Ответ КЦ'
+    ]
+    worksheet.append(headers)
+
+    #------------------------------------ Форматирование заголовков-----------------------н
+    # green_fill = PatternFill(start_color='00FF00', end_color='00FF00', fill_type='solid')  # Зеленый цвет
+    # # Индексы заголовков, к которым нужно применить зеленый фон (начиная с 1)
+    # green_header_indices = [15, 16,  17, 18, 19]  # Индексы для 'ФИО врача', 'Сравнение...', 'Действия ЦПП', 'Контроль...', 'Вывод'
+    # for col in green_header_indices:
+    #     worksheet.cell(row=1, column=col).fill = green_fill  # Применяем зеленый фон к указанным заголовкам
+    #------------------------------------ Форматирование заголовков-----------------------к
+
+
+    # ---------------------------
+    blue_fill = PatternFill(start_color='b1e4fa', end_color='00FF00', fill_type='solid')  # Ситний цвет
+    yellow_fill = PatternFill(start_color='14fa70', end_color='00FF00', fill_type='solid')  # Ситний цвет
+    # Индексы заголовков, к которым нужно применить зеленый фон (начиная с 1)
+    # green_header_indices = [15, 16, 17, 18,
+    #                         19]  # Индексы для 'ФИО врача', 'Сравнение...', 'Действия ЦПП', 'Контроль...', 'Вывод'
+    blue_header_indices = [1, 2, 3, 4, 5,6,7,8,]  # Индексы для 'ФИО врача', 'Сравнение...', 'Действия ЦПП', 'Контроль...', 'Вывод'
+    yellow_header_indices = [9,]  # Индексы для 'ФИО врача', 'Сравнение...', 'Действия ЦПП', 'Контроль...', 'Вывод'
+
+    # ------------------- для колонок с синим цветом -------------
+    for col in blue_header_indices:
+        cell = worksheet.cell(row=1, column=col)
+        cell.fill = blue_fill  # Применяем Ситний фон к заголовкам
+        cell.alignment = Alignment(wrap_text=True)  # Включаем перенос текста
+
+    for col in yellow_header_indices:
+        cell = worksheet.cell(row=1, column=col)
+        cell.fill = yellow_fill  # Применяем Ситний фон к заголовкам
+        cell.alignment = Alignment(wrap_text=True)  # Включаем перенос текста
+
+    # ------------------- для колонок с зелен цветом -------------
+    # Настройка ширины колонок
+    column_widths = [20, 15, 25, 15, 20, 30, 30, 25]  # Ширина для каждой колонки
+    for i, width in enumerate(column_widths, start=1):
+        worksheet.column_dimensions[worksheet.cell(row=1, column=i).column_letter].width = width
+
+    # ---------------------------
+
+    # Заполнение данными
+    for item in data_plf:
+        worksheet.append([
+            item.data_planfakta.strftime("%d.%m.%Y") if item.data_planfakta else '',  # Форматируем дату
+            item.polis_oms,
+            item.fio_pacienta,
+            item.data_rozhdeniya.strftime("%d.%m.%Y") if item.data_rozhdeniya else '',  # Форматируем дату
+            item.ovpp_name,
+            item.planovaya_data_vizita_soglasno_emias_reestru.strftime("%d.%m.%Y") if item.planovaya_data_vizita_soglasno_emias_reestru else '',  # Форматируем дату
+            item.fakticheskaya_data_vizita_soglasno_emias.strftime("%d.%m.%Y") if item.fakticheskaya_data_vizita_soglasno_emias else '',  # Форматируем дату
+            item.vopros_dlya_razbora,
+            item.otvet_kc,
+        ])
+
+    # Сохранение файла в памяти
+    output = BytesIO()
+    workbook.save(output)
+    output.seek(0)
+
+    # ----- Формирую название файла --------
+    if search_data_zamecaniya:
+        file = f'plan_fact_{search_data_zamecaniya}.xlsx'
+    else:      file = 'plan_fact_all.xlsx'
+    print(file)
+
+    # Создание HTTP ответа
+    response = HttpResponse(output, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = f'attachment; filename="{file}"'
+    return response

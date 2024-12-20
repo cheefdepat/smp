@@ -84,7 +84,7 @@
 
                         <th>Наличие родственников</th>
                                        <td><input type="text" name="nalichie_rodstvennikov"  value="{{ patient.nalichie_rodstvennikov }}" ></td>  </tr>
-                        <th>---Дата передачи соц координаторам ДТСЗН</th>
+                        <th>Дата передачи соц координаторам ДТСЗН</th>
                                           <td><input type="date" name="data_peredachi_soc_koordinatoram_dtszn"  value="{{ patient.data_peredachi_soc_koordinatoram_dtszn|date:'Y-m-d' }}" ></td>         </tr>
                         <th>ФИО заведующего отд</th>
                                         <td><input type="text" name="fio_zaveduyushchego_otd"  value="{{ patient.fio_zaveduyushchego_otd }}" ></td>  </tr>
@@ -94,15 +94,14 @@
 <!--                                        <td><input type="text" name="kommentarij_soc"  value="{{ patient.kommentarij_soc }}" ></td>         </tr>-->
                     <td> <textarea rows="10" cols="45" name="kommentarij_soc"   > {{ patient.kommentarij_soc }}</textarea></td>         </tr>
 
-                        <th>---Дата принятия в работу соц координаторами ДТСЗН</th>
+                        <th>Дата принятия в работу соц координаторами ДТСЗН</th>
                                         <td><input type="date" name="data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn"  value="{{ patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn|date:'Y-m-d' }}" ></td>         </tr>
                         <th>Статус пациента</th>
-<!--                                        <td><input type="text" name="status_pacienta"  value="{{ patient.status_pacienta }}" ></td>         </tr>-->
                     <td>  <select name="status_pacienta">
-                                    <option value="Статус_1">Статус_1</option>
-                                    <option value="Статус_2">Статус_2</option>
-                                    <option value="Статус_3">Статус_3</option>
-
+                         <option {% if '_1' in  patient.status_pacienta %}selected{% endif %}>Статус_1</option>
+                         <option {% if '_2' in  patient.status_pacienta %}selected{% endif %}>Статус_2</option>
+                         <option {% if '_3' in  patient.status_pacienta %}selected{% endif %}>Статус_3</option>
+                         <option {% if '_4' in  patient.status_pacienta %}selected{% endif %}>Статус_4</option>
                                 </select> </td> </tr>
 
 

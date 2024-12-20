@@ -31,16 +31,16 @@ class KisLongFilterForm(forms.Form):
     otdelenie = forms.CharField(label='Отделение',
                                 required=False,
                                 widget=forms.TextInput(
-                                    attrs={'style': 'width: 150px; background-color: #C6F4D6;'})
+                                    attrs={'style': 'width: 150px; background-color: #87CEEB;'})
                                  )
 
     kojko_dni_min = forms.IntegerField(label='Количество дней (мин.)',
                                        required=False,
                                        # initial=1,
                                        widget=forms.NumberInput(
-                                              attrs={'style': 'width: 50px; background-color: #C6F4D6;'}))
+                                              attrs={'style': 'width: 50px; background-color: #87CEEB;'}))
     kojko_dni_max = forms.IntegerField(label='Количество дней (макс.)',
                                        required=False,
                                        # initial=3000,
                                        widget=forms.NumberInput(
-                                               attrs={'style': 'width: 50px; background-color: #C6F4D6;'}))
+                                               attrs={'style': 'width: 50px; background-color: #87CEEB;'}))

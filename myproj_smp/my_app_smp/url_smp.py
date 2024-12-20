@@ -16,6 +16,9 @@ from .views import login_view
 from .views import active_users_count
 from .views import custom_404_view
 from .views import results
+from .views import results_page_1
+from .views import results_page_2
+from .views import export_to_excel
 # from django.conf.urls import handler404, handler500
 
 app_name = 'my_app_smp'  # Убедитесь, что это указано
@@ -40,6 +43,9 @@ urlpatterns = [
     path('active_users/', active_users_count, name='active_users_count'),
     path('custom_404_view/', custom_404_view, name='custom_404_view'),
     path('results/', results, name='results'),  # Добавьте этот путь
+    path('results_page_1/', results_page_1, name='results_page_1'),  # Добавьте этот путь
+    path('results_page_2/', results_page_2, name='results_page_2'),  # Добавьте этот путь
+    path('export_to_excel/', export_to_excel, name='export_to_excel'),  # вывод в Эксель
 
 ]
 

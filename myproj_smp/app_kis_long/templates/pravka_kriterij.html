@@ -4,11 +4,6 @@
 {% block content %}
 
     <form method="POST">
-<!--        <a href="{% url 'my_app_smp:home' %}" class="btn_save">Назад к списку пациентов@@@@ </a>-->
-<!--        <button href="#" class="btn_save" type="submit" name="save!!!" >Сохранить@@@@</button>-->
-<!--        <button class="btn_save" type="submit" name="send_to_ker" >Отправить в КЭР@@@@</button>-->
-
-<!--        <a href="javascript:history.back()" class="btn">Вернуться назад</a>-->
 
         {% csrf_token %}
 
@@ -54,65 +49,72 @@
                 <tr> <th>PPI :</th>
                     <td><input type="text" name="ppi"  value="{{ patient.ppi }}" ></td>         </tr>
                 <tr>   <th>Медиц_критерии :</th>
-<!--                    <td><input type="text" name="medic_kriterii"  value="{{ patient.medic_kriterii }}" ></td>  </tr>-->
-                    <td> <select name="medic_kriterii">
-                                <option value="1.1. Стабильное состояние здоровья ">1.1. Стабильное состояние здоровья </option>
-                                <option value="1.2. Прогрессирующее заболевание">1.2. Прогрессирующее заболевание</option>
-                                <option value="1.3. Нарушение когнитивных функций">1.3. Нарушение когнитивных функций</option>
-                                <option value="1.4. Ограниченная подвижность">1.4. Ограниченная подвижность</option>
-                            </select></td>
+                    <td>   <select name="medic_kriterii">
+            <option {% if patient.medic_kriterii == 'Сведения не указаны' %}selected{% endif %}> Сведения не указаны</option>
+            <option {% if patient.medic_kriterii == '1.1. Стабильное состояние здоровья' %}selected{% endif %}>1.1. Стабильное состояние здоровья</option>
+            <option {% if patient.medic_kriterii == '1.2. Прогрессирующее заболевание' %}selected{% endif %}>1.2. Прогрессирующее заболевание</option>
+            <option {% if patient.medic_kriterii == '1.3. Нарушение когнитивных функций' %}selected{% endif %}>1.3. Нарушение когнитивных функций</option>
+            <option {% if patient.medic_kriterii == '1.4. Ограниченная подвижность' %}selected{% endif %}>1.4. Ограниченная подвижность</option>
+                         </select>  </td></tr>
+
+                <tr>   <th>Мед показания:</th>
+                    <td>
+                        <select name="med_pokazaniya">
+            <option {% if '0.' in patient.med_pokazaniya %}selected{% endif %}> 0. Сведения не указаны</option>
+            <option {% if '1.' in patient.med_pokazaniya %}selected{% endif %}> 1. Тяжелая одышка 5-7 баллов+ </option>
+            <option {% if '2.' in patient.med_pokazaniya %}selected{% endif %}> 2. Дисфагия 3-4 ст. </option>
+            <option {% if '3.' in patient.med_pokazaniya %}selected{% endif %}> 3. Эметический некупируемый синдром </option>
+            <option {% if '4.' in patient.med_pokazaniya %}selected{% endif %}> 4. Нарастающий отек, асцит или плевральный выпот(треб.дренирование) </option>
+            <option {% if '5.' in patient.med_pokazaniya %}selected{% endif %}> 5. Пролежни/трофические язвы(III-IVст.), ежеднев.обработки </option>
+            <option {% if '6.' in patient.med_pokazaniya %}selected{% endif %}> 6. Стомы, катетеры, осложненное течение</option>
+            <option {% if '7.' in patient.med_pokazaniya %}selected{% endif %}> 7. Выраженный болевой синдром, требующий коррекции </option>
+                         </select>
+                    </td></tr>
 
                   <tr>  <th>Соц.критерии :</th>
                         <td>  <select name="soc_kriterii">
-                                    <option value="2.1. Отсутствие близких или родственников">2.1. Отсутствие близких или родственников</option>
-                                    <option value="2.2. Неспособность семьи обеспечить уход">2.2. Неспособность семьи обеспечить уход</option>
-                                    <option value="2.3. Наличие социального конфликта">2.3. Наличие социального конфликта</option>
-                                    <option value="2.4. Отказ от ухода">2.4. Отказ от ухода</option>
+            <option {% if '0.' in  patient.soc_kriterii %}selected{% endif %}> 0. Сведения не указаны</option>
+            <option {% if '2.1' in  patient.soc_kriterii %}selected{% endif %}>2.1. Отсутствие близких или родственников</option>
+            <option {% if '2.2' in  patient.soc_kriterii %}selected{% endif %}>2.2. Неспособность семьи обеспечить уход</option>
+            <option {% if '2.3' in  patient.soc_kriterii %}selected{% endif %}>2.3. Наличие социального конфликта</option>
+            <option {% if '2.4' in  patient.soc_kriterii %}selected{% endif %}>2.4. Отказ от ухода</option>
                                 </select> </td> </tr>
+
                 <tr>   <th>Функцииональн.критерии :</th>
                        <td>  <select name="funkciional_kriterii">
-                                    <option value="3.1. Неспособность к самообслуживанию">3.1. Неспособность к самообслуживанию</option>
-                                    <option value="3.2. Полная зависимость от помощи извне">3.2. Полная зависимость от помощи извне</option>
-                                    <option value="3.3. Сложности в организации ухода на дому ">3.3. Сложности в организации ухода на дому </option>
-
+            <option {% if '0.' in  patient.funkciional_kriterii %}selected{% endif %}> 0. Сведения не указаны</option>
+            <option {% if '3.1.' in  patient.funkciional_kriterii %}selected{% endif %}> 3.1. Неспособность к самообслуживанию</option>
+            <option {% if '3.2.' in  patient.funkciional_kriterii %}selected{% endif %}> 3.2. Полная зависимость от помощи извне</option>
+            <option {% if '3.3.' in  patient.funkciional_kriterii %}selected{% endif %}> 3.3. Сложности в организации ухода на дому</option>
                                 </select> </td> </tr>
+
                 <tr>     <th>Псих.критерии :</th>
                       <td>  <select name="psikh_kriterii">
-                                    <option value="4.1. Психоэмоциональная нестабильность пациента">4.1. Психоэмоциональная нестабильность пациента</option>
-                                    <option value="4.2. Эмоциональное выгорание родственников">4.2. Эмоциональное выгорание родственников</option>
-
+            <option {% if '0.' in  patient.psikh_kriterii %}selected{% endif %}> 0. Сведения не указаны</option>
+            <option {% if '4.1.' in  patient.psikh_kriterii %}selected{% endif %}> 4.1. Психоэмоциональная нестабильность пациента</option>
+            <option {% if '4.2.' in  patient.psikh_kriterii %}selected{% endif %}> 4.2. Эмоциональное выгорание родственников</option>
                                 </select> </td> </tr>
+
                 <tr>    <th>Орг.критерии :</th>
                     <td>  <select name="org_kriterii">
-                                    <option value="5.1. Наличие показаний для перевода в социальное учреждение">5.1. Наличие показаний для перевода в социальное учреждение</option>
-                                    <option value="5.2. Доступность социальных учреждений">5.2. Доступность социальных учреждений</option>
-
+            <option {% if '0.' in  patient.org_kriterii %}selected{% endif %}> 0. Сведения не указаны</option>
+            <option {% if '5.1.' in  patient.org_kriterii %}selected{% endif %}> 5.1. Наличие показаний для перевода в социальное учреждение</option>
+            <option {% if '5.2.' in  patient.org_kriterii %}selected{% endif %}> 5.2. Доступность социальных учреждений</option>
                                 </select> </td> </tr>
+
                  <tr>      <th>Наличие заявки в соц службу :</th>
-<!--                    <td><input type="text" name="nalichie_zayavki_v_soc_sluzhbu"  value="{{ patient.nalichie_zayavki_v_soc_sluzhbu }}" >-->
                         <td>  <select name="nalichie_zayavki_v_soc_sluzhbu">
-                                    <option value="Заявка подана">Заявка подана</option>
-                                    <option value="Заявка отсутствует">Заявка отсутствует</option>
-
+            <option {% if 'отсутствует' in  patient.nalichie_zayavki_v_soc_sluzhbu %}selected{% endif %}> Заявка отсутствует</option>
+            <option {% if 'подана' in  patient.nalichie_zayavki_v_soc_sluzhbu %}selected{% endif %}> Заявка подана</option>
                                 </select> </td> </tr>
-
-
 
                 <tr>    <th>Состояние заявки :</th>
-<!--                    <td> <input type="text" name="sostoyanie_zayavki"  value="{{ patient.sostoyanie_zayavki }}" >-->
                       <td>  <select name="sostoyanie_zayavki">
-                                    <option value="Заявка отсутствует">Заявка отсутствует</option>
-                                    <option value="Оформление МСЭ">Оформление МСЭ</option>
-                                    <option value="Оформление медкарты"> Оформление медкарты</option>
-                                    <option value="Ожидание путевки"> Ожидание путевки</option>
-
+             <option {% if '0.' in  patient.sostoyanie_zayavki %}selected{% endif %}> 0. Заявка отсутствует</option>
+             <option {% if '1.' in  patient.sostoyanie_zayavki %}selected{% endif %}> 1. Оформление МСЭ</option>
+             <option {% if '2.' in  patient.sostoyanie_zayavki %}selected{% endif %}> 2. Оформление медкарты</option>
+             <option {% if '3.' in  patient.sostoyanie_zayavki %}selected{% endif %}> 3. Ожидание путевки</option>
                                 </select> </td> </tr>
-
-
-
-                    Оформление МСЭ
-Оформление медкарты
-Ожидание путевки
 
 
                  <tr>   <th>Прична отсутствия заявки :</th>

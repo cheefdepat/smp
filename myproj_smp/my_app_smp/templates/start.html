@@ -5,27 +5,33 @@
     <title>Начальная страница</title>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+
 </head>
 <body>
 <header>
     <h1>Добро пожаловать!</h1>
     <div style="text-align: right; margin-top: -30px; margin-right: 30px;">
         Вы авторизованы как " {{user}} "
+        {{groups}}
     </div>
 </header>
 <nav>
     <a href="{% url 'my_app_smp:help' %}" class="btn">Помощь</a>
+    <a href="{% url 'my_app_smp:results' %}" class="btn">Дашборд</a>
     <a href="{% url 'my_app_smp:logout' %}" class="btn">Выход</a>
 </nav>
 <div style="text-align: center;">
     <h3>Для продолжение работы выберите необходимое приложение:</h3>
     <a href="{% url 'my_app_smp:home' %}" class="btn_start">Перейти в приложение СМП</a><br>
     <a href="{% url 'app_planfact:plf_start_list' %}" class="btn_start">Перейти в приложение План-факт</a><br>
+
+    {% if 'soc_koordinator' in groups or       'vps' in groups or        'ker' in groups or           'admin' in groups or     'stacionar' in groups %}
     <a href="{% url 'app_kis_long:v_kis_home' %}" class="btn_start">Перейти в приложение КИС</a><br>
+    {% endif  %}
     <p></p>
 </div>
 <footer>
-    <p>&copy; 2024 ЦПП. Все права защищены.</p>
+    <p>&copy; 2024  Все права защищены.</p>
 </footer>
 </body>
 </html>
