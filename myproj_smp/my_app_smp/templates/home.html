@@ -38,8 +38,13 @@
 
     <nav>
 <!--        <a href="{% url 'my_app_smp:export_to_excel' %}" class="btn">Выгрузить в Excel</a>-->
+        {% if 'ker' in groups %}
+        <a href="{% url 'my_app_smp:export_to_excel_for_ker' %}?search_data_vizova_smp={{ search_data_vizova_smp }}"
+                                                            class="btn">Вывод в Excel (для КЭР)</a>
+        {% endif %}
         <a href="{% url 'my_app_smp:export_to_excel' %}?search_data_vizova_smp={{ search_data_vizova_smp }}"
-                                                            class="btn">Выгрузить в Excel</a>
+                                                    class="btn">Выгрузить в Excel</a>
+
         <a href="{% url 'my_app_smp:start_page' %}" class="btn">Возврат к списку ТАБЛИЦ</a>
         <a href="{% url 'my_app_smp:help' %}" class="btn">Помощь</a>
         <a href="{% url 'my_app_smp:logout' %}" class="btn">Выход</a>
