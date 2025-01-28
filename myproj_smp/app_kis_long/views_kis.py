@@ -87,11 +87,6 @@ def v_find_new_in_kis(request):
 
     patients_all = Kis.objects.filter(
                         data_vipiski__isnull=True,
-                        # data_gospit__lt=kojko_dni_min,  # --- сколько к-дней берем в срез
-                        )
-
-    patients_60 = Kis.objects.filter(
-                        data_vipiski__isnull=True,
                         data_gospit__lt=kojko_dni_min,  # --- сколько к-дней берем в срез
                         )
 
@@ -107,7 +102,7 @@ def v_find_new_in_kis(request):
                 for key in ['fio_pacienta', 'otdelenie', 'kojko_dni_min', 'kojko_dni_max', 'records_per_page']:
                     if key not in request.GET:
                         request.GET[key] = ''
-                # Добавьте также сохранение фильтров в GET-запросе
+                # Добавляем также сохранение фильтров в GET-запросе
                 for key, value in request.GET.items():
                     if key not in ['page', 'records_per_page']:
                         request.GET[key] = value
@@ -145,30 +140,31 @@ def v_find_new_in_kis(request):
         #     # status_zapisi='передано в соц'  # --- сколько к-дней берем в срез
         # )
 
-
         if form_filtr_kis.is_valid():
+
+            patients_all = Kis.objects.filter(
+                data_vipiski__isnull=True,
+                # data_gospit__lt=kojko_dni_min,  # --- сколько к-дней берем в срез
+                                            )
+
             filtr_pacient = form_filtr_kis.cleaned_data['form_fio_pacienta']
             filtr_otdelenie_name = form_filtr_kis.cleaned_data['form_otdelenie']
             filtr_kojko_dni_min = form_filtr_kis.cleaned_data['form_kojko_dni_min']
-            # filtr_kojko_dni_max = form_filtr1.cleaned_data['form_kojko_dni_max']
-
 
             if filtr_pacient:
                 patients_all = patients_all.filter(pacient__icontains=filtr_pacient)
             if filtr_otdelenie_name:
                 patients_all = patients_all.filter(otdelenie_name__icontains=filtr_otdelenie_name)
 
-            # if not filtr_kojko_dni_min:
-            #     kojko_dni_min = (today - timezone.timedelta(days=0))
-            # else: kojko_dni_min = (today - timezone.timedelta(days=filtr_kojko_dni_min))
-
-            kojko_dni_min = (today - timezone.timedelta(days=10000))
-
+            # Применение фильтра по количеству дней
             if filtr_kojko_dni_min:
                 kojko_dni_min = (today - timezone.timedelta(days=filtr_kojko_dni_min))
-            # else: kojko_dni_min = (today - timezone.timedelta(days=10000))
-            else: kojko_dni_min = (today - timezone.timedelta(days=60))
+                patients_all = patients_all.filter(data_gospit__lt=(kojko_dni_min))
+            else: kojko_dni_min = (today - timezone.timedelta(days=0))
 
+
+
+            patients_all = patients_all.filter(data_gospit__lt=(kojko_dni_min))
 
             # if not filtr_kojko_dni_max:        kojko_dni_max = (today - timezone.timedelta(days=1))
             # else:
@@ -179,7 +175,9 @@ def v_find_new_in_kis(request):
 
             # patients = patients.filter(data_gospit__range=(kojko_dni_min, kojko_dni_max))
 
-            patients_all = patients_all.filter(data_gospit__lt=(kojko_dni_min))
+            # --*******************************
+
+
 
             # patients = Kis.objects.filter(
             #     data_vipiski__isnull=True,
