@@ -23,24 +23,48 @@ class KisLongFormСhoiceMedKriter(forms.Form):
 
 
 class KisLongFilterForm(forms.Form):
-    fio_pacienta = forms.CharField(label='ФИО',
+    form_fio_pacienta = forms.CharField(label='ФИО',
                                    required=False,
                                    widget=forms.TextInput(
                                        attrs={'style': 'width: 350px; background-color: #87CEEB;'})
                                    )
-    otdelenie = forms.CharField(label='Отделение',
+    form_otdelenie = forms.CharField(label='Отделение',
                                 required=False,
                                 widget=forms.TextInput(
                                     attrs={'style': 'width: 150px; background-color: #87CEEB;'})
                                  )
 
-    kojko_dni_min = forms.IntegerField(label='Количество дней (мин.)',
+    form_kojko_dni_min = forms.IntegerField(label='Количество дней (мин.)',
                                        required=False,
                                        # initial=1,
                                        widget=forms.NumberInput(
                                               attrs={'style': 'width: 50px; background-color: #87CEEB;'}))
-    kojko_dni_max = forms.IntegerField(label='Количество дней (макс.)',
+    form_kojko_dni_max = forms.IntegerField(label='Количество дней (макс.)',
                                        required=False,
                                        # initial=3000,
                                        widget=forms.NumberInput(
                                                attrs={'style': 'width: 50px; background-color: #87CEEB;'}))
+
+
+class KisFilterForm(forms.Form):
+    form_fio_pacienta = forms.CharField(label='ФИО',
+                                   required=False,
+                                   widget=forms.TextInput(
+                                       attrs={'style': 'width: 350px; background-color: #87CEEB;'})
+                                   )
+    form_otdelenie = forms.CharField(label='Отделение',
+                                required=False,
+                                widget=forms.TextInput(
+                                    attrs={'style': 'width: 150px; background-color: #87CEEB;'})
+                                 )
+
+    form_kojko_dni_min = forms.IntegerField(label='Количество дней (мин.)',
+                                       required=False,
+                                       initial=15,  # Устанавливаем значение по умолчанию
+                                       widget=forms.NumberInput(
+                                              attrs={'style': 'width: 50px; background-color: #87CEEB;'}))
+    # form_kojko_dni_max = forms.IntegerField(label='Количество дней (макс.)',
+    #                                    required=False,
+    #                                    # initial=3000,
+    #                                    widget=forms.NumberInput(
+    #                                            attrs={'style': 'width: 50px; background-color: #87CEEB;'}))
