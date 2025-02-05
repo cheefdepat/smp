@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Детали пациента</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Подтвердите отправку данных в КЭР</h1>
+    </header>
+    <div style="text-align: center;">
+        <form method="post">
+            {% csrf_token %}
+            <button class="btn_save" type="submit" name="vnosim_v_bazy">Отправить в БД</button>
+            <button class="btn_save" type="submit" name="korrektirovat">Корректировать</button>
+        </form>
+    </div>
+
+    <div class="field-group-2-columns">
+        <div>
+            <fieldset >
+                <legend>Проверка данных перед внесения в БД</legend>
+                <table >
+                    <tr>
+                        <th >id:</th>
+                        <td > {{id_pac}} </td>
+                    </tr>
+
+                    <tr>
+                        <th>ФИО пациента:</th>
+                        <td> {{fio_pacienta}} </td>
+                    </tr>
+
+                    <tr>
+                        <th>Дата рождения:</th>
+                        <td> {{data_rozhdeniya}}  </td>
+                    </tr>
+                    <tr>
+                        <th>Пол:</th>
+                        <td> {{pol}}  </td>
+                    </tr>
+                    <tr>
+                        <th>Полис ОМ:</th>
+                        <td> {{polis_oms}}  </td>
+                    </tr>
+
+                </table>
+            </fieldset>
+        </div>
+
+
+    </div>
+
+    <footer>
+        <p>&copy; 2024 ЦПП. Все права защищены.</p>
+    </footer>
+</body>
+</html>

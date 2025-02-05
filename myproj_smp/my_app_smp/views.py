@@ -12,6 +12,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 import logging
 
+import openpyxl
+from io import BytesIO
+from openpyxl.styles import PatternFill, Alignment, Font, Border, Side
+from django.http import HttpResponse
+
 # ------------------------------------------------- Зона логгирования ----------------
 class MyFilter(logging.Filter):
     def filter(self, record):
@@ -24,7 +29,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 # Создайте обработчик логирования для файла
-file_handler = logging.FileHandler('log.txt')
+file_handler = logging.FileHandler('log_smp.txt')
 
 # Установите формат логирования
 # formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -65,9 +70,19 @@ def logout(request):
     # return render(request, 'login.html')
 
 def start_page(request):
+    # -------------- получаю принадлежность к группе -------
+    user_groups_list = []
+    for i in request.user.groups.all():
+        print(i)
+        user_groups_list.append(str(i))
 
-    return render(request, 'start.html')
+    return render(request, 'start.html',
+                  {
+                      'groups': user_groups_list,
+                         }              )
 
+def ny(request):
+    return render(request, 'ny.html')
 
 # class MyprojectLogout(LogoutView):
 #     next_page  = reverse_lazy('login')
@@ -90,103 +105,18 @@ def calculate_date(chislo1, chislo2):
 
 def help(request):
     return render(request, 'help.html', {
-        # 'data_smp': page_obj,
-        # 'search_fio': query_fio,
-        # 'search_kurir': query_kurir,
-        # 'search_otrabot': query_otrabot,
-        # 'records_per_page': records_per_page,
-        # 'total_records': total_records,  # Передаем общее количество записей
-        # 'unique_kurir': unique_kurir,  # Передаем уникальные значения в контекст по курир. филиалу ВПС
-        # 'unique_otrab': unique_otrab,  # Передаем уникальные значения в контекст по отработанным в КЭР
-        # 'groups': user_groups_list,  # Получаем все группы
+
     })
 
 
 def results(request):
     return render(request, 'results.html')
 
+def results_page_1(request):
+    return render(request, 'results_page_1.html')
 
-# def home(request):
-#     # --------------
-#     user_groups_list = []
-#     for i in request.user.groups.all():
-#         print(i)
-#         user_groups_list.append(str(i))
-#     # groups = Group.objects.all()
-#     print(user_groups_list)
-#     # -------------------------
-#     # ------------------------------------------- фильтр по ВПС -------------
-#     # dict_vps = {'butovo':	'Бутово ОВПП',
-#     #             'voronovo':	'Вороново ОВПП',
-#     #             'danilovskij'	:'Даниловский ОВПП',
-#     #             'degunino'	:'Дегунино ОВПП',
-#     #             'zelenograd'	:'Зеленоград ОВПП',
-#     #             'kolomenskoe':	'Коломенское ОВПП',
-#     #             'kurkino':	'Куркино ОВПП',
-#     #             'lyublino'	: 'Люблино ОВПП',
-#     #             'nekrasovka':	'Некрасовка ОВПП',
-#     #             'ovprp'	:'ОВПРП',
-#     #             'pmdkh':	'ПМДХ ОВПП',
-#     #             'pmkh'	:'ПМХ ОВПП',
-#     #             'preobrazhenskoe':	'Преображенское ОВПП',
-#     #             'rostokino':'Ростокино ОВПП',
-#     #             'savelovskij'	:'Савеловский ОВПП',
-#     #             'solncevo'	: 'Солнцево ОВПП',
-#     #             'khoroshevo':	'Хорошево ОВПП',
-#     #             'caricyno':	'Царицыно ОВПП',}
-#
-#
-#     is_vps_group = request.user.groups.filter(name='vps').exists()
-#     query_fio = request.GET.get('search_fio', '')  # Получаем строку поиска по FIO
-#     query_kurir = request.GET.get('search_kurir', '')  # Получаем строку поиска по курирующему подразделению
-#     query_otrabot = request.GET.get('search_otrabot', '')  # Получаем строку поиска по отработанным записям
-#     records_per_page = request.GET.get('records_per_page', 20)  # Получаем количество записей на странице
-#
-#     # ------------------------------ применим фильтр из СЛОВАРЯ ВПС ----------------
-#
-#     # Фильтруем данные по обоим полям
-#     print(request.user.groups)
-#
-#     if user_groups_list == ['vps']:
-#         # Исключаем записи, у которых ok_vps равно "ВПС"
-#         data_smp = SmpRazborTab.objects.filter(ok_vps="впс").order_by('data_vyzova_smp',
-#                                                                                   'fio_pacienta')  # Сортировка по возрастанию
-#     else:
-#         data_smp = SmpRazborTab.objects.all().order_by('data_vyzova_smp', 'fio_pacienta')  # Сортировка по возрастанию
-#     total_records = data_smp.count()  # Общее количество записей
-#
-#     if query_fio:
-#         data_smp = data_smp.filter(fio_pacienta__icontains=query_fio)
-#
-#     if query_kurir:
-#         data_smp = data_smp.filter(kuriruyushchee_podrazdelenie_ovpp__icontains=query_kurir)
-#
-#     if query_otrabot:
-#         data_smp = data_smp.filter(ok_vps=query_otrabot)
-#
-#
-#
-#     # data_smp = data_smp.filter(ok_vps=query_kurir)
-#     # Получаем уникальные значения для выпадающего списка
-#     unique_kurir = SmpRazborTab.objects.values_list('kuriruyushchee_podrazdelenie_ovpp', flat=True).distinct()
-#     unique_otrab = SmpRazborTab.objects.values_list('ok_vps', flat=True).distinct()
-#
-#     paginator = Paginator(data_smp, records_per_page)  # Показывать 10 записей на странице
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
-#
-#     return render(request, 'home.html', {
-#         'data_smp': page_obj,
-#         'search_fio': query_fio,
-#         'search_kurir': query_kurir,
-#         'search_otrabot': query_otrabot,
-#         'records_per_page': records_per_page,
-#         'total_records': total_records,  # Передаем общее количество записей
-#         'unique_kurir': unique_kurir,  # Передаем уникальные значения в контекст по курир. филиалу ВПС
-#         'unique_otrab': unique_otrab,  # Передаем уникальные значения в контекст по отработанным в КЭР
-#         'groups': user_groups_list, # Получаем все группы
-#     })
-
+def results_page_2(request):
+    return render(request, 'results_page_2.html')
 
 def home(request):
 
@@ -210,11 +140,9 @@ def home(request):
     query_fio = request.GET.get('search_fio', '')  # Получаем строку поиска по FIO
     query_kurir = request.GET.get('search_kurir', '')  # Получаем строку поиска по курирующему подразделению
     query_otrabot = request.GET.get('search_otrabot', '')  # Получаем строку поиска по отработанным записям
+    query_data_vizova_smp = request.GET.get('search_data_vizova_smp', '')  # Получаем строку поиска по дате смп
+
     records_per_page = request.GET.get('records_per_page', 20)  # Получаем количество записей на странице
-
-
-    print('-----------')
-
 
     # Обработка фильтров из GET-запроса
 
@@ -231,6 +159,9 @@ def home(request):
 
         if 'search_otrabot' in request.GET:
             query_otrabot = request.GET.get('search_otrabot', '')
+
+        if 'search_data_vizova_smp' in request.GET:
+            query_data_vizova_smp = request.GET.get('search_data_vizova_smp', '')
         # -----------------------------------------------------------
 
 
@@ -255,6 +186,10 @@ def home(request):
     if query_otrabot:
         data_smp = data_smp.filter(ok_vps=query_otrabot)
 
+    if query_data_vizova_smp:
+       data_smp = data_smp.filter(data_vyzova_smp=query_data_vizova_smp)
+
+
     # Получаем уникальные значения для выпадающего списка
     unique_kurir = SmpRazborTab.objects.values_list('kuriruyushchee_podrazdelenie_ovpp', flat=True).distinct()
     unique_otrab = SmpRazborTab.objects.values_list('ok_vps', flat=True).distinct()
@@ -262,6 +197,7 @@ def home(request):
     paginator = Paginator(data_smp, records_per_page)  # Показывать 10 записей на странице
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    filter_records = data_smp.count()  # количество записей - отфильтрованное
 
     return render(request, 'home.html', {
         'data_smp': page_obj,
@@ -270,11 +206,14 @@ def home(request):
         'search_fio': query_fio,
         'search_kurir': query_kurir,
         'search_otrabot': query_otrabot,
+        'search_data_vizova_smp': query_data_vizova_smp,
+
         'records_per_page': records_per_page,
         'total_records': total_records,  # Передаем общее количество записей
         'unique_kurir': unique_kurir,  # Передаем уникальные значения в контекст по курир. филиалу ВПС
         'unique_otrab': unique_otrab,  # Передаем уникальные значения в контекст по отработанным в КЭР
         'groups': user_groups_list, # Получаем все группы
+        'filter_records': filter_records, ## количество записей - отфильтрованное
     })
 
 
@@ -383,13 +322,13 @@ def edit_patient(request, id):
             print('ssssss-----------------')
             patient.kolichestvo_dnej_ot_proshlogo_vizita_vracha = koli4_dney_ot_proshlogo_vizita_vracha
             patient.kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover
-
+            logger.info(f'пользователь {request.user} сохранил запись о пациенте {patient.fio_pacienta}')
             patient.save()
             return redirect('my_app_smp:home')
 
         elif 'send_to_ker' in request.POST:  # Кнопка "Отправить в КЭР"
             # if patient.is_valid():
-            print('send_to_ker-----------------')
+            logger.info(f'пользователь {request.user} отправил запись о пациенте {patient.fio_pacienta} в КЭР')
             patient.kolichestvo_dnej_ot_proshlogo_vizita_vracha = koli4_dney_ot_proshlogo_vizita_vracha
             patient.kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover = dni_kolichestvo_dnej_ot_momenta_polucheniya_dannykh_po_smp_do_sover
 
@@ -568,3 +507,348 @@ def custom_404_view(request, exception):
 
 def custom_500_view(request):
     return render(request, '500.html', status=500)
+
+def export_to_excel(request):
+    # Получите данные с учетом фильтров
+    # search_fio = request.GET.get('search_fio', '')
+    # search_kurir = request.GET.get('search_kurir', '')
+    # search_otrabot = request.GET.get('search_otrabot', '')
+    search_data_vizova_smp = request.GET.get('search_data_vizova_smp', '')
+
+    # Примените фильтры к вашему запросу
+    data_smp = SmpRazborTab.objects.all()  # Замените на ваш запрос
+    # if search_fio:
+    #     data_smp = data_smp.filter(fio_pacienta__icontains=search_fio)
+    # if search_kurir:
+    #     data_smp = data_smp.filter(kuriruyushchee_podrazdelenie_ovpp=search_kurir)
+    # if search_otrabot:
+    #     data_smp = data_smp.filter(status_otrabotki=search_otrabot)  # Замените на ваше поле
+    if search_data_vizova_smp:
+        data_smp = data_smp.filter(data_vyzova_smp=search_data_vizova_smp)  # Замените на ваше поле
+
+    # Создание Excel файла
+    workbook = openpyxl.Workbook()
+    worksheet = workbook.active
+    worksheet.title = 'Patients Data'
+
+    # Заголовки столбцов
+    headers = [
+        'Дата вызова СМП',
+        'ФИО пациента',
+        'Количество выездов в день',
+        'Дата рождения',
+        'Полис ОМС',
+        'Результат вызова',
+        'Актив / Пассив',
+        'Диагноз по МКБ',
+        'Причина вызова скорой помощи ', # -------------
+        'Наличие болевого синдрома',
+        'Причина вызова скорой помощи (кратко)',
+        'Курирующее подразделение ОВПП',
+        'Дата включения в регистр',
+        'Дата последнего визита врача из протокола осмотра EMIAS',
+        'ФИО врача',
+        'Сравнение "Повода вызова СМП" с Протоколами врача ЦПП выездов ДО и ПОСЛЕ вызова СМП',
+        'Действия ЦПП',
+        'Контроль исполнения назначенных врачом ЦПП рекомендаций',
+        'Вывод',
+    ]
+    worksheet.append(headers)
+
+    # Установка ширины для 2-го и 15-го столбца
+    worksheet.column_dimensions['A'].width = 10  # Установите нужную ширину для 2-го столбца
+    worksheet.column_dimensions['B'].width = 38  # Установите нужную ширину для 2-го столбца
+    worksheet.column_dimensions['C'].width = 15  # Установите нужную ширину столбца
+    worksheet.column_dimensions['D'].width = 15  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['E'].width = 20  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['F'].width = 25  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['G'].width = 15  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['H'].width = 15  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['I'].width = 35  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['J'].width = 15  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['K'].width = 20  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['L'].width = 24  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['M'].width = 20  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['N'].width = 20  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['O'].width = 40  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['P'].width = 40  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['Q'].width = 40  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['R'].width = 40  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['S'].width = 40  # Установите нужную ширину  столбца
+
+    # Форматирование заголовков
+    grey_fill = PatternFill(start_color='BFBFBF', end_color='BFBFBF', fill_type='solid')  # Зеленый цвет
+    yellou_fill = PatternFill(start_color='FDE9D9', end_color='FDE9D9', fill_type='solid')  # Зеленый цвет
+    green_puff_fill = PatternFill(start_color='D8E4BC', end_color='D8E4BC', fill_type='solid')  # Зеленый цвет
+
+    # Индексы заголовков, к которым нужно применить зеленый фон (начиная с 1)
+    grey_header_indices = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  # Индексы для 'ФИО врача',....', 'Вывод'
+    yellou_header_indices = [11, 12, 13, 14]  # Индексы для '...'
+    green_puff_indices = [15, 16, 17, 18, 19]  # Индексы для 'ФИО врача',....', 'Вывод'
+
+    for col in grey_header_indices:
+        worksheet.cell(row=1, column=col).fill = grey_fill  # Применяем зеленый фон к указанным заголовкам
+
+    for col in yellou_header_indices:
+        worksheet.cell(row=1, column=col).fill = yellou_fill  # Применяем зеленый фон к указанным заголовкам
+
+    for col in green_puff_indices:
+        worksheet.cell(row=1, column=col).fill = green_puff_fill  # Применяем зеленый фон к указанным заголовкам
+
+    # Установка переноса текста для заголовков и жирного шрифта
+    bold_font = Font(bold=True)  # Создаем объект шрифта с жирным начертанием
+
+    # Создание границ
+    thin_border = Border(left=Side(style='thin'),
+                         right=Side(style='thin'),
+                         top=Side(style='thin'),
+                         bottom=Side(style='thin'))
+
+    for col in range(1, len(headers) + 1):
+        cell = worksheet.cell(row=1, column=col)
+        cell.alignment = Alignment(wrap_text=True, horizontal='center',
+                                   vertical='center')  # Устанавливаем перенос текста
+        cell.font = bold_font  # Устанавливаем жирный шрифт
+        cell.border = thin_border  # Применяем границы к ячейке заголовка
+
+        # Заполнение данными
+
+    for item in data_smp:
+        row_data = [
+            item.data_vyzova_smp.strftime("%d.%m.%Y") if item.data_vyzova_smp else '',  #
+            item.fio_pacienta,  #
+            item.kolichestvo_vyezdov_v_den,  #
+            item.data_rozhdeniya.strftime("%d.%m.%Y") if item.data_rozhdeniya else '',  #
+            item.polis_oms,
+            item.rezultat_vyzova,
+            item.aktiv_passiv,
+            item.diagnoz_po_mkb,
+            item.prichina_vyzova_skoroiy_pomoschi,
+            item.nalichie_bolevogo_sindroma,
+            item.prichina_vyzova_skoroiy_pomoschi_kratko,
+            item.kuriruyushchee_podrazdelenie_ovpp,
+            item.data_vklyucheniya_v_registr.strftime("%d.%m.%Y") if item.data_vklyucheniya_v_registr else '',
+            item.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias.strftime(
+                "%d.%m.%Y") if item.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias else '',
+            item.fio_vracha,
+            item.sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle,
+            item.dejstviya_cpp,
+            item.kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij,
+            item.vyvod,
+
+            # item.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya,
+            # item.kakie_dejstviya_byli_predprinyaty_smp,
+            # item.sootvetstvuet_li_naznachennyj_bazovyj_plan_sostoyaniyu_pacie,
+            # item.trebovanie_gospitalizacii_na_dannyj_moment,
+            # item.vyyavlennye_defekty_v_rabote_vracha,
+            # item.bazovyj_plan_naznachen_korrektno,
+            # item.ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu,
+            # item.zhaloby_opisany_v_polnom_obeme,
+            # item.ocenka_zaveduyushchego_proizvedena_korrektno,
+            # item.ocenka_dejstvij_vracha_do_vyzova_smp,
+            # item.ocenka_dejstvij_posle_vyzova_smp,
+            # item.vyvody_po_rezultatm_ocenki,
+
+        ]
+
+        # Добавляем данные в строку
+        worksheet.append(row_data)
+
+        # Применяем границы ко всем ячейкам в текущей строке
+        current_row = worksheet.max_row  # Получаем номер последней строки
+        for col in range(1, len(row_data) + 1):
+            cell = worksheet.cell(row=current_row, column=col)
+            cell.border = thin_border  # Применяем границы к ячейке
+
+    # Сохранение файла в памяти
+    output = BytesIO()
+    workbook.save(output)
+    output.seek(0)
+
+    # ----- Формирую название файла --------
+    if search_data_vizova_smp:
+        file = f'smp_{search_data_vizova_smp}.xlsx'
+    else:      file = 'smp_all.xlsx'
+    print(file)
+
+    # Создание HTTP ответа
+    response = HttpResponse(output, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = f'attachment; filename="{file}"'
+    return response
+
+def export_to_excel_for_ker(request):
+    '''расширенный вывод в ЭКСЕЛЬ данных о СПМ - для КЭР '''
+
+    # Получите данные с учетом фильтров
+    search_data_vizova_smp = request.GET.get('search_data_vizova_smp', '')
+
+    # Примените фильтры к вашему запросу
+    data_smp = SmpRazborTab.objects.all()  #  запрос
+    if search_data_vizova_smp:
+        data_smp = data_smp.filter(data_vyzova_smp=search_data_vizova_smp)  # Замените на ваше поле
+
+    # Создание Excel файла
+    workbook = openpyxl.Workbook()
+    worksheet = workbook.active
+    worksheet.title = 'Patients Data'
+
+    # Заголовки столбцов
+
+    headers = [
+            'Дата вызова СМП',
+            'ФИО пациента',
+            'Количество выездов в день',
+            'Дата рождения',
+            'Полис ОМС',
+            'Результат вызова',
+            'Актив / Пассив',
+            'Диагноз по МКБ',
+            'Причина вызова скорой помощи ', # -------------
+            'Наличие болевого синдрома',
+            'Причина вызова скорой помощи (кратко)',
+            'Курирующее подразделение ОВПП',
+            'Дата включения в регистр',
+            'Дата последнего визита врача из протокола осмотра EMIAS',
+            'ФИО врача',
+            'Сравнение "Повода вызова СМП" с Протоколами врача ЦПП выездов ДО и ПОСЛЕ вызова СМП',
+            'Действия ЦПП',
+            'Контроль исполнения назначенных врачом ЦПП рекомендаций',
+            'Вывод',
+
+                'Какова причина вызова СМП по результатам аудиоконтроля?',
+                'Какие действия были предприняты СМП?',
+                'Соответствует ли назначенный базовый план состоянию пациента',
+                'Требуется ли госпитализация на данный момент',
+                'Выявленные дефекты в работе врача',
+                "Базовый план назначен корректно",
+                'Оценка состояния соответствует базовому плану',
+                'Жалобы описаны в полном объёме',
+                'Оценка заведующего произведена корректно',
+                'Оценка действий врача до вызова СМП',
+                'Оценка действий после вызова СМП',
+                'Выводы по результатм оценки',
+
+        ]
+
+
+    worksheet.append(headers)
+
+
+    # Установка ширины для 2-го и 15-го столбца
+    worksheet.column_dimensions['B'].width = 30  # Установите нужную ширину для 2-го столбца
+    worksheet.column_dimensions['O'].width = 15  # Установите нужную ширину столбца
+    worksheet.column_dimensions['P'].width = 20  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['Q'].width = 20  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['R'].width = 20  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['S'].width = 30  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['T'].width = 30  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['U'].width = 30  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['X'].width = 30  # Установите нужную ширину  столбца
+    # worksheet.column_dimensions['W'].width = 30  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['AE'].width = 30  # Установите нужную ширину  столбца
+
+    # Форматирование заголовков
+    green_fill = PatternFill(start_color='98FB98', end_color='98FB98', fill_type='solid')  # Зеленый цвет
+    blue_fill = PatternFill(start_color='87CEEB', end_color='87CEEB', fill_type='solid')  # Зеленый цвет
+    peach_puff_fill = PatternFill(start_color='FFDAB9', end_color='FFDAB9', fill_type='solid')  # Зеленый цвет
+    moccasin_fill = PatternFill(start_color='FFE4B5', end_color='FFE4B5', fill_type='solid')  # Зеленый цвет
+
+    # Индексы заголовков, к которым нужно применить зеленый фон (начиная с 1)
+    green_header_indices = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ]  # Индексы для 'ФИО врача',....', 'Вывод'
+    blue_header_indices = [15, 16, 17, 18, 19, ]  # Индексы для '...'
+
+    peach_puff_indices = [20, 21, 22, 23, 24, ]  # Индексы для 'ФИО врача',....', 'Вывод'
+    moccasin_fill_indices = [25, 26, 27, 28, 29, 30, 31]  # Индексы для '....'
+
+    for col in green_header_indices:
+        worksheet.cell(row=1, column=col).fill = green_fill  # Применяем зеленый фон к указанным заголовкам
+
+    for col in blue_header_indices:
+        worksheet.cell(row=1, column=col).fill = blue_fill  # Применяем зеленый фон к указанным заголовкам
+
+    for col in peach_puff_indices:
+        worksheet.cell(row=1, column=col).fill = peach_puff_fill  # Применяем зеленый фон к указанным заголовкам
+
+    for col in moccasin_fill_indices:
+        worksheet.cell(row=1, column=col).fill = moccasin_fill  # Применяем зеленый фон к указанным заголовкам
+
+    # Установка переноса текста для заголовков и жирного шрифта
+    bold_font = Font(bold=True)  # Создаем объект шрифта с жирным начертанием
+
+    # Создание границ
+    thin_border = Border(left=Side(style='thin'),
+                         right=Side(style='thin'),
+                         top=Side(style='thin'),
+                         bottom=Side(style='thin'))
+
+    for col in range(1, len(headers) + 1):
+        cell = worksheet.cell(row=1, column=col)
+        cell.alignment = Alignment(wrap_text=True, horizontal='center', vertical='center')  # Устанавливаем перенос текста
+        cell.font = bold_font  # Устанавливаем жирный шрифт
+        cell.border = thin_border  # Применяем границы к ячейке заголовка
+
+
+        # Заполнение данными
+
+    for item in data_smp:
+        row_data = [
+            item.data_vyzova_smp.strftime("%d.%m.%Y") if item.data_vyzova_smp else '', #
+            item.fio_pacienta,                                                          #
+            item.kolichestvo_vyezdov_v_den,                                             #
+            item.data_rozhdeniya.strftime("%d.%m.%Y") if item.data_rozhdeniya else '', #
+            item.polis_oms,
+            item.rezultat_vyzova,
+            item.aktiv_passiv,
+            item.diagnoz_po_mkb,
+            item.prichina_vyzova_skoroiy_pomoschi,
+                        item.nalichie_bolevogo_sindroma,
+            item.prichina_vyzova_skoroiy_pomoschi_kratko,
+            item.kuriruyushchee_podrazdelenie_ovpp,
+            item.data_vklyucheniya_v_registr.strftime("%d.%m.%Y") if item.data_vklyucheniya_v_registr else '',
+            item.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias.strftime(
+                "%d.%m.%Y") if item.data_poslednego_vizita_vracha_iz_protokola_osmotra_emias else '',
+            item.fio_vracha,
+            item.sravnenie_povoda_vyz_smp_s_prot_vracha_cpp_do_i_posle,
+            item.dejstviya_cpp,
+            item.kontrol_ispolneniya_naznachennykh_vrachom_cpp_rekomendacij,
+            item.vyvod,
+
+            item.kakova_prichina_vyzova_smp_po_rezutatam_audiokontrolya,
+            item.kakie_dejstviya_byli_predprinyaty_smp,
+            item.sootvetstvuet_li_naznachennyj_bazovyj_plan_sostoyaniyu_pacie,
+            item.trebovanie_gospitalizacii_na_dannyj_moment,
+            item.vyyavlennye_defekty_v_rabote_vracha,
+            item.bazovyj_plan_naznachen_korrektno,
+            item.ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu,
+            item.zhaloby_opisany_v_polnom_obeme,
+            item.ocenka_zaveduyushchego_proizvedena_korrektno,
+            item.ocenka_dejstvij_vracha_do_vyzova_smp,
+            item.ocenka_dejstvij_posle_vyzova_smp,
+            item.vyvody_po_rezultatm_ocenki,
+
+        ]
+
+        # Добавляем данные в строку
+        worksheet.append(row_data)
+
+        # Применяем границы ко всем ячейкам в текущей строке
+        current_row = worksheet.max_row  # Получаем номер последней строки
+        for col in range(1, len(row_data) + 1):
+            cell = worksheet.cell(row=current_row, column=col)
+            cell.border = thin_border  # Применяем границы к ячейке
+
+    # Сохранение файла в памяти
+    output = BytesIO()
+    workbook.save(output)
+    output.seek(0)
+
+    # ----- Формирую название файла --------
+    if search_data_vizova_smp:
+        file = f'smp_{search_data_vizova_smp}.xlsx'
+    else:      file = 'smp_all.xlsx'
+    print(file)
+
+    # Создание HTTP ответа
+    response = HttpResponse(output, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = f'attachment; filename="{file}"'
+    return response

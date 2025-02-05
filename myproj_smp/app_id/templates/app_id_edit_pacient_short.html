@@ -1,0 +1,65 @@
+{% extends "edit_pacient_base.html" %}
+
+
+{% block content %}
+
+    <form method="POST">
+        <a href="{% url 'app_id:v_id_add_svedeniya_o_pac' %}" class="btn_save">Назад к списку пациентов </a>
+<!--        <a href="{% url 'app_id:v_id_add_svedeniya_o_pac' %}" class="btn_save">Назад к списку пациентов </a>-->
+<!--        <a href="{% url 'app_id:v_id_add_svedeniya_o_pac' %}" class="btn_save">Назад к списку пациентов </a>-->
+        <button class="btn_save" type="submit" name="save" >Сохранить</button>
+<!--        <button class="btn_save" type="submit" name="otmena" >Отправить в КЭР</button>-->
+
+<!--        <a href="javascript:history.back()" class="btn">Вернуться назад</a>-->
+
+        {% csrf_token %}
+Статус записи о пациенте: "на корректировке"
+        <div class="field-group-2-columns">
+
+            <div>
+                <fieldset>
+                    <legend>Поля для внесения данных</legend>
+                    <table>
+                        <tr>
+                            <th>id пациента:</th>
+                            <td>{{ patient.id_pac }}</td>
+                        </tr>
+                        <tr>
+                            <th>ФИО:</th>
+                            <td><input type="text" name="fio_pacienta"  value="{{ patient.fio_pacienta }}" ></td>
+                        </tr>
+                        <tr>
+                            <th>ДР:</th>
+                            <td><input type="date" name="data_rozhdeniya"  value="{{ patient.data_rozhdeniya|date:'Y-m-d' }}" ></td>
+                        </tr>
+                        <tr>
+                            <th>Пол:</th>
+
+<!--                                <input type="text" name="pol"  value="{{ patient.pol }}" >-->
+                              <td><input list="pol" name="pol"  value="{{ patient.pol }}"  pattern="мужской|женский">
+                                <datalist id="pol">
+                                    <option value="мужской">
+                                    <option value="женский">
+                                </datalist>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Полис:</th>
+                            <td><input type="text" name="polis_oms"  value="{{ patient.polis_oms }}" ></td>
+                        </tr>
+<!--                        <tr>-->
+<!--                            <th>Вывод:</th>-->
+<!--                            <td><input type="text" name="vyvod"  value="{{ patient.vyvod }}" ></td>-->
+<!--                        </tr>-->
+                    </table>
+
+            </div>
+        </div>
+
+
+
+        <br>
+
+    </form>
+
+{% endblock %}

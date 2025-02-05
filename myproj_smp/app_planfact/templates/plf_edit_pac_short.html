@@ -5,6 +5,11 @@
 
     <form method="POST">
         <a href="{% url 'app_planfact:plf_start_list' %}" class="btn_save">Назад к списку пациентов </a>
+
+        {% if 'ker' in groups %}
+        <button class="btn_save" type="submit" name="ot_ker_nazad_v_vps" >Вернуть запись на ВПС</button>
+        {% endif  %}
+
         <button class="btn_save" type="submit" name="plf_save_vps" >Сохранить</button>
         <button class="btn_save" type="submit" name="plf_send_to_ker" >Отправить в КЭР</button>
 
@@ -15,7 +20,7 @@
             <div>
 
                 <fieldset >
-                    <legend>Данные по вызову СМП</legend>
+                    <legend>Данные по ПЛАН-ФАКТу</legend>
                     <table >
                         <tr>
                             <th >Дата получения замечания:</th>

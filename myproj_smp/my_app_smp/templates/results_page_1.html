@@ -12,7 +12,7 @@
     <style>
         .metabase-dashboard {
             width: 100%; /* Ширина iframe */
-            height: 600px; /* Высота iframe */
+            height: 1100px; /* Высота iframe */
             border: none; /* Убираем рамку */
         }
     </style>
@@ -23,16 +23,8 @@
 
 </nav>
     <main>
-         <div style="text-align: center;">
-            <h3>Выбрать дашборд для просмотра результатов:</h3>
-       
-            <a href="{% url 'my_app_smp:results_page_1' %}" class="btn_dash">Сведения по выполнению СМП и план-факт (суточное заполнение)</a><br>
-            <a href="{% url 'my_app_smp:results_page_2' %}" class="btn_dash">Итоги СМП</a><br>
-
-            <p></p>
-        </div>
-
-    </main>
+       <iframe class="metabase-dashboard" src="http://10.159.8.163:3210/public/dashboard/8c90dd25-b9ab-46d9-862c-05bc049ecbbd" allow="fullscreen"></iframe>
+     </main>
 
 </body>
 </html>

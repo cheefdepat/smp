@@ -1,0 +1,130 @@
+{% extends 'kis_long_home.html' %}
+{% block title %} Детали о пациенте: {{ patient.fio_pacienta }}.{% endblock %}
+
+{% block content %}
+
+    <form method="POST">
+
+
+        {% csrf_token %}
+<nav>
+    <a href="{% url 'app_kis_long:v_kis_home' %}" class="btn">Вернуться к общему списку</a>
+
+</nav>
+
+<div class="field-group-2-columns">
+        <div>
+            <fieldset >
+                <!------------------------------------------ -->
+                <legend>Данные по пациенту (из КИС)</legend>
+                <table >
+                    <tr>   <th >ФИО:</th>
+                        <td > {{ patient.fio_pacienta  }} </td>     </tr>
+                    <tr>     <th >Дата рождения:</th>
+                        <td > {{ patient.data_rozhdeniya }} </td>    </tr>
+                    <tr>    <th>Отделение:</th>
+                        <td> {{ patient.otdelenie  }}  </td>  </tr>
+                    <tr>     <th>Дата госпитализации:</th>
+                        <td> {{ patient.data_gospit  }}  </td>   </tr>
+                    <tr> <th>Количество койко-дней:</th>
+                        <td> {{ patient.kojko_dni  }}  </td>   </tr>
+                    <tr> <th>Диагноз основной:</th>
+                        <td> {{ patient.diagnoz_osnovnoj  }}  </td>  </tr>
+                    <tr>  <th>Дата выписки:</th>
+                        <td> {{ patient.data_vypiski  }}  </td>  </tr>
+                    <tr>  <th>Исход госпитализации:</th>
+                        <td> {{ patient.iskhod_gospit  }}  </td>  </tr>
+                    <tr> <th>№ истории болезни:</th>
+                        <td> {{ patient.n_istorii_bolezni  }}  </td>   </tr>
+                <!------------------------------------------ -->
+                </table>
+            </fieldset>
+<br>
+            <fieldset>
+                              <!------------------------------------------ -->
+                  <legend>КРИТЕРИИ оценки (последние изменения по пациенту: {{patient.data_last_changed}} )</legend>
+
+<!--                <button class="btn_save" type="submit" name="btn_correct_kriter" >Внести правки в раздел "Критерии"</button>-->
+                <table>
+                <tr> <th>PPI :</th>
+                        <td>{{ patient.ppi }}</td>     </tr>
+                <tr>   <th>Мед.показания:</th>
+                        <td>{{ patient.med_pokazaniya }}</td>   </tr>
+                <tr>   <th>Мед.критерии:</th>
+                        <td>{{ patient.medic_kriterii }}</td>   </tr>
+                 <tr>  <th>Социальные критерии:</th>
+                        <td>{{ patient.soc_kriterii }}</td>  </tr>
+                <tr>   <th>Функцииональные критерии:</th>
+                        <td>{{ patient.funkciional_kriterii }}</td>  </tr>
+                <tr>     <th>Психологические критерии:</th>
+                        <td>{{ patient.psikh_kriterii }}</td>  </tr>
+                <tr>    <th>Организационные критерии:</th>
+                        <td>{{ patient.org_kriterii }}</td>   </tr>
+                 <tr>      <th>Наличие заявки в соц.службу:</th>
+                        <td>{{ patient.nalichie_zayavki_v_soc_sluzhbu }}</td>    </tr>
+                <tr>    <th>Состояние заявки:</th>
+                        <td>{{ patient.sostoyanie_zayavki }}</td>  </tr>
+                 <tr>   <th>Прична отсутствия заявки:</th>
+                        <td>{{ patient.prichna_otsutstviya_zayavki }}</td>  </tr>
+                 <tr>   <th>Комментарий:</th>
+                        <td>{{ patient.kommentarij }}</td>  </tr>
+                </table>
+            </fieldset>
+        </div>
+        <div>
+            <fieldset>
+              <!------------------------------------------ -->
+                <legend>Данные по состоянию заявки:</legend>
+                <button class="btn_save" type="submit" name="btn_otmena_pravki_zayavka" >Отменить изменения раздела "Заявка"</button>
+                <button class="btn_save" type="submit" name="btn_save_pravki_zayavka" >Сохранить изменения раздела "Заявка"</button>
+                <table>
+                    <tr>
+                        <th>Тема заявки.Помощь в жизнеустройстве</th>
+<!--                                       <td><input type="text" name="tema_zayavki_pomosh_v_zhizneustrojstve"  value="{{ patient.tema_zayavki_pomosh_v_zhizneustrojstve }}" ></td>         </tr>-->
+
+                     <td> <textarea rows="10" cols="45" name="tema_zayavki_pomosh_v_zhizneustrojstve"   >{{ patient.tema_zayavki_pomosh_v_zhizneustrojstve }}</textarea></td>         </tr>
+
+
+                        <th>Наличие родственников:</th>
+                                       <td><input type="text" name="nalichie_rodstvennikov"  value="{{ patient.nalichie_rodstvennikov }}" ></td>  </tr>
+                        <th>Дата передачи соц.координаторам ДТСЗН:</th>
+                                          <td><input type="date" name="data_peredachi_soc_koordinatoram_dtszn"  value="{{ patient.data_peredachi_soc_koordinatoram_dtszn|date:'Y-m-d' }}" ></td>         </tr>
+                        <th>ФИО заведующего отделением:</th>
+                                        <td><input type="text" name="fio_zaveduyushchego_otd"  value="{{ patient.fio_zaveduyushchego_otd }}" ></td>  </tr>
+                        <th>ФИО лечащего врача:</th>
+                                        <td><input type="text" name="fio_lechashchego_vracha"  value="{{ patient.fio_lechashchego_vracha }}" ></td>  </tr>
+                        <th>Комментарий соц.координатора:</th>
+<!--                                        <td><input type="text" name="kommentarij_soc"  value="{{ patient.kommentarij_soc }}" ></td>         </tr>-->
+                    <td> <textarea rows="10" cols="45" name="kommentarij_soc"   >{{ patient.kommentarij_soc }}</textarea></td>         </tr>
+
+                        <th>Дата принятия в работу соц.координаторами ДТСЗН:</th>
+                                        <td><input type="date" name="data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn"  value="{{ patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn|date:'Y-m-d' }}" ></td>         </tr>
+                        <th>Статус пациента:</th>
+                    <td>  <select name="status_pacienta">
+                         <option {% if '_1' in  patient.status_pacienta %}selected{% endif %}>Статус_1</option>
+                         <option {% if '_2' in  patient.status_pacienta %}selected{% endif %}>Статус_2</option>
+                         <option {% if '_3' in  patient.status_pacienta %}selected{% endif %}>Статус_3</option>
+                         <option {% if '_4' in  patient.status_pacienta %}selected{% endif %}>Статус_4</option>
+                                </select> </td> </tr>
+
+
+                    <th>Соц.координатор:</th>
+                    <td><input type="text" name="soc_koordinator"  value="{{ patient.soc_koordinator }}" ></td>         </tr>
+                        <th>Комментарий соц.координаторов ДТСЗН</th>
+                    <td> <textarea rows="10" cols="45" name="kommentarij_soc_koordinatorov_dtszn"   >{{ patient.kommentarij_soc_koordinatorov_dtszn }}</textarea></td>         </tr>
+
+                    <th>Решение по пациенту: </th>
+                                        <td><input type="text" name="reshenie_po_pacientu"  value="{{ patient.reshenie_po_pacientu }}" ></td>         </tr>
+                        <th>Дата принятия решения по пациенту:</th>
+                                        <td><input type="date" name="data_prinyatiya_resheniya_po_pacientu"  value="{{ patient.data_prinyatiya_resheniya_po_pacientu|date:'Y-m-d' }}" ></td>         </tr>
+                        <th>Пациент не может выразить свое согласие:</th>
+                                        <td><input type="text" name="pacient_ne_mozhet_vyrazit_svoe_soglasie"  value="{{ patient.pacient_ne_mozhet_vyrazit_svoe_soglasie }}" ></td>         </tr>
+                        <th>Отказ родственников:</th>
+                                        <td><input type="text" name="otkaz_rodstvennikov"  value="{{ patient.otkaz_rodstvennikov }}" ></td>         </tr>
+                </table>
+            </fieldset>
+            </br>
+
+        </div>
+    </div>
+{% endblock %}

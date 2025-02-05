@@ -19,10 +19,10 @@
         </br>
         </br>
        Вы авторизованы как " {{user}} "
-        <!--       ** @2 {{groups}} ****<br>-->
-        <!--       ** @3 {{group_names}} ****<br>-->
-        <!--       ** @4 {{group}} ****<br>-->
-        <!--       ** @5 {{request.user.groups}} ****<br>-->
+<!--               ** @2 {{groups}} ****<br>-->
+<!--               ** @3 {{group_names}} ****<br>-->
+<!--               ** @4 {{group}} ****<br>-->
+<!--               ** @5 {{request.user.groups}} ****<br>-->
         <!--       ** @6 {{user.groups.all}} ****<br>-->
         <!--       ** @7 {{user.groups.filter.values}} ****<br>-->
         <!--     4  {{user.groups.values.0.name}}<br>-->
@@ -31,11 +31,16 @@
     </header>
 
     <nav>
+        <a href="{% url 'my_app_smp:export_to_excel' %}?search_data_vizova_smp={{ search_data_vizova_smp }}"><img style="position: relative;
+                                                                                                                        top: 20px;" 
+                                                                                                                    src="{% static 'css/Microsoft_Office_Excel.png' %}" width="50" height="50" alt="Выгрузить в Excel"></a>
+        {% if 'ker' in groups %}
+        <a href="{% url 'my_app_smp:export_to_excel_for_ker' %}?search_data_vizova_smp={{ search_data_vizova_smp }}"
+                                                            class="btn">Вывод в Excel (для КЭР)</a>
+        {% endif %}
         <a href="{% url 'my_app_smp:start_page' %}" class="btn">Возврат к списку ТАБЛИЦ</a>
-<!--        <a href="#" class="btn">КЭР</a>-->
-<!--        <a href="#" class="btn">Контакты</a>-->
-<!--        <a href="#" class="btn">Помощь</a>-->
-
+        <!-- <a href="{% url 'my_app_smp:export_to_excel' %}?search_data_vizova_smp={{ search_data_vizova_smp }}"
+                                                            class="btn">Выгрузить в Excel</a> -->
         <a href="{% url 'my_app_smp:help' %}" class="btn">Помощь</a>
        <a  href="{% url 'my_app_smp:logout' %}" class="btn">Выход</a>
 
@@ -46,9 +51,13 @@
 
 
     <!-- Форма поиска и количество записей на странице -->
+      Количество записей, полученное после применения фильтров: {{filter_records}}
     <form method="GET" action="" class="search-container">
         <div style="width: 100%;">
             <div>
+                <label for="search_data_vizova_smp">Дата вызова СМП:</label>
+                    <input id="search_data_vizova_smp" style="background-color: #b5cfde; width: 100px;" type="date" name="search_data_vizova_smp" placeholder="Введите дату" value="{{ search_data_vizova_smp }}">
+
                     <input style="background-color: #b5cfde;" type="text" name="search_fio" placeholder="Введите  фамилию пациента" value="{{ search_fio }}">
 
                     <select name="search_kurir" onchange="submitForm()">
@@ -67,9 +76,11 @@
                     </select>
                     {% endif %}
                     <!----------- ПЕРЕДАННЫЕ В КЭР------------------->
+                <a href="{% url 'my_app_smp:home' %}?search_fio=&search_kurir=&search_otrabot=" class="btn_save">Сбросить фильтры</a>
+
                     <button class="btn_save" type="submit">Применить фильтр</button>
             </div>
-            <div style="text-align: right;">
+            <div style="text-align: right;">                
                 Количество строк: <input type="number" style="width: 50px;" name="records_per_page" placeholder="Записей на странице" value="{{ records_per_page }}" min="1">
             </div>
 
@@ -137,25 +148,6 @@
     </tbody>
 </table>
 
-<!--    &lt;!&ndash; Пагинация &ndash;&gt;-->
-<!--    <div class="pagination">-->
-<!--        <span class="step-links">-->
-<!--            {% if data_smp.has_previous %}-->
-<!--                <a href="?page=1">&laquo; Первая</a>-->
-<!--                <a href="?page={{ data_smp.previous_page_number }}">Предыдущая</a>-->
-<!--            {% endif %}-->
-
-<!--            <span class="current">-->
-<!--                Страница {{ data_smp.number }} из {{ data_smp.paginator.num_pages }}.-->
-<!--            </span>-->
-
-<!--            {% if data_smp.has_next %}-->
-<!--                <a href="?page={{ data_smp.next_page_number }}">Следующая</a>-->
-<!--                <a href="?page={{ data_smp.paginator.num_pages }}">Последняя &raquo;</a>-->
-<!--            {% endif %}-->
-<!--        </span>-->
-<!--    </div>-->
-<!--    &lt;!&ndash; Пагинация &ndash;&gt;-->
 
       <!-- Пагинация -->
 <div class="pagination">
@@ -163,14 +155,6 @@
     {% if data_smp.has_previous %}
         <a href="?page={{ data_smp.previous_page_number }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Предыдущая</a>
     {% endif %}
-
-<!--    {% for num in paginator.page_range %}-->
-<!--        {% if num == data_smp.number %}-->
-<!--            <span>{{ num }}</span>-->
-<!--        {% else %}-->
-<!--            <a href="?page={{ num }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>-->
-<!--        {% endif %}-->
-<!--    {% endfor %}-->
             <span class="current">
                 Страница {{ data_smp.number }} из {{ data_smp.paginator.num_pages }}.
             </span>

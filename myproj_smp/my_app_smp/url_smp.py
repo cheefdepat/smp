@@ -14,6 +14,11 @@ from .views import start_page
 # from .views import kis_patient_list
 from .views import login_view
 from .views import results
+from .views import results_page_1
+from .views import results_page_2
+from .views import export_to_excel
+from .views import export_to_excel_for_ker
+from .views import ny
 
 
 app_name = 'my_app_smp'  # Убедитесь, что это указано
@@ -37,8 +42,14 @@ urlpatterns = [
     path('proverka_ker/<int:id>/', proverka_ker, name='proverka_ker'),
     path('proverka_glav/<int:id>/', proverka_glav, name='proverka_glav'),
     path('help', help, name='help'),
-    path('results', results, name='results'),
+    path('export_to_excel/', export_to_excel, name='export_to_excel'),  # вывод в Эксель
+    path('export_to_excel_for_ker/', export_to_excel_for_ker, name='export_to_excel_for_ker'),  # вывод в Эксель
 
+    path('results', results, name='results'),
+    path('results_page_1/', results_page_1, name='results_page_1'),  # Добавьте этот путь
+    path('results_page_2/', results_page_2, name='results_page_2'),  # Добавьте этот путь
+
+    path('ny/', ny, name='ny'),  # Дny
 
 ]
 

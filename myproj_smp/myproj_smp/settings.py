@@ -46,9 +46,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'app_smp',
     'my_app_smp',
     'app_planfact',
+    'app_kis_long',
+    'app_id',
 ]
 
 MIDDLEWARE = [
@@ -193,6 +194,24 @@ LOGGING = {
             # 'formatter': 'simple',
             'encoding':'UTF-8'
         },
+        'file_smp': {
+            # 'class': 'logging.FileHandler',            'filename': '/path/to/django.log',
+            'class': 'logging.FileHandler',
+            # 'filename': 'django.log',
+            'filename': 'log_smp.txt',
+            'formatter': 'verbose',
+            # 'formatter': 'simple',
+            'encoding': 'UTF-8'
+        },
+        'file_plf': {
+            # 'class': 'logging.FileHandler',            'filename': '/path/to/django.log',
+            'class': 'logging.FileHandler',
+            # 'filename': 'django.log',
+            'filename': 'log_plf.txt',
+            'formatter': 'verbose',
+            # 'formatter': 'simple',
+            # 'encoding': 'UTF-8'
+        },
     },
     'loggers': {
         'django': {
@@ -205,10 +224,15 @@ LOGGING = {
                         'propagate': True,
                           },
         'my_app_smp': {
-                    'handlers': ['console', 'file'],
+                    'handlers': ['console', 'file_smp'],
                     'level': 'INFO',
                     'propagate': True,
                 },
+        'app_planfact': {
+            'handlers': ['console', 'file_plf'],
+            'level': 'INFO',
+            'propagate': True,
+        },
         'http.server': {  # Отключаем логи для BaseHTTPServer
             'handlers': ['console'],
             'level': 'ERROR',  # Уровень логирования, ниже которого не будет записываться
