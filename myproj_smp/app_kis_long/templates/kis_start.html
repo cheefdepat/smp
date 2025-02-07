@@ -24,10 +24,10 @@
     </header>
 {% block content %}
     <nav>
-        <a href="{% url 'my_app_smp:start_page' %}" class="btn">Возврат к списку ТАБЛИЦ</a>
+        <a href="{% url 'my_app_smp:start_page' %}" class="btn">Возврат к списку ТАБЛИЦ111</a>
         <a href="{% url 'my_app_smp:help' %}" class="btn">Помощь</a>
 
-        <a href="{% url 'my_app_smp:results' %}" class="btn">Дашборд</a>
+<!--        <a href="{% url 'my_app_smp:results' %}" class="btn">Дашборд</a>-->
         <a href="{% url 'app_kis_long:run_calculate_koiko_dni' %}" class="btn">Расчет койко-дней</a>
         <a  href="{% url 'my_app_smp:logout' %}" class="btn">Выход</a>
     </nav>
@@ -62,9 +62,9 @@
                 <th>Отделение</th>
                 <th>Дата госпитализации</th>
                 <th>Койко-дни</th>
-                <th>Дата изменений</th>
-                <th>Состояние заявки</th>
-                <th>Статус записи</th>
+                <th>id</th>
+<!--                <th>Состояние заявки</th>-->
+<!--                <th>Статус записи</th>-->
                 <!-- Добавьте другие заголовки для всех полей модели -->
             </tr>
         </tr>
@@ -75,13 +75,13 @@
 
      {% if user.is_authenticated %}
         <tr>
-                <td>  <a href="{% url 'app_kis_long:v_kis_pac_detail' patient.id %}" class="btn_save">Внести сведения</a> </td>
+                <td>  <a href="{% url 'app_kis_long:v_new_is_kis_v_kislong' patient.id %}" class="btn_save">Внести пац.в кислонг</a> </td>
                 <td>{{ patient.pacient }}</td>
                 <td>{{ patient.data_rozhd|date:"d.m.Y"   }}</td>
                 <td>{{ patient.otdelenie_name }}</td>
                 <td>{{ patient.data_gospit|date:"d.m.Y"   }}</td>
                 <td>{{ patient.data_gospit|days_difference }}</td>
-<!--                <td>{{ patient.data_last_changed|date:"d.m.Y"   }}</td>-->
+                <td>{{ patient.id}}</td>
 <!--                <td>{{ patient.sostoyanie_zayavki }}</td>-->
 <!--                <td>{{ patient.status_zapisi }}</td>-->
                 <!-- Добавьте другие ячейки для всех полей модели -->

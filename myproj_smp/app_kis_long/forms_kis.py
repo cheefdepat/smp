@@ -60,7 +60,7 @@ class KisFilterForm(forms.Form):
 
     form_kojko_dni_min = forms.IntegerField(label='Количество дней (мин.)',
                                        required=False,
-                                       initial=15,  # Устанавливаем значение по умолчанию
+                                       initial=60,  # Устанавливаем значение по умолчанию
                                        widget=forms.NumberInput(
                                               attrs={'style': 'width: 50px; background-color: #87CEEB;'}))
     # form_kojko_dni_max = forms.IntegerField(label='Количество дней (макс.)',

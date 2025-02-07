@@ -9,7 +9,7 @@ from django.contrib import messages
 from datetime import datetime
 from django.core.paginator import Paginator
 from django.db.models import Q
-
+from django.db.models.functions import Lower
 
 class MyFilter(logging.Filter):
     def filter(self, record):
@@ -90,7 +90,6 @@ def v_find_new_in_kis(request):
                         data_gospit__lt=kojko_dni_min,  # --- сколько к-дней берем в срез
                         )
 
-
     if request.method == 'GET':
         # ---------------------------- сброс фильтров в 0 --------------
         if 'reset' in request.GET:
@@ -113,7 +112,6 @@ def v_find_new_in_kis(request):
             if 'records_per_page' in request.GET and request.GET['records_per_page'] != '':
                 request.session['records_per_page'] = int(request.GET['records_per_page'])
 
-
         # ---------------------------- сброс фильтров в 0 --------------
         # patients = KisLong.objects.all()
         # if 'soc_koordinator' in user_groups_list and len(user_groups_list) == 1:
@@ -133,19 +131,10 @@ def v_find_new_in_kis(request):
         #             data_gospit__lt=today - timezone.timedelta(days=60)  # --- сколько к-дней берем в срез
         #         )
         # ------------------------------------ soc_koordinator ----------------------------к
-        # kojko_dni_min = (today - timezone.timedelta(days=60))
-        # patients = Kis.objects.filter(
-        #     # data_vipiski__isnull=True,
-        #     data_gospit__lt=kojko_dni_min,  # --- сколько к-дней берем в срез
-        #     # status_zapisi='передано в соц'  # --- сколько к-дней берем в срез
-        # )
 
         if form_filtr_kis.is_valid():
 
-            patients_all = Kis.objects.filter(
-                data_vipiski__isnull=True,
-                # data_gospit__lt=kojko_dni_min,  # --- сколько к-дней берем в срез
-                                            )
+            patients_all = Kis.objects.filter(  data_vipiski__isnull=True,  )
 
             filtr_pacient = form_filtr_kis.cleaned_data['form_fio_pacienta']
             filtr_otdelenie_name = form_filtr_kis.cleaned_data['form_otdelenie']
@@ -163,59 +152,26 @@ def v_find_new_in_kis(request):
             else: kojko_dni_min = (today - timezone.timedelta(days=0))
 
 
-
+            # ---------- Получили отфильрованных пациентов
             patients_all = patients_all.filter(data_gospit__lt=(kojko_dni_min))
 
-            # if not filtr_kojko_dni_max:        kojko_dni_max = (today - timezone.timedelta(days=1))
-            # else:
-            #     kojko_dni_max = (today - timezone.timedelta(days=filtr_kojko_dni_max))
+        # Создаем список пациентов из KisLong для сравнения, приводя к нижнему регистру
+        patients_in_kis_long = KisLong.objects.annotate(
+                                                        fio_pacienta_lower=Lower('fio_pacienta'),
+                                                        data_rozhdeniya_lower=Lower('data_rozhdeniya')
+                                                        ).values_list('fio_pacienta_lower')
 
-            # kojko_dni_min = (today - timezone.timedelta(days=20))
-            # kojko_dni_max = (today - timezone.timedelta(days=30))
+        # Фильтруем пациентов из Kis, которые отсутствуют в KisLong
+        patients_not_in_kis_long = patients_all.exclude(
+            Q(pacient__in=[p[0].lower() for p in patients_in_kis_long])
+            # &
+            # Q(data_rozhd__in=[p[1] for p in patients_in_kis_long])
+        )
 
-            # patients = patients.filter(data_gospit__range=(kojko_dni_min, kojko_dni_max))
-
-            # --*******************************
-
-
-
-            # patients = Kis.objects.filter(
-            #     data_vipiski__isnull=True,
-            #     data_gospit__lt=kojko_dni_min,  # --- сколько к-дней берем в срез
-            #     # status_zapisi='передано в соц'  # --- сколько к-дней берем в срез
-            # )
-
-        paginator = Paginator(patients_all, records_per_page)  # Показывать 10 записей на странице
+        # paginator = Paginator(patients_all, records_per_page)  # Показывать 10 записей на странице
+        paginator = Paginator(patients_not_in_kis_long, records_per_page)  # Показывать 10 записей на странице
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-
-        # list_number_kislong = KisLong.objects.values_list('n_istorii_bolezni')
-        # list_number_kis = Kis.objects.values_list('pacient','data_rozhd', 'data_gospit')
-
-        # Получаем пациентов, которые есть в обеих таблицах
-        # identical_patients = Kis.objects.filter(
-        #     Q(pacient__in=KisLong.objects.values_list('fio_pacienta', flat=True)) &
-        #     Q(data_rozhd__in=KisLong.objects.values_list('data_rozhdeniya', flat=True))
-
-        # # Получаем текущую дату
-        # today = timezone.now().date()
-
-        # identical_patients = Kis.objects.filter(
-        #                 data_vipiski__isnull=True,
-        #                 data_gospit__lt=today - timezone.timedelta(days=60)   # --- сколько к-дней берем в срез
-        #             )
-
-        # Преобразуем результат в список
-        # identical_patients_list = list(identical_patients)
-
-        # Выводим список идентичных пациентов
-        # for patient in identical_patients_list:
-        #     print(f"Пациент: {patient.pacient}, Дата рождения: {patient.data_rozhd}")
-
-
-        # paginator = Paginator(patients, records_per_page)  # Показывать 10 записей на странице
-        # page_number = request.GET.get('page')
-        # page_obj = paginator.get_page(page_number)
 
         # Сохраняем количество записей на странице в GET-запросе
         if 'records_per_page' not in request.GET:
@@ -331,6 +287,29 @@ def v_kis_pac_detail(request, id):
         return redirect('app_kis_long:v_kis_pravka_zayavka', id=patient.id)
 
     return render(request, 'kis_pac_detail.html', {
+                                                   'patient': patient,
+
+                                                    })
+
+def v_new_is_kis_v_kislong(request, id):
+
+    patient = get_object_or_404(Kis, id=id)  # Получаем запись по ID
+    logger.info(f'пользователь {request.user} зашел в детали по  пациенту {patient.pacient}')
+    # form_all_fild = KisLongDetailForm()
+
+    if 'btn_correct_kriter' in request.POST:  # Кнопка "Изменить критерии"
+        print(f'пользователь {request.user} нажал btn_correct_kriter')
+        logger.info(f'пользователь {request.user} нажал btn_correct_kriter и зашел в правки по kriter -  {patient.pacient}')
+        # patient.save()
+        return redirect('app_kis_long:v_kis_pravka_kriterij', id=patient.id)
+
+    if 'btn_correct_zayavka' in request.POST:  # Кнопка "Изменить zayavka"
+        logger.info(
+            f'пользователь {request.user} нажал btn_correct_zayavka и зашел в правки по zayavkе -  {patient.pacient}')
+        # patient.save()
+        return redirect('app_kis_long:v_kis_pravka_zayavka', id=patient.id)
+
+    return render(request, 'kis_new_pac.html', {
                                                    'patient': patient,
 
                                                     })

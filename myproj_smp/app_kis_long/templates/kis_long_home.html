@@ -22,32 +22,23 @@
 {% block content %}
     <nav>
         <a href="{% url 'my_app_smp:start_page' %}" class="btn">Возврат к списку ТАБЛИЦ</a>
-        <a href="{% url 'my_app_smp:help' %}" class="btn">Помощь</a>
+<!--        <a href="{% url 'my_app_smp:help' %}" class="btn">Помощь</a>-->
 
-        <a href="{% url 'my_app_smp:results' %}" class="btn">Дашборд</a>
+        <a href="{% url 'app_kis_long:v_find_new_in_kis' %}" class="btn">v_find_new_in_kis</a>
         <a href="{% url 'app_kis_long:run_calculate_koiko_dni' %}" class="btn">Расчет койко-дней</a>
-        <a  href="{% url 'my_app_smp:logout' %}" class="btn">Выход</a>
+<!--        <a  href="{% url 'my_app_smp:logout' %}" class="btn">Выход</a>-->
     </nav>
 
     <!-- Форма поиска и количество записей на странице -->
     <form method="GET" action="" class="search-container">
-
             <div style="text-align: right;">
                 Количество строк: <input type="number" style="width: 50px;" name="records_per_page" placeholder="Записей на странице" value="{{ records_per_page }}" min="1">
             </div>
-
     </form>
-   <!-- kis_long_home.html -->
-<!--<form method="get">-->
-<!--    {{ form.as_table }}-->
-<!--    <button type="submit">Фильтровать</button>-->
-<!--</form>-->
-<form method="get">
+
+
+<form method="get">  <!-----------------   фильтры ------------>
     {{ form.as_table }}
-<!--    <label for="kojko_dni_min">Количество дней (мин.):</label>-->
-<!--    <input type="number" id="kojko_dni_min" name="kojko_dni_min" value="{{ request.GET.kojko_dni_min }}">-->
-<!--    <label for="kojko_dni_max">Количество дней (макс.):</label>-->
-<!--    <input type="number" id="kojko_dni_max" name="kojko_dni_max" value="{{ request.GET.kojko_dni_max }}">-->
     <button type="submit">Фильтровать</button>
     <button type="submit" name="reset" value="reset">Сбросить фильтрацию</button>
 </form>
@@ -62,7 +53,7 @@
                 <th>Отделение</th>
                 <th>Дата госпитализации</th>
                 <th>Койко-дни</th>
-<!--                <th>Статус пациента</th>-->
+                <th>Дата изменений</th>
                 <th>Состояние заявки</th>
                 <th>Статус записи</th>
                 <!-- Добавьте другие заголовки для всех полей модели -->
@@ -77,10 +68,11 @@
         <tr>
                 <td>  <a href="{% url 'app_kis_long:v_kis_pac_detail' patient.id %}" class="btn_save">Внести сведения</a> </td>
                 <td>{{ patient.fio_pacienta }}</td>
-                <td>{{ patient.data_rozhdeniya }}</td>
+                <td>{{ patient.data_rozhdeniya|date:"d.m.Y"   }}</td>
                 <td>{{ patient.otdelenie }}</td>
-                <td>{{ patient.data_gospit }}</td>
+                <td>{{ patient.data_gospit|date:"d.m.Y"   }}</td>
                 <td>{{ patient.kojko_dni }}</td>
+                <td>{{ patient.data_last_changed|date:"d.m.Y"   }}</td>
                 <td>{{ patient.sostoyanie_zayavki }}</td>
                 <td>{{ patient.status_zapisi }}</td>
                 <!-- Добавьте другие ячейки для всех полей модели -->
