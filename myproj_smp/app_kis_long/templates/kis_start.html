@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Данные из БД</title>
+    {% load static %}
+    {% load custom_filters1 %}
+
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+
+</head>
+<body>
+   <header>
+        <h3>{% block title %} !!! Данные о "долгих" пациентах, сведения о которых еще не сохранены !!!  {% endblock %} </h3>
+        <div style="text-align: right; margin-top: -30px; margin-bottom: 20px;">
+            <strong>Общее количество записей: {{ total_new_pac }}</strong>
+        </br>
+        </br>
+       Вы авторизованы как " {{user}} " . Группы -  " {{groups}} "
+        </div>
+    </header>
+{% block content %}
+    <nav>
+<!--        <a href="{% url 'my_app_smp:start_page' %}" class="btn">Назад к списку программ</a>-->
+
+<!--        <a href="{% url 'app_kis_long:run_calculate_koiko_dni' %}" class="btn">Расчет койко-дней</a>-->
+        <a href="{% url 'app_kis_long:v_kis_home' %}" class="btn">Вернуться к общему списку</a>
+        <a href="{% url 'my_app_smp:help' %}" class="btn">Помощь</a>
+<!--        <a  href="{% url 'my_app_smp:logout' %}" class="btn">Выход</a>-->
+    </nav>
+
+    <!-- Форма поиска и количество записей на странице -->
+    <form method="GET" action="" class="search-container">
+            <div style="text-align: right;">
+                Количество строк: <input type="number" style="width: 50px;" name="records_per_page" placeholder="Записей на странице" value="{{ records_per_page }}" min="1">
+            </div>
+    </form>
+
+
+<form method="get">  <!-----------------   фильтры ------------>
+    {{ form.as_table }}
+    <button type="submit" class="btn_save">Фильтровать</button>
+    <button type="submit" name="reset" value="reset" class="btn_save">Сбросить фильтрацию</button>
+</form>
+
+<table class="table_home">
+    <thead>
+        <tr>
+            <th style="width: 320px;">Действия с записями</th>  <!-- Изменено на "Действия" для ясности -->
+             <th>ФИО</th>
+                <th style="width: 100px;">ДР</th>
+                <th>Отделение</th>
+                <th style="width: 100px;">Дата госпитализации</th>
+                <th style="width: 80px;">Койко-дни</th>
+                <th style="width: 100px;">id</th>
+<!--                <th>Состояние заявки</th>-->
+<!--                <th>Статус записи</th>-->
+                <!-- Добавьте другие заголовки для всех полей модели -->
+            </tr>
+        </tr>
+    </thead>
+    <tbody>
+    {{patient}}
+    {% for patient in page_obj %}
+
+     {% if user.is_authenticated %}
+        <tr>
+                <td>  <a href="{% url 'app_kis_long:v_new_is_kis_v_kislong' patient.id %}" class="btn_save">Добавить пациента в <br>таблицу "долгих" госпитализаций</a> </td>
+                <td>{{ patient.pacient }}</td>
+                <td style="text-align: center !important;">{{ patient.data_rozhd|date:"d.m.Y"   }}</td>
+                <td>{{ patient.otdelenie_name }}</td>
+                <td style="text-align: center !important;">{{ patient.data_gospit|date:"d.m.Y"   }}</td>
+                <td style="text-align: right !important;">{{ patient.data_gospit|days_difference }}</td>
+                <td style="text-align: right !important;">{{ patient.id}}</td>
+
+<!--                <td>{{ patient.status_zapisi }}</td>-->
+                <!-- Добавьте другие ячейки для всех полей модели -->
+        </tr>
+
+        {% endif  %}
+        {% endfor %}
+    </tbody>
+</table>
+
+
+   <!-- Пагинация -->
+   <div class="pagination">
+
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Предыдущая</a>
+    {% endif %}
+
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+            </span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Следующая</a>
+    {% endif %}
+</div>
+<!-- Пагинация -->
+
+
+ {% endblock %}  <!--#---------------------- конец КОНТЕНТА   -->
+    <footer>
+        <p>&copy; 2025.  Все права защищены..</p>
+    </footer>
+</body>
+</html>

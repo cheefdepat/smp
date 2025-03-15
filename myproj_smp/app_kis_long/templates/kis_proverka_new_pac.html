@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Детали пациента</title>
+    {% load static %}
+    {% load custom_filters1 %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Подтвердите отправку данных в таблицу "долгих" госпитализаций</h1>
+    </header>
+<!--    <div style="text-align: center;">-->
+<!--        <form method="post">-->
+<!--            {% csrf_token %}-->
+<!--            <button class="btn_save" type="submit" name="vnosim_new_pac_v_bazy_kis_long">{{nazvanie_knopki_save}}</button>-->
+<!--            <button class="btn_save" type="submit" name="korrektirovat">Корректировать</button>-->
+<!--        </form>-->
+<!--    </div>-->
+
+    <div class="field-group-2-columns">
+        <div>
+            <fieldset >
+           <legend>Проверка данных перед внесения в БД</legend> <br>
+           <legend>Данные о пациенте (из КИС)</legend>
+                    <table >
+                        <tr>  <th>ФИО пациента:</th>                        <td> {{fio_pacienta}} </td>  </tr>
+                        <tr>  <th>Дата рождения:</th>  <td> {{data_rozhdeniya}}  </td>    </tr>
+                        <tr>  <th>Отделение:  </th>      <td> {{otdelenie_name}}  </td>  </tr>
+                        <tr>  <th>Дата госпит:</th>             <td> {{data_gospit}}  </td>     </tr>
+                        <tr>  <th>Количество койко-дней:</th>                   <td> {{data_gospit_format_date|days_difference}}  </td>     </tr>
+                        <tr>  <th>№ истории болезни:</th>       <td> {{n_istorii_bolezni_session}}  </td>     </tr>
+
+                    </table>
+            <legend>Проверка данных о СОСТОЯНИИ пациента:</legend>
+                <table >
+                    <tr>  <th>ФИО заведующего отд</th> <td> {{fio_zaveduyushchego_otd_session}} </td>   </tr>
+                    <tr>  <th>ФИО лечащего врача</th> <td> {{fio_lechashchego_vracha_session}} </td>   </tr>
+                    <tr>  <th>PPI</th> <td> {{ppi_session}} </td>   </tr>
+                    <tr>  <th>Мед.показания для стац.наблюдения:</th>   <td> {{med_pokazaniya_session}} </td>   </tr>
+                    <tr>  <th>Динамика состояния пациента:</th>         <td> {{dinamika_sostoyania_session}} </td>   </tr>
+                    <tr>  <th>Двигательная активность:</th>             <td> {{dvigatel_activnost_session}} </td>   </tr>
+                    <tr>  <th>Статус наблюдения:</th>                   <td> {{status_nabludeniya_session}} </td>   </tr>
+                    <tr>  <th>Потребность в соц.координаторе:</th>      <td> {{potrebnost_v_soc_koordinat_session}} </td>   </tr>
+                    <tr>  <th>Способность выразить согласие:</th>      <td> {{sposoben_virazit_soglasie_session}} </td>   </tr>
+                    <tr>  <th>Статус мед.карты:</th>                    <td> {{status_med_karty_session|default:"-"}} </td>   </tr>
+                    <tr>  <th>Статус по МСЭ:</th>                       <td> {{status_po_mse_session|default:"-"}} </td>   </tr>
+<!--                    <tr>  <th>Соц.критерии:</th>                        <td> {{soc_kriterii_session|default:"-"}} </td>   </tr>-->
+                    <tr>  <th>Функцииональн.критерии:</th>              <td> {{funkciional_kriterii_session|default:"-"}} </td>   </tr>
+<!--                    <tr>  <th>Психологич.критерии:</th>                 <td> {{psikh_kriterii_session|default:"-"}} </td>   </tr>-->
+                    <tr>  <th>Комментарии:</th>                         <td> {{kommentarij_session}} </td>   </tr>
+                </table >
+                    <hr>
+                     <table >
+                    <tr>  <th>Статус заявки на координатора:</th>          <td> {{status_zapisi}} </td>   </tr>
+                    <tr>  <th>Дата подачи заявки на соц.координатора:</th>   <td> {{data_peredachi_soc_koordinatoram_dtszn|default:"не подается"}} </td>   </tr>
+                    </table>
+
+            </fieldset>
+<div style="text-align: center;">
+<form method="post">
+    {% csrf_token %}
+    <button class="btn_save" type="submit" name="vnosim_new_pac_v_bazy_kis_long">{{nazvanie_knopki_save}}</button>
+    <button class="btn_save" type="submit" name="korrektirovat">Корректировать</button>
+</form>
+</div>
+        </div>
+
+
+    </div>
+
+    <footer>
+        <p>&copy; 2024 ЦПП. Все права защищены.</p>
+    </footer>
+</body>
+</html>

@@ -168,7 +168,8 @@ def home(request):
     # Фильтруем данные по обоим полям и сортируем по p_p
     # data_smp = SmpRazborTab.objects.all().order_by('p_p')  # Сортировка по возрастанию p_p
     # Фильтруем данные по обоим полям
-    if user_groups_list == ['vps']:
+    # if user_groups_list == ['vps']:
+    if 'vps' in user_groups_list:  # ------------------------- ВКЛЮЧИТЬ визмость ОТПРАВКИ В КЭР
         # Исключаем записи, у которых ok_vps равно "ВПС"
         data_smp = SmpRazborTab.objects.filter(ok_vps="впс").order_by('data_vyzova_smp',
                                                                                   'fio_pacienta')  # Сортировка по возрастанию
@@ -552,6 +553,7 @@ def export_to_excel(request):
         'Действия ЦПП',
         'Контроль исполнения назначенных врачом ЦПП рекомендаций',
         'Вывод',
+        'Выявленные дефекты в работе врача',
     ]
     worksheet.append(headers)
 
@@ -575,6 +577,7 @@ def export_to_excel(request):
     worksheet.column_dimensions['Q'].width = 40  # Установите нужную ширину  столбца
     worksheet.column_dimensions['R'].width = 40  # Установите нужную ширину  столбца
     worksheet.column_dimensions['S'].width = 40  # Установите нужную ширину  столбца
+    worksheet.column_dimensions['T'].width = 40  # Установите нужную ширину  столбца
 
     # Форматирование заголовков
     grey_fill = PatternFill(start_color='BFBFBF', end_color='BFBFBF', fill_type='solid')  # Зеленый цвет
@@ -584,7 +587,7 @@ def export_to_excel(request):
     # Индексы заголовков, к которым нужно применить зеленый фон (начиная с 1)
     grey_header_indices = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  # Индексы для 'ФИО врача',....', 'Вывод'
     yellou_header_indices = [11, 12, 13, 14]  # Индексы для '...'
-    green_puff_indices = [15, 16, 17, 18, 19]  # Индексы для 'ФИО врача',....', 'Вывод'
+    green_puff_indices = [15, 16, 17, 18, 19,20]  # Индексы для 'ФИО врача',....', 'Вывод'
 
     for col in grey_header_indices:
         worksheet.cell(row=1, column=col).fill = grey_fill  # Применяем зеленый фон к указанным заголовкам
@@ -640,7 +643,7 @@ def export_to_excel(request):
             # item.kakie_dejstviya_byli_predprinyaty_smp,
             # item.sootvetstvuet_li_naznachennyj_bazovyj_plan_sostoyaniyu_pacie,
             # item.trebovanie_gospitalizacii_na_dannyj_moment,
-            # item.vyyavlennye_defekty_v_rabote_vracha,
+            item.vyyavlennye_defekty_v_rabote_vracha,
             # item.bazovyj_plan_naznachen_korrektno,
             # item.ocenka_sostoyaniya_sootvetstvuet_bazovomu_planu,
             # item.zhaloby_opisany_v_polnom_obeme,

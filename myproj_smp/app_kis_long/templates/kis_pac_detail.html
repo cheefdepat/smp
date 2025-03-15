@@ -2,6 +2,9 @@
 {% block title %} Детали о пациенте: {{ patient.fio_pacienta }}.{% endblock %}
 
 {% block content %}
+<!--v_kis_pac_detail <br>-->
+<!--kis_pac_detail.html-->
+<!--{{groups}}-->
 <nav>
      <a href="{% url 'app_kis_long:v_kis_home' %}" class="btn">Вернуться к общему списку</a>
 
@@ -11,102 +14,79 @@
 <div class="field-group-2-columns">
         <div>
             <fieldset >
-                <!------------------------------------------ -->
                 <legend>Данные по пациенту (из КИС)</legend>
                 <table >
-                    <tr>   <th >ФИО:</th>
-                        <td > {{ patient.fio_pacienta  }} </td>     </tr>
-                    <tr>     <th >Дата рождения:</th>
-                        <td > {{ patient.data_rozhdeniya }} </td>    </tr>
-                    <tr>    <th>отделение:</th>
-                        <td> {{ patient.otdelenie  }}  </td>  </tr>
-                    <tr>     <th>Дата госпитализации:</th>
-                        <td> {{ patient.data_gospit  }}  </td>   </tr>
-                    <tr> <th>Количество койко-дней:</th>
-                        <td> {{ patient.kojko_dni  }}  </td>   </tr>
-                    <tr> <th>Диагноз основной:</th>
-                        <td> {{ patient.diagnoz_osnovnoj  }}  </td>  </tr>
-                    <tr>  <th>Дата выписки:</th>
-                        <td> {{ patient.data_vypiski  }}  </td>  </tr>
-                    <tr>  <th>Исход госпитализации:</th>
-                        <td> {{ patient.iskhod_gospit  }}  </td>  </tr>
-                    <tr> <th>№ истории болезни:</th>
-                        <td> {{ patient.n_istorii_bolezni  }}  </td>   </tr>
-                <!------------------------------------------ -->
+                    <tr> <th>ФИО:</th>               <td > {{ patient.fio_pacienta  }} </td>     </tr>
+                    <tr> <th>Дата рождения</th>      <td > {{ patient.data_rozhdeniya }} </td>    </tr>
+                    <tr> <th>Отделение:</th>          <td> {{ patient.otdelenie  }}  </td>  </tr>
+                    <tr> <th>Дата госпит:</th>        <td> {{ patient.data_gospit  }}  </td>   </tr>
+                    <tr> <th>Койко_дни:</th>           <td> {{ patient.kojko_dni  }}  </td>   </tr>
+                    <tr> <th>Диагноз основной:</th>    <td> {{ patient.diagnoz_osnovnoj  }}  </td>  </tr>
+                    <tr>  <th>Дата выписки:</th>       <td> {{ patient.data_vypiski|default_if_none:'-' }}  </td>  </tr>
+                    <tr>  <th>Исход госпит:</th>       <td> {{ patient.iskhod_gospit|default_if_none:'-'  }}  </td>  </tr>
+                    <tr> <th>№ истории болезни:</th>   <td> {{ patient.n_istorii_bolezni  }}  </td>   </tr>
                 </table>
             </fieldset>
-<br>
+<!--<br>-->
             <fieldset>
-                              <!------------------------------------------ -->
-                 <legend>КРИТЕРИИ оценки (последние изменения по пациенту: {{patient.data_last_changed}} )</legend>
+          <legend>"Медицинский блок" (последние изменения по пациенту: {{patient.data_last_changed_med|default_if_none:'-' }} )</legend>
+          {% if 'soc_koordinator' not in groups or 'admin' in groups %}
+          <button class="btn_save" type="submit" name="btn_correct_kriter" >Внести правки в "Медицинский блок"</button>
+          {% endif  %}
+<!--                <button class="btn_save" type="submit" name="btn_correct_kriter" >Внести правки в "Медицинский блок"</button>-->
 
-        {% if 'stacionar' in groups or 'vps' in groups%}
-        <button class="btn_save" type="submit" name="btn_correct_kriter" >Внести правки в раздел "Критерии"</button>
-        {% endif  %}
                 <table>
-                <tr> <th>PPI :</th>
-                        <td>{{ patient.ppi }}</td>     </tr>
-                 <tr>   <th>Мед.показания:</th>
-                        <td>{{ patient.med_pokazaniya }}</td>   </tr>
-                <tr>   <th>Мед.критерии:</th>
-                        <td>{{ patient.medic_kriterii }}</td>   </tr>
-                 <tr>  <th>Соц.критерии:</th>
-                        <td>{{ patient.soc_kriterii }}</td>  </tr>
-                <tr>   <th>Функцииональные критерии :</th>
-                        <td>{{ patient.funkciional_kriterii }}</td>  </tr>
-                <tr>     <th>Психологические критерии:</th>
-                        <td>{{ patient.psikh_kriterii }}</td>  </tr>
-                <tr>    <th>Организационные критерии:</th>
-                        <td>{{ patient.org_kriterii }}</td>   </tr>
-                 <tr>      <th>Наличие заявки в соц.службу:</th>
-                        <td>{{ patient.nalichie_zayavki_v_soc_sluzhbu }}</td>    </tr>
-                <tr>    <th>Состояние заявки:</th>
-                        <td>{{ patient.sostoyanie_zayavki }}</td>  </tr>
-                 <tr>   <th>Прична отсутствия заявки:</th>
-                        <td>{{ patient.prichna_otsutstviya_zayavki }}</td>  </tr>
-                 <tr>   <th>Комментарий:</th>
-                        <td>{{ patient.kommentarij }}</td>  </tr>
-                </table>
-            </fieldset>
+                <tr> <th>ФИО заведующего отд</th>                        <td>{{ patient.fio_zaveduyushchego_otd|default_if_none:'-'  }}</td> <tr>
+                <tr> <th>ФИО лечащего врача</th>                         <td>{{ patient.fio_lechashchego_vracha|default_if_none:'-'  }}</td>  <tr>
+                <tr> <th>PPI :</th>                                      <td>{{ patient.ppi|default_if_none:'-'  }}</td>     </tr>
+                <tr> <th>Мед.показания для стац.наблюдения:</th>         <td>{{ patient.med_pokazaniya|default_if_none:'-' }}</td>   </tr>
+                <tr> <th>Динамика состояния пациента:</th>              <td>{{ patient.dinamika_sostoyania|default_if_none:'-' }}</td>   </tr>
+                <tr> <th>Двигательная активность:</th>                  <td>{{ patient.dvigatel_activnost|default_if_none:'-' }}</td>   </tr>
+                <tr> <th>Статус наблюдения :</th>                       <td>{{ patient.status_nabludeniya|default_if_none:'-' }}</td>  </tr>
+                <tr> <th>Наличие заявки на соц.координатора:</th>       <td>{{ patient.potrebnost_v_soc_koordinat|default_if_none:'-' }}</td>  </tr>
+                <tr> <th>Способность выразить согласие: </th>           <td>{{ patient.sposoben_virazit_soglasie|default_if_none:'-' }}</td>  </tr>
+                <tr> <th>Статус оформления мед.карты для путевки: </th> <td>{{ patient.status_med_karty|default_if_none:'-' }}</td>  </tr>
+                <tr> <th>Статус по МСЭ:</th>                            <td>{{ patient.status_po_mse|default_if_none:'-' }}</td>  </tr>
+                <tr> <th>Функцииональные критерии:</th>                 <td>{{ patient.funkciional_kriterii|default_if_none:'-' }}</td>  </tr>
+                 <tr> <th>Комментарий администратора :</th>                        <td>{{ patient.kommentarij|default_if_none:'-' }}</td>  </tr>
+                 </table>
+                    <table >
+                 <tr>
+                     <hr>
+                     <th>Исход госпитализации:</th>                   <td>{{ patient.iskhod_gospit|default_if_none:'-' }}</td>  </tr>
+                 <tr> <th>Дата выписки:</th>                           <td>{{ patient.data_vypiski|default_if_none:'-' }}</td>  </tr>
+
+
+          </table>
+          </fieldset>
         </div>
         <div>
             <fieldset>
               <!------------------------------------------ -->
-                <legend>Данные по состоянию заявки</legend>
-        {% if 'soc_koordinator' in groups %}
-        <button class="btn_save" type="submit" name="btn_correct_zayavka" >Внести правки в раздел "Заявка"</button>
-        {% endif  %}
-
+                <legend>Данные по социальному блоку</legend>
+                {% if 'soc_koordinator' in groups %}
+                <button class="btn_save" type="submit" name="btn_correct_zayavka" >Внести правки в "Социальный блок"</button>
+                {% endif  %}
                 <table>
-                    <tr>
-                        <th>Тема заявки.Помощь в жизнеустройстве:</th>
-                        <td>{{ patient.tema_zayavki_pomosh_v_zhizneustrojstve }}</td></tr>
-                        <th>Наличие родственников:</th>
-                        <td>{{ patient.nalichie_rodstvennikov }}</td></tr>
-                        <th>Дата передачи соц.координаторам ДТСЗН:</th>
-                        <td>{{ patient.data_peredachi_soc_koordinatoram_dtszn }}</td><tr>
-                        <th>ФИО заведующего отделением:</th>
-                        <td>{{ patient.fio_zaveduyushchego_otd }}</td> <tr>
-                        <th>ФИО лечащего врача:</th>
-                        <td>{{ patient.fio_lechashchego_vracha }}</td>  <tr>
-                        <th>Комментарий соц.координатора:</th>
-                        <td>{{ patient.kommentarij_soc }}</td> <tr>
-                        <th>Дата принятия в работу соц.координаторами:</th>
-                        <td>{{ patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn }}</td> <tr>
-                        <th>Статус пациента:</th>
-                        <td>{{ patient.status_pacienta }}</td>   <tr>
-                        <th>Соц.координатор:</th>
-                        <td>{{ patient.soc_koordinator }}</td> <tr>
-                        <th>Комментарий соц.координатора:</th>
-                        <td>{{ patient.kommentarij_soc_koordinatorov_dtszn }}</td>  <tr>
-                        <th>Решение по пациенту: </th>
-                        <td>{{ patient.reshenie_po_pacientu }}</td>  <tr>
-                        <th>Дата принятия решения по пациенту:</th>
-                        <td>{{ patient.data_prinyatiya_resheniya_po_pacientu }}</td> <tr>
-                        <th>Пациент не может выразить свое согласие:</th>
-                        <td>{{ patient.pacient_ne_mozhet_vyrazit_svoe_soglasie }}</td> <tr>
-                        <th>Отказ родственников:</th>
-                        <td>{{ patient.otkaz_rodstvennikov }}</td> <tr>
+                <tr>  <th>Наличие заявки в соц службу :</th>  <td>{{ patient.potrebnost_v_soc_koordinat|default_if_none:'-'  }}</td>    </tr>
+                <tr>  <th>Социальные критерии :</th>               <td>{{ patient.soc_kriterii|default_if_none:'-'  }}</td>  </tr>
+                 <tr>   <th>Состояние заявки :</th>
+                            <td>Карта -> {{ patient.status_med_karty|default_if_none:'-'  }}
+                                МСЭ-> {{ patient.status_po_mse|default_if_none:'-'  }} </td>                 </tr>
+                <tr>  <th>Тема заявки Помощь в жизнеустройстве</th>    <td>{{ patient.tema_zayavki_pomosh_v_zhizneustrojstve|default_if_none:'-'  }}</td></tr>
+                <th>Наличие родственников</th>                         <td>{{ patient.nalichie_rodstvennikov|default_if_none:'-'  }}</td></tr>
+                <th>Дата передачи соц координаторам ДТСЗН</th>          <td>{{ patient.data_peredachi_soc_koordinatoram_dtszn|default_if_none:"-"  }}</td><tr>
+<!--                                                                                                                             |default_if_none:'-'          -->
+                <th>Дата принятия в работу соц координаторами ДТСЗН</th> <td>{{ patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn|default_if_none:"-" }}</td> <tr>
+                <th>Статус пациента (группа)</th>                       <td>{{ patient.status_pacienta|default_if_none:'-'  }}</td>   <tr>
+                <th>Соц.координатор (ФИО)</th>                          <td>{{ patient.soc_koordinator|default_if_none:'-'  }}</td> <tr>
+                <th>Статус решения о переводе </th>                     <td>{{ patient.status_resheniya_o_perevode|default_if_none:"Статус не определен" }}</td>  <tr>
+                <th>Последняя дата изменения статуса решения о переводе </th>   <td>{{ status_last_date|default_if_none:'-'  }}</td>  <tr>
+                <th>Пояснения к решению о переводе </th>                 <td>{{ patient.poyasneniya_k_resheniyu_po_pac|default_if_none:'-'  }}</td>  <tr>
+                <th>Решение ДТСЗН по путевке </th>                       <td>{{ patient.reshenie_dtszn_po_putevke|default_if_none:'-'  }}</td>  <tr>
+                <th>Дата принятия решения ДТСЗН по путевке</th>          <td>{{ patient.data_resheniya_dtszn|default_if_none:"Статус не определен" }}</td> <tr>
+                <th>Комментарий соц координаторов ДТСЗН</th>            <td>{{ patient.kommentarij_soc_koordinatorov_dtszn|default_if_none:'-'  }}</td>  <tr>
+
                 </table>
             </fieldset>
             </br>
@@ -114,4 +94,4 @@
         </div>
     </div>
  </form>
-{% endblock %}м
+{% endblock %}

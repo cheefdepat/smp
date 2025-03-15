@@ -23,11 +23,6 @@ logger.setLevel(logging.INFO)
 
 # Создайте обработчик логирования для файла
 file_handler = logging.FileHandler('log_plf.txt')
-# Установите формат логирования
-# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-# formatter = logging.Formatter('%(asctime)s - %(name)s -  %(message)s')
-# file_handler.setFormatter(formatter)
-# Добавьте фильтр логирования к обработчику логирования
 file_handler.addFilter(MyFilter())
 
 # Добавьте обработчик логирования к логгеру
@@ -35,8 +30,18 @@ logger.addHandler(file_handler)
 
 # -------------------------------------------------  логгирования -----------------------
 
+def zamena_pustot(pole_proverki_daty):
+    # Функция проверки является ли значение в поле ДАТЫ - пустым??? для ВСЕХ ДАТ проверку!!!!
+    # Проверяем ДАТУ, является ли значение None ---------------- для ВСЕХ ДАТ проверку!!!!
+    if pole_proverki_daty == "":
+        pole_proverki_daty = None
+    else:
+        pole_proverki_daty = pole_proverki_daty
+    return pole_proverki_daty
+
+
 def plf_start_list(request):
-    # --------------
+    # --------------cd
     user_groups_list = []
     for i in request.user.groups.all():
         print(i)
@@ -54,11 +59,11 @@ def plf_start_list(request):
     records_per_page = request.GET.get('records_per_page', 20)  # Получаем количество записей на странице
     print(query_data_zamecaniya)
     # Фильтруем данные по обоим полям и сортируем по p_p
-    # data_smp = SmpRazborTab.objects.all().order_by('p_p')  # Сортировка по возрастанию p_p
-    # Фильтруем данные по обоим полям
+
     print(request.user.groups)
 
-    if user_groups_list == ['vps']:   # ------------------------- ВКЛЮЧИТЬ визмость ОТПРАВКИ В КЭР
+    # if user_groups_list == ['vps']:   # ------------------------- ВКЛЮЧИТЬ визмость ОТПРАВКИ В КЭР
+    if 'vps' in user_groups_list and len(user_groups_list) == 1:  # ------------------------- ВКЛЮЧИТЬ визмость ОТПРАВКИ В КЭР
     # if user_groups_list == ['#']:     # ------------------------- отключить визмость ОТПРАВКИ В КЭР
         # Исключаем записи, у которых ok_vps равно "ВПС"
         data_plf = PlanFactTab.objects.filter(ok_status_zapolnenia="Заполняется ВПС").order_by('data_planfakta',
@@ -110,7 +115,6 @@ def plf_edit_patient(request, id):
     # -------------- группу передадим ---
     user_groups_list = []
     for i in request.user.groups.all():
-        print(i)
         user_groups_list.append(str(i))
     # --------------
 
@@ -118,21 +122,68 @@ def plf_edit_patient(request, id):
 
     # --------------- вычсление перес=менных по ДНЯМ!!! ------------
     if request.method == 'POST':
+
         # ---------   Заполняем поля, которые НУЖНО считать со страницы и сохранять ------------
-
         logger.info(f'пользователь {request.user} вошел к пациенту {patient.fio_pacienta} -- {patient.data_planfakta}')
+
+
+
+        # ------------------- предотвращение ошибки из-за пустоты в ДАТЕ ----
+        patient.data_vk = request.POST.get('data_vk')
+        patient.data_vk = zamena_pustot(patient.data_vk)
+
+        patient.name_mo_provod_vk = request.POST.get('name_mo_provod_vk')
+        patient.diagnoz_mkb10 = request.POST.get('diagnoz_mkb10')
+        patient.komment_k_pervichnomu_vizitu = request.POST.get('komment_k_pervichnomu_vizitu')
+        patient.komment_k_posled_vizitu = request.POST.get('komment_k_posled_vizitu')
+        patient.tyagostnaya_simptomatika_pall_potrebnosti = request.POST.get('tyagostnaya_simptomatika_pall_potrebnosti')
+        patient.plan_nablyudeniya_sootvestvuet_tyazhesti_sostoyaniya_i_prognozu = request.POST.get('plan_nablyudeniya_sootvestvuet_tyazhesti_sostoyaniya_i_prognozu')
+
+
+        patient.vizov_smp_posle_last_vizit = request.POST.get('vizov_smp_posle_last_vizit')
+
+        patient.nalichie_pokazanij_k_okazaniyu_specPMP = request.POST.get('nalichie_pokazanij_k_okazaniyu_specPMP')
+        patient.nablyudenie_v_drugoj_mo_parallel_s_ovpp = request.POST.get('nablyudenie_v_drugoj_mo_parallel_s_ovpp')
+        patient.name_drugoj_mo_parallel_s_ovpp = request.POST.get('name_drugoj_mo_parallel_s_ovpp')
+        patient.name_drugoj_mo_parallel_s_ovpp = request.POST.get('name_drugoj_mo_parallel_s_ovpp')
+
+        patient.osnovaniya_parallel_nabluden = request.POST.get('osnovaniya_parallel_nabluden')
+
+        patient.vypiska_receptov_vps = request.POST.get('vypiska_receptov_vps')
+        patient.vypiska_receptov_drugoj_mo = request.POST.get('vypiska_receptov_drugoj_mo')
+        patient.potrebnost_v_respiratorke = request.POST.get('potrebnost_v_respiratorke')
+        patient.vyvlennye_defekty = request.POST.get('vyvlennye_defekty')
+        patient.mery_prinyatye_vps_dlya_uluchsheniya_pmp = request.POST.get('mery_prinyatye_vps_dlya_uluchsheniya_pmp')
+        patient.predlozheniya_dlya_uluchsheniya_pmp = request.POST.get('predlozheniya_dlya_uluchsheniya_pmp')
+        patient.diagnoz_mkb10 = request.POST.get('diagnoz_mkb10')
+        # patient.komment_zav_vps = request.POST.get('komment_zav_vps')
+        # patient.komment_aup = request.POST.get('komment_aup')
+
         patient.otvet_kc = request.POST.get('otvet_kc')
-        patient.defekty_v_okazanii_pmp_na_osnovanii_karty_kontrolya_kachest = request.POST.get('defekty_v_okazanii_pmp_na_osnovanii_karty_kontrolya_kachest')
-        patient.opisanie_defektov = request.POST.get('opisanie_defektov')
-        patient.vyvody_svyaz_perenosa_vizita_s_defektami_okazaniya_pmp = request.POST.get('vyvody_svyaz_perenosa_vizita_s_defektami_okazaniya_pmp')
-        patient.vypolnennye_meropriyatiya_po_nedopushcheniyu_perenosov = request.POST.get('vypolnennye_meropriyatiya_po_nedopushcheniyu_perenosov')
 
-        # --------------------Проверяем ДАТУ !!!!--------------------------------------------------
-        # patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc = zamena_pustot(
-        #                                                         patient.data_polucheniya_svedenij_po_vyzovam_smp_ot_kc)
 
-        # -----------------------
-        # print('1проверка кнопки -----------------')
+        # ------------------- предотвращение ошибки из-за пустоты в ДАТЕ ----
+        patient.data_vklyucheniya_v_reestr = request.POST.get('data_vklyucheniya_v_reestr')
+        patient.data_vklyucheniya_v_reestr = zamena_pustot(patient.data_vklyucheniya_v_reestr)
+        # ------------------- предотвращение ошибки из-за пустоты в ДАТЕ ----
+        patient.data_vklyucheniya_v_reestr = request.POST.get('data_vklyucheniya_v_reestr')
+        patient.data_vklyucheniya_v_reestr = zamena_pustot(patient.data_vklyucheniya_v_reestr)
+        # ------------------- предотвращение ошибки из-за пустоты в ДАТЕ ----
+        patient.data_pervichnogo_vizita = request.POST.get('data_pervichnogo_vizita')
+        patient.data_pervichnogo_vizita = zamena_pustot(patient.data_pervichnogo_vizita)
+# ------------------- предотвращение ошибки из-за пустоты в ДАТЕ ----
+        patient.data_poslednego_vizita = request.POST.get('data_poslednego_vizita')
+        patient.data_poslednego_vizita = zamena_pustot(patient.data_poslednego_vizita)
+
+# ------------------- предотвращение ошибки из-за пустоты в ДАТЕ ----
+        patient.data_poslednego_poseshcheniya_drugoj_mo = request.POST.get('data_poslednego_poseshcheniya_drugoj_mo')
+        patient.data_poslednego_poseshcheniya_drugoj_mo = zamena_pustot(patient.data_poslednego_poseshcheniya_drugoj_mo)
+
+
+
+
+
+
         if 'plf_save_vps' in request.POST:  # Кнопка "Сохранить"
             print('109-----------------')
             logger.info(
@@ -153,7 +204,6 @@ def plf_edit_patient(request, id):
             return redirect('app_planfact:plf_proverka_to_ker', id=patient.id)  # Переходим на страницу проверки
 
 
-
     return render(request, 'plf_edit_pac_short.html', {'patient': patient,
                                                        'groups': user_groups_list,  # Получаем все группы
 
@@ -172,7 +222,11 @@ def plf_proverka_to_ker(request, id):
         elif 'korrektirovat' in request.POST:  # Кнопка "Корректировать"
             return redirect('app_planfact:plf_edit_patient', id=id)  # Возвращаем на страницу редактирования
 
-    return render(request, 'plf_patient_detail.html', {'patient': patient})
+    return render(request, 'plf_patient_detail.html', {'patient': patient,
+                                                       'group':'ker1'
+
+
+                                                       })
 
 
 def plf_export_to_excel(request):
@@ -192,11 +246,33 @@ def plf_export_to_excel(request):
     # Заголовки столбцов
     headers = [
         'Дата план-факта',
-        'ОМС',    'ФИО',    'ДР',    'ОВПП',
+        'ID', 'ОМС',    'ФИО',    'ДР',    'ОВПП',
         'Плановая дата визита согласно ЕМИАС/реестру',
         'Фактическая дата визита согласно ЕМИАС',
         'Вопрос для разбора',
-        'Ответ КЦ'
+        'Дата ВК (ОК)',
+        'Наименование МО, проводившей ВК(ОК)',
+        'Диагноз МКБ-10',
+        'Дата внесения в Реестр',
+        'Дата первичного визита',
+        'Комментарий к первичному визиту(при необходимости)',
+        'Дата последнего визита',
+        'Комментарий к последнему визиту(при необходимости)',
+        'Имеющаяся тягостная симптоматика, паллиативные потребности',
+        'Индивидуальный план наблюдения соотвествует тяжести состояния и прогнозу',
+        'Вызовы СМП после последнего визита(даты)',
+        'Наличие показаний к оказанию специализированной ПМП',
+        'Наблюдение в других МО (параллельно с ОВППМП)',
+        'Наименование другой МО, в которой наблюдается пациент параллельно с параллельно с ОВППМП',
+        'Дата последнего посещения другой МО',
+        'Обоснование параллельного наблюдения иными МО',
+        'Выписка рецептов для лечения тягостной симптматики ОВППМП дата последней выписки, наименование препарата, на какой срок или количество препарата',
+        'Выписка рецептов для лечения тягостной симптматикидругой МО дата, наименование препарата, на какой срок или количество препарата',
+        'Потребность в респираторной поддержке да / нет, при наличии потребности - комментарии, в том числе дата выявления потребности и дата обеспечения респираторным оборудованием',
+        'Дефекты, выявленные в процессе разбора',
+        'Меры, принятые в ОВППМП для оказания качественной ПМП',
+        'Предложения по организационным решениям для улучшения качества оказания ПМП',
+        'Коментарий ЦПП',
     ]
     worksheet.append(headers)
     # Установка ширины для 2-го и 15-го столбца
@@ -212,14 +288,21 @@ def plf_export_to_excel(request):
 
     # Форматирование заголовков
     blue_fill = PatternFill(start_color='D9E1F2', end_color='D9E1F2', fill_type='solid')  # цвет
+    green_fill = PatternFill(start_color='d9f2dd', end_color='d9f2dd', fill_type='solid')  # цвет
     yellou_fill = PatternFill(start_color='FFFF00', end_color='FFFF00', fill_type='solid')  # цвет
 
     # Индексы заголовков, к которым нужно применить зеленый фон (начиная с 1)
-    blue_header_indices = [1, 2, 3, 4, 5, 6, 7, 8]  # Индексы для 'ФИО врача',....', 'Вывод'
-    yellou_header_indices = [9]  # Индексы для '...'
+    blue_header_indices = [1, 2, 3, 4, 5, 6, 7, 8, 9]  # Индексы для 'ФИО врача',....', 'Вывод'
+    green_header_indices = [10,11,12,13, 14, 15,16,17,18,19,20,
+                            21,22,23,24,25,26,27,28,29,30,31]  # Индексы для 'ФИО врача',....', 'Вывод'
+
+    yellou_header_indices = [32]  # Индексы для '...'
 
     for col in blue_header_indices:
         worksheet.cell(row=1, column=col).fill = blue_fill  # Применяем зеленый фон к указанным заголовкам
+
+    for col in green_header_indices:
+        worksheet.cell(row=1, column=col).fill = green_fill  # Применяем зеленый фон к указанным заголовкам
 
     for col in yellou_header_indices:
         worksheet.cell(row=1, column=col).fill = yellou_fill  # Применяем зеленый фон к указанным заголовкам
@@ -245,6 +328,7 @@ def plf_export_to_excel(request):
     for item in data_plf:
         row_data = [
             item.data_planfakta.strftime("%d.%m.%Y") if item.data_planfakta else '',  # Форматируем дату
+            item.id_pac,
             item.polis_oms,
             item.fio_pacienta,
             item.data_rozhdeniya.strftime("%d.%m.%Y") if item.data_rozhdeniya else '',  # Форматируем дату
@@ -254,7 +338,44 @@ def plf_export_to_excel(request):
             item.fakticheskaya_data_vizita_soglasno_emias.strftime(
                 "%d.%m.%Y") if item.fakticheskaya_data_vizita_soglasno_emias else '',  # Форматируем дату
             item.vopros_dlya_razbora,
-            item.otvet_kc,
+
+            # Форматируем дату
+            item.data_vk.strftime(
+                "%d.%m.%Y") if item.data_vk else '',  # Форматируем дату ,#'Дата ВК (ОК)',
+
+            item.name_mo_provod_vk,#'Наименование МО, проводившей ВК(ОК)',
+            item.diagnoz_mkb10,#'Диагноз МКБ-10',
+            # Форматируем дату
+            item.data_vklyucheniya_v_reestr.strftime(
+                "%d.%m.%Y") if item.data_vklyucheniya_v_reestr else '',   #Дата внесения в Реестр',
+            # Форматируем дату
+            item.data_pervichnogo_vizita.strftime(
+                "%d.%m.%Y") if item.data_pervichnogo_vizita else '',   #'Дата первичного визита',
+
+            item.komment_k_pervichnomu_vizitu,#'Комментарий к первичному визиту(при необходимости)',
+            # Форматируем дату
+            item.data_poslednego_vizita.strftime(
+                "%d.%m.%Y") if item.data_poslednego_vizita else '',  #  #'Дата последнего визита',
+
+            item.komment_k_posled_vizitu,#'Комментарий к последнему визиту(при необходимости)',
+            item.tyagostnaya_simptomatika_pall_potrebnosti,#'Имеющаяся тягостная симптоматика, паллиативные потребности',
+            item.plan_nablyudeniya_sootvestvuet_tyazhesti_sostoyaniya_i_prognozu,#'Индивидуальный план наблюдения соотвествует тяжести состояния и прогнозу',
+            item.vizov_smp_posle_last_vizit,#'Вызовы СМП после последнего визита(даты)',
+            item.nalichie_pokazanij_k_okazaniyu_specPMP,#'Наличие показаний к оказанию специализированной ПМП',
+            item.nablyudenie_v_drugoj_mo_parallel_s_ovpp,#'Наблюдение в других МО (параллельно с ОВППМП)',
+            item.name_drugoj_mo_parallel_s_ovpp,#'Наименование другой МО, в которой наблюдается пациент параллельно с параллельно с ОВППМП',
+            # Форматируем дату
+            item.data_poslednego_poseshcheniya_drugoj_mo.strftime(
+                "%d.%m.%Y") if item.data_poslednego_poseshcheniya_drugoj_mo else '',  #'Дата последнего посещения другой МО',
+
+            item.osnovaniya_parallel_nabluden,#'Обоснование параллельного наблюдения иными МО',
+            item.vypiska_receptov_vps,#'Выписка рецептов для лечения тягостной симптматики ОВППМП дата последней выписки, наименование препарата, на какой срок или количество препарата',
+            item.vypiska_receptov_drugoj_mo,#'Выписка рецептов для лечения тягостной симптматикидругой МО дата, наименование препарата, на какой срок или количество препарата',
+            item.potrebnost_v_respiratorke,#,'Потребность в респираторной поддержке да / нет, при наличии потребности - комментарии, в том числе дата выявления потребности и дата обеспечения респираторным оборудованием',
+            item.vyvlennye_defekty,#'Дефекты, выявленные в процессе разбора',
+            item.mery_prinyatye_vps_dlya_uluchsheniya_pmp,#'Меры, принятые в ОВППМП для оказания качественной ПМП',
+            item.predlozheniya_dlya_uluchsheniya_pmp,#'Предложения по организационным решениям для улучшения качества оказания ПМП',
+            item.otvet_kc, #'Коментарий ЦПП',
         ]
 
         # Добавляем данные в строку

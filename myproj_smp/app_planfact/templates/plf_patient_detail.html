@@ -19,62 +19,48 @@
 
         </form>
     </div>
-
+plf_patient_detail.html
       <div class="field-group-2-columns">
             <div>
 
                 <fieldset >
                     <legend>Данные по ПЛАН-ФАКТу</legend>
                     <table >
-                        <tr>
-                            <th >Дата получения замечания:</th>
-                            <td > {{ patient.data_planfakta }} </td>
-                        </tr>
-                        <tr>
-                            <th >ПОЛИС ОМС:</th>
-                            <td > {{ patient.polis_oms }} </td>
-                        </tr>
-                        <tr>
-                            <th>ФИО пациента:</th>
-                            <td> {{ patient.fio_pacienta  }}  </td>
-                        </tr>
-                          <tr>
-                            <th>Дата рождения:</th>
-                            <td> {{ patient.data_rozhdeniya  }}  </td>
-                        </tr>
-                        <tr>
-                            <th>ОВПП:</th>
-                            <td> {{ patient.ovpp_name  }}  </td>
-                        </tr>
+                        <tr> <th >Дата получения замечания:</th>   <td > {{ patient.data_planfakta }} </td>  </tr>
+                        <tr> <th >ПОЛИС ОМС:</th>    <td > {{ patient.polis_oms }} </td> </tr>
+                        <tr>  <th>ФИО пациента:</th>     <td> {{ patient.fio_pacienta  }}  </td>                        </tr>
+                         <tr> <th>Дата рождения:</th>  <td> {{ patient.data_rozhdeniya  }}  </td>  </tr>
+                        <tr>                    <th>ОВПП:</th>                           <td> {{ patient.ovpp_name  }}  </td>                        </tr>
 
-                        <tr>
-                            <th>Плановая дата визита согласно ЕМИАС/реестру:</th>
-                                <td>
+                        <tr> <th>Плановая дата визита согласно ЕМИАС/реестру:</th>
+                            <td>
                                     {% if patient.planovaya_data_vizita_soglasno_emias_reestru %}
                                         {{ patient.planovaya_data_vizita_soglasno_emias_reestru }}
                                     {% else %}
                                         Не указана
                                     {% endif %}
-                                </td>
-                        </tr>
-                        <tr>
-                            <th>Фактическая дата визита согласно ЕМИАС:</th>
-                            <td>
+                            </td>              </tr>
+                        <tr>  <th>Фактическая дата визита согласно ЕМИАС:</th>  <td>
                                 {% if patient.fakticheskaya_data_vizita_soglasno_emias %}
                                         {{ patient.fakticheskaya_data_vizita_soglasno_emias }}
                                     {% else %}
                                         Не указана
                                     {% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Вопрос для разбора:</th>
-                            <td> {{ patient.vopros_dlya_razbora  }}  </td>
-                        </tr>
+                            </td>               </tr>
+                        <tr>   <th>Вопрос для разбора:</th> <td> {{ patient.vopros_dlya_razbora  }}  </td>      </tr>
 
-                        </tr>
+  <tr> <td></td></tr>
+
+<tr> <th>Дата ВК (ОК):</th>             <td> {{ patient.data_vk|date:'Y-m-d' }}  </td></tr>
+<tr> <th>Наименование МО, проводившей ВК(ОК):</th>  <td>{{ patient.name_mo_provod_vk|default_if_none:"-" }}  </td></tr>
+<tr> <th>Диагноз МКБ-10:</th>           <td>{{ patient.diagnoz_mkb10|default_if_none:"-" }}</td></tr>
+<tr> <th>Дата внесения в Реестр:</th>   <td>{{ patient.data_vklyucheniya_v_reestr|date:'Y-m-d' }} </td></tr>
+<tr> <th>Дата первичного визита:</th>   <td>{{ patient.data_pervichnogo_vizita|date:'Y-m-d' }} </td></tr>
+<tr><th>Комментарий к первичному визиту(при необходимости):</th> <td> {{ patient.komment_k_pervichnomu_vizitu|default_if_none:"-" }}</td>   </tr>
+<tr> <th>Дата последнего визита:</th>   <td>{{ patient.data_poslednego_vizita|date:'Y-m-d' }}</td></tr>
+<tr><th>Комментарий к последнему визиту(при необходимости) :</th> <td> {{ patient.komment_k_posled_vizitu|default_if_none:"-" }}</td>         </tr>
                     </table>
-                         </fieldset>
+                    </fieldset>
             </div>
        <!------------------------------------------------------------------------------------------------------------>
             <div>
@@ -83,25 +69,54 @@
                     <legend>Статус записи о пациенте: "{{patient.ok_status_zapolnenia }}"</legend>
                     <table>
                         <tr>
-                            <th>Ответ КЦ:</th>
-                            <td>{{ patient.otvet_kc }}</td>
-                        </tr>
-                        <tr>
-<!--                            <th>Дефекты в оказании ПМП на основании карты контроля качества оказания ПМП в амбулаторных условиях. (есть- указать номера пунктов чек-листа/ нет):</th>-->
-<!--                            <td>{{ patient.defekty_v_okazanii_pmp_na_osnovanii_karty_kontrolya_kachest }}</td>-->
-                        </tr>
-                        <tr>
-<!--                            <th>Описание дефектов:</th>-->
-<!--                            <td>{{ patient.opisanie_defektov }}</td>-->
-                        </tr>
-                        <tr>
-<!--                            <th>Выводы (связь переноса визита с дефектами оказания ПМП)              ДА/НЕТ:</th>-->
-<!--                            <td>{{ patient.vyvody_svyaz_perenosa_vizita_s_defektami_okazaniya_pmp }}</td>-->
-                        </tr>
-                        <tr>
-<!--                            <th>Выполненные мероприятия по недопущению переносов. (коррекция терапии, изменеие базового плана, госпитализация):</th>-->
-<!--                            <td>{{ patient.vypolnennye_meropriyatiya_po_nedopushcheniyu_perenosov }}</td>-->
-                        </tr>
+
+
+<th>Имеющаяся тягостная симптоматика, паллиативные потребности:</th>
+                        <td> {{ patient.tyagostnaya_simptomatika_pall_potrebnosti|default_if_none:"-" }}</td>         </tr>
+
+<th>Индивидуальный план наблюдения соотвествует тяжести состояния и прогнозу:</th>
+                        <td> {{ patient.plan_nablyudeniya_sootvestvuet_tyazhesti_sostoyaniya_i_prognozu|default_if_none:"-" }}</td>         </tr>
+
+<th>Вызовы СМП, совершенные после последнего визита (даты вызовов СМП):</th>
+                <td> {{ patient.vizov_smp_posle_last_vizit|default_if_none:"-" }}</td> </tr>
+
+<th>Наличие показаний к оказанию специализированной ПМП:</th>
+        <td> {{ patient.nalichie_pokazanij_k_okazaniyu_specPMP|default_if_none:"-" }}</td>         </tr>
+<th>Наблюдение в других МО (параллельно с ОВППМП):</th>
+       <td> {{ patient.nablyudenie_v_drugoj_mo_parallel_s_ovpp|default_if_none:"-" }}</td>         </tr>
+<th>Наименование другой МО, в которой наблюдается пациент параллельно с параллельно с ОВППМП:</th>
+     <td> {{ patient.name_drugoj_mo_parallel_s_ovpp|default_if_none:"-" }}</td>         </tr>
+<tr> <th>Дата последнего посещения другой МО:</th>
+    <td>{{ patient.data_poslednego_poseshcheniya_drugoj_mo|date:'Y-m-d' }} </td></tr>
+<tr> <th>Обоснование параллельного наблюдения иными МО:</th>
+    <td> {{ patient.osnovaniya_parallel_nabluden|default_if_none:"-" }}</td>         </tr>
+
+<tr> <th> Выписка рецептов для лечения тягостной симптматики ОВППМП дата последней выписки, наименование препарата, на какой срок или количество препарата:</th>
+                <td> {{ patient.vypiska_receptov_vps|default_if_none:"-" }}</td>         </tr>
+<tr> <th> Выписка рецептов для лечения тягостной симптматикидругой МО дата, наименование препарата, на какой срок или количество препарата:</th>
+                <td> {{ patient.vypiska_receptov_drugoj_mo|default_if_none:"-" }}</td>         </tr>
+<tr> <th> Потребность в респираторной поддержке да / нет, при наличии потребности - комментарии, в том числе дата выявления потребности и дата обеспечения респираторным оборудованием  :</th>
+                <td> {{ patient.potrebnost_v_respiratorke|default_if_none:"-" }}</td>         </tr>
+<tr><th> Дефекты, выявленные в процессе разбора:</th>       <td> {{ patient.vyvlennye_defekty|default_if_none:"-" }}</td>         </tr>
+
+<tr><th> Меры, принятые в ОВППМП для оказания качественной ПМП, при необходимости - комментарии:</th>
+                <td> {{ patient.mery_prinyatye_vps_dlya_uluchsheniya_pmp|default_if_none:"-" }}</textarea></td>         </tr>
+
+<tr><th> Предложения по организационным решениям для улучшения качества оказания ПМП:</th>
+                <td> {{ patient.predlozheniya_dlya_uluchsheniya_pmp|default_if_none:"-" }}</textarea></td>         </tr>
+
+
+<th>Комментарий ЦПП:</th>
+
+                                <td>
+                                    {% if group == 'ker' %}
+                                        <input type="text" name="otvet_kc"  value="{{ patient.otvet_kc|default_if_none:"-" }}" >
+                                    {% else %}
+                                        {{ patient.otvet_kc }}
+                                    {% endif %}
+                                </td>
+</tr>
+
                     </table>
                 </fieldset>
 

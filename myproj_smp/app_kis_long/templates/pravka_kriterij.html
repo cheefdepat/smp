@@ -2,9 +2,72 @@
 {% block title %} Детали о пациенте: {{ patient.fio_pacienta }}.{% endblock %}
 
 {% block content %}
-
+<!--pravka_kriterij.html  <br>-->
+<!--v_kis_pravka_kriterij-->
     <form method="POST">
+
         {% csrf_token %}
+
+
+        <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+    var potrebnost_v_soc_koordinat = document.getElementById('potrebnost_v_soc_koordinat');
+    var funkciional_kriterii = document.getElementById('funkciional_kriterii');
+    var status_med_karty = document.getElementById('status_med_karty');
+    var status_po_mse = document.getElementById('status_po_mse');
+    var funkciional_kriterii_row = document.getElementById('funkciional_kriterii_row');
+    var sposoben_virazit_soglasie = document.getElementById('sposoben_virazit_soglasie');
+    var sposoben_virazit_soglasie_row = document.getElementById('sposoben_virazit_soglasie_row');
+    var status_med_karty_row = document.getElementById('status_med_karty_row');
+    var status_po_mse_row = document.getElementById('status_po_mse_row');
+
+    // Проверка значения patient.potrebnost_v_soc_koordinat при открытии страницы
+    if (potrebnost_v_soc_koordinat.value === '2. Есть потребность в соц.координаторе') {
+        funkciional_kriterii.disabled = false;
+        sposoben_virazit_soglasie.disabled = false;
+        status_med_karty.disabled = false;
+        status_po_mse.disabled = false;
+        funkciional_kriterii_row.style.display = 'table-row';
+        sposoben_virazit_soglasie_row.style.display = 'table-row';
+        status_med_karty_row.style.display = 'table-row';
+        status_po_mse_row.style.display = 'table-row';
+    } else {
+        funkciional_kriterii.disabled = true;
+        sposoben_virazit_soglasie.disabled = true;
+        status_med_karty.disabled = true;
+        status_po_mse.disabled = true;
+        sposoben_virazit_soglasie_row.style.display = 'none';
+        funkciional_kriterii_row.style.display = 'none';
+        status_med_karty_row.style.display = 'none';
+        status_po_mse_row.style.display = 'none';
+    }
+
+    // Обработчик события при изменении значения select
+    potrebnost_v_soc_koordinat.onchange = function() {
+        if (this.value === '2. Есть потребность в соц.координаторе') {
+            funkciional_kriterii.disabled = false;
+            sposoben_virazit_soglasie.disabled = false;
+            status_med_karty.disabled = false;
+            status_po_mse.disabled = false;
+            funkciional_kriterii_row.style.display = 'table-row';
+            sposoben_virazit_soglasie_row.style.display = 'table-row';
+            status_med_karty_row.style.display = 'table-row';
+            status_po_mse_row.style.display = 'table-row';
+        } else {
+            funkciional_kriterii.disabled = true;
+            sposoben_virazit_soglasie.disabled = true;
+            status_med_karty.disabled = true;
+            status_po_mse.disabled = true;
+            sposoben_virazit_soglasie_row.style.display = 'none';
+            funkciional_kriterii_row.style.display = 'none';
+            status_med_karty_row.style.display = 'none';
+            status_po_mse_row.style.display = 'none';
+        }
+    };
+});
+</script>
+
 
 <nav>
     <a href="{% url 'app_kis_long:v_kis_home' %}" class="btn">Вернуться к общему списку</a>
@@ -15,160 +78,156 @@
         <div>
             <fieldset >
                 <!------------------------------------------ -->
-                <legend>Данные по пациенту (из КИС)</legend>
+          <legend>Данные по пациенту (из КИС)</legend>
                 <table >
-                    <tr>   <th >ФИО:</th>
-                        <td > {{ patient.fio_pacienta  }} </td>     </tr>
-                    <tr>     <th >Дата рождения:</th>
-                        <td > {{ patient.data_rozhdeniya }} </td>    </tr>
-                    <tr>    <th>Отделение:</th>
-                        <td> {{ patient.otdelenie  }}  </td>  </tr>
-                    <tr>     <th>Дата госпитализации:</th>
-                        <td> {{ patient.data_gospit  }}  </td>   </tr>
-                    <tr> <th>Количество койко-дней:</th>
-                        <td> {{ patient.data_rozhdeniya  }}  </td>   </tr>
-                    <tr> <th>Диагноз основной:</th>
-                        <td> {{ patient.diagnoz_osnovnoj  }}  </td>  </tr>
-                    <tr>  <th>Дата выписки:</th>
-                        <td> {{ patient.data_vypiski  }}  </td>  </tr>
-                    <tr>  <th>Исход госпитализации:</th>
-                        <td> {{ patient.iskhod_gospit  }}  </td>  </tr>
-                    <tr> <th>№ истории болезни:</th>
-                        <td> {{ patient.n_istorii_bolezni  }}  </td>   </tr>
+                    <tr> <th >ФИО:</th>                  <td > {{ patient.fio_pacienta  }} </td>     </tr>
+                    <tr> <th >Дата рождения</th>         <td > {{ patient.data_rozhdeniya }} </td>    </tr>
+                    <tr> <th>отделение:</th>             <td> {{ patient.otdelenie  }}  </td>  </tr>
+                    <tr> <th>Дата госпит:</th>           <td> {{ patient.data_gospit  }}  </td>   </tr>
+                    <tr> <th>Койко_дни:</th>             <td> {{ patient.kojko_dni  }}  </td>   </tr>
+                    <tr> <th>Диагноз основной:</th>      <td> {{ patient.diagnoz_osnovnoj  }}  </td>  </tr>
+<!--                    <tr> <th>Дата выписки:</th>          <td> {{ patient.data_vypiski|default_if_none:'-'  }}  </td>  </tr>-->
+<!--                    <tr> <th>Исход госпит:</th>          <td> {{ patient.iskhod_gospit|default_if_none:'-'  }}  </td>  </tr>-->
+                    <tr> <th>№ истории болезни:</th>     <td> {{ patient.n_istorii_bolezni  }}  </td>   </tr>
                 <!------------------------------------------ -->
                 </table>
             </fieldset>
-<br>
             <fieldset>
-                              <!------------------------------------------ -->
-                <legend>КРИТЕРИИ оценки (последние изменения по пациенту: {{patient.data_last_changed}} )</legend>
-
+  <!------------------------------------------ -->
+          <legend>Медицинский блок</legend>
                 <button class="btn_save" type="submit" name="btn_otmena_pravki_kriter" >Отменить изменения</button>
                 <button class="btn_save" type="submit" name="btn_save_kriter" >Сохранить изменения</button>
                 <table>
-                <tr> <th>PPI :</th>
-                    <td><input type="text" name="ppi"  value="{{ patient.ppi }}" ></td>         </tr>
+        <th>ФИО заведующего отд</th>
+            <td><input type="text" name="fio_zaveduyushchego_otd"  value="{{ patient.fio_zaveduyushchego_otd|default_if_none:'-'  }}" ></td>  </tr>
+        <th>ФИО лечащего врача</th>
+            <td><input type="text" name="fio_lechashchego_vracha"  value="{{ patient.fio_lechashchego_vracha|default_if_none:'-'  }}" ></td>  </tr>
+        <tr> <th>PPI :</th>
+            <td><input type="text" name="ppi"                      value="{{ patient.ppi }}" ></td>         </tr>
+        <tr>   <th>Мед.показания для стац.наблюдения:</th>
+            <td>
+                <select name="med_pokazaniya">
+                    <option {% if '0.' in  patient.med_pokazaniya %}selected{% endif %}>0. Мед.показания отсутствуют</option>
+                    <option {% if '1.' in  patient.med_pokazaniya %}selected{% endif %}>1. Тяжелая одышка 5-7 баллов+ </option>
+                    <option {% if '2.' in  patient.med_pokazaniya %}selected{% endif %}>2. Дисфагия 3-4 ст. </option>
+                    <option {% if '3.' in  patient.med_pokazaniya %}selected{% endif %}>3. Эметический некупируемый синдром </option>
+                    <option {% if '4.' in  patient.med_pokazaniya %}selected{% endif %}>4. Нарастающий отек, асцит или плевральный выпот(треб.дренирование) </option>
+                    <option {% if '5.' in  patient.med_pokazaniya %}selected{% endif %}>5. Пролежни/трофические язвы(III-IVст.), ежеднев.обработки </option>
+                    <option {% if '6.' in  patient.med_pokazaniya %}selected{% endif %}>6. Стомы, катетеры, осложненное течение</option>
+                    <option {% if '7.' in  patient.med_pokazaniya %}selected{% endif %}>7. Выраженный болевой синдром, требующий коррекции </option>
+                </select>   </td></tr>
 
-                                    <tr>   <th>Мед.показания:</th>
-                    <td>
-                        <select name="med_pokazaniya">
-            <option {% if '0.' in patient.med_pokazaniya %}selected{% endif %}> 0. Сведения не указаны</option>
-            <option {% if '1.' in patient.med_pokazaniya %}selected{% endif %}> 1. Тяжелая одышка 5-7 баллов+ </option>
-            <option {% if '2.' in patient.med_pokazaniya %}selected{% endif %}> 2. Дисфагия 3-4 ст. </option>
-            <option {% if '3.' in patient.med_pokazaniya %}selected{% endif %}> 3. Эметический некупируемый синдром </option>
-            <option {% if '4.' in patient.med_pokazaniya %}selected{% endif %}> 4. Нарастающий отек, асцит или плевральный выпот(треб.дренирование) </option>
-            <option {% if '5.' in patient.med_pokazaniya %}selected{% endif %}> 5. Пролежни/трофические язвы(III-IVст.), ежеднев.обработки </option>
-            <option {% if '6.' in patient.med_pokazaniya %}selected{% endif %}> 6. Стомы, катетеры, осложненное течение</option>
-            <option {% if '7.' in patient.med_pokazaniya %}selected{% endif %}> 7. Выраженный болевой синдром, требующий коррекции </option>
-                         </select>
-                    </td></tr>
+        <tr>   <th>Динамика состояния пациента:</th>
+            <td>   <select name="dinamika_sostoyania">
+                    <option {% if '1.' in  patient.dinamika_sostoyania %}selected{% endif %}>1. Стабильное состояние</option>
+                    <option {% if '2.' in  patient.dinamika_sostoyania %}selected{% endif %}>2. Прогрессирующее заболевание</option>
+                    <option {% if '3.' in  patient.dinamika_sostoyania %}selected{% endif %}>3. Крайне тяжелое</option>
+                   </select>  </td></tr>
 
-               <tr>   <th>Мед.критерии:</th>
-                    <td>   <select name="medic_kriterii">
-            <option {% if patient.medic_kriterii == 'Сведения не указаны' %}selected{% endif %}> Сведения не указаны</option>
-            <option {% if patient.medic_kriterii == '1.1. Стабильное состояние здоровья' %}selected{% endif %}>1.1. Стабильное состояние здоровья</option>
-            <option {% if patient.medic_kriterii == '1.2. Прогрессирующее заболевание' %}selected{% endif %}>1.2. Прогрессирующее заболевание</option>
-            <option {% if patient.medic_kriterii == '1.3. Нарушение когнитивных функций' %}selected{% endif %}>1.3. Нарушение когнитивных функций</option>
-            <option {% if patient.medic_kriterii == '1.4. Ограниченная подвижность' %}selected{% endif %}>1.4. Ограниченная подвижность</option>
-                         </select>  </td></tr>
+        <tr>  <th>Двигательная активность:</th>
+            <td>  <select name="dvigatel_activnost">
+                        <option {% if '1.' in  patient.dvigatel_activnost %}selected{% endif %}>1. Мобилен</option>
+                        <option {% if '2.' in  patient.dvigatel_activnost %}selected{% endif %}>2. Передвигается с помощью</option>
+                        <option {% if '3.' in  patient.dvigatel_activnost %}selected{% endif %}>3. Полностью немобилен </option>
+                  </select> </td> </tr>
 
+        <tr id="status_nabludeniya_row">  <th>Статус наблюдения:</th>
+                <td>  <select id="status_nabludeniya" name="status_nabludeniya">
+                    <option {% if '1.' in  patient.status_nabludeniya %}selected{% endif %}>1. Требуется продолжить наблюдение в стационаре</option>
+                    <option {% if '2.' in  patient.status_nabludeniya %}selected{% endif %}>2. Планируется выписка домой</option>
+                    <option {% if '3.' in  patient.status_nabludeniya %}selected{% endif %}>3. Нуждается в переводе в соц.учрежение</option>
+                        </select> </td> </tr>
 
+        <tr>   <th>Потребность в соц.координаторе:</th>
+            <td>   <select id="potrebnost_v_soc_koordinat" name="potrebnost_v_soc_koordinat">
+                    <option {% if '1.' in  patient.potrebnost_v_soc_koordinat %}selected{% endif %}>1. Нет потребности в соц.координаторе</option>
+                    <option {% if '2.' in  patient.potrebnost_v_soc_koordinat %}selected{% endif %}>2. Есть потребность в соц.координаторе</option>
+                    </select>  </td></tr>
 
-                  <tr>  <th>Социальные критерии:</th>
-                        <td>  <select name="soc_kriterii">
-            <option {% if '0.' in  patient.soc_kriterii %}selected{% endif %}> 0. Сведения не указаны</option>
-            <option {% if '2.1' in  patient.soc_kriterii %}selected{% endif %}>2.1. Отсутствие близких или родственников</option>
-            <option {% if '2.2' in  patient.soc_kriterii %}selected{% endif %}>2.2. Неспособность семьи обеспечить уход</option>
-            <option {% if '2.3' in  patient.soc_kriterii %}selected{% endif %}>2.3. Наличие социального конфликта</option>
-            <option {% if '2.4' in  patient.soc_kriterii %}selected{% endif %}>2.4. Отказ от ухода</option>
+<!--           ЕСли НЕТ потребности в соц.коорд - открывается видимость тэгов     -- начало     -->
+                    <tr id="sposoben_virazit_soglasie_row" style="display: none;">  <th>Способность выразить согласие:</th>
+                            <td>  <select id="sposoben_virazit_soglasie" name="sposoben_virazit_soglasie">
+                                    <option>-</option>
+                                    <option {% if '1.' in  patient.sposoben_virazit_soglasie %}selected{% endif %}>1. Способен самостоятельно выразить согласие</option>
+                                    <option {% if '2.' in  patient.sposoben_virazit_soglasie %}selected{% endif %}>2. Неспособен самостоятельно выразить согласие</option>
+                                    <option {% if '3.' in  patient.sposoben_virazit_soglasie %}selected{% endif %}>3. Другой вариант (получить от соц.коорд.пример)</option>
+                                    </select> </td> </tr>
+
+                    <tr id="status_med_karty_row" style="display: none;">  <th>Статус оформления мед.карты для путевки:</th>
+                        <td>  <select id="status_med_karty" name="status_med_karty">
+                                <option>-</option>
+                                <option {% if '1.' in  patient.status_med_karty %}selected{% endif %}>1. Карта в процессе оформления</option>
+                                <option {% if '2.' in  patient.status_med_karty %}selected{% endif %}>2. Карта оформлена</option>
                                 </select> </td> </tr>
 
-                <tr>   <th>Функцииональные критерии:</th>
-                       <td>  <select name="funkciional_kriterii">
-            <option {% if '0.' in  patient.funkciional_kriterii %}selected{% endif %}> 0. Сведения не указаны</option>
-            <option {% if '3.1.' in  patient.funkciional_kriterii %}selected{% endif %}> 3.1. Неспособность к самообслуживанию</option>
-            <option {% if '3.2.' in  patient.funkciional_kriterii %}selected{% endif %}> 3.2. Полная зависимость от помощи извне</option>
-            <option {% if '3.3.' in  patient.funkciional_kriterii %}selected{% endif %}> 3.3. Сложности в организации ухода на дому</option>
-                                </select> </td> </tr>
+                   <tr id="status_po_mse_row" style="display: none;">  <th>Статус по МСЭ:</th>
+                            <td>  <select id="status_po_mse" name="status_po_mse">
+                                    <option>-</option>
+                                    <option {% if '1.' in  patient.status_po_mse %}selected{% endif %}>1. Есть гр.инв.</option>
+                                    <option {% if '2.' in  patient.status_po_mse %}selected{% endif %}>2. Нуждается в оформлении гр.инв.</option>
+                                    <option {% if '3.' in  patient.status_po_mse %}selected{% endif %}>3. В процессе оформления гр.инв.</option>
+                                    </select> </td> </tr>
 
-                <tr>     <th>Психологические критерии:</th>
-                      <td>  <select name="psikh_kriterii">
-            <option {% if '0.' in  patient.psikh_kriterii %}selected{% endif %}> 0. Сведения не указаны</option>
-            <option {% if '4.1.' in  patient.psikh_kriterii %}selected{% endif %}> 4.1. Психоэмоциональная нестабильность пациента</option>
-            <option {% if '4.2.' in  patient.psikh_kriterii %}selected{% endif %}> 4.2. Эмоциональное выгорание родственников</option>
-                                </select> </td> </tr>
+                 <tr id="funkciional_kriterii_row" style="display: none;">   <th>Функцииональн.критерии :</th>
+                    <td>  <select id="funkciional_kriterii" name="funkciional_kriterii">
+                        <option >-</option>
+                        <option  {% if '1.' in  patient.funkciional_kriterii %}selected{% endif %}>1. Неспособность к самообслуживанию</option>
+                        <option  {% if '2.' in  patient.funkciional_kriterii %}selected{% endif %}>2. Полная зависимость от помощи извне</option>
+                        <option  {% if '3.' in  patient.funkciional_kriterii %}selected{% endif %}>3. Сложности в организации ухода на дому</option>
+                        </select> </td> </tr>
+<!--           ЕСли НЕТ потребности в соц.коорд - открывается видимость тэгов     -- конец     -->
 
-                <tr>    <th>Организационные критерии:</th>
-                    <td>  <select name="org_kriterii">
-            <option {% if '0.' in  patient.org_kriterii %}selected{% endif %}> 0. Сведения не указаны</option>
-            <option {% if '5.1.' in  patient.org_kriterii %}selected{% endif %}> 5.1. Передача информации социальному координатору ДТСЗН.</option>
-            <option {% if '5.2.' in  patient.org_kriterii %}selected{% endif %}> 5.2. Планируется перевод в социальное учреждение.</option>
-            <option {% if '5.3.' in  patient.org_kriterii %}selected{% endif %}> 5.3. передача информации в ГСИ.</option>
-            <option {% if '5.4.' in  patient.org_kriterii %}selected{% endif %}> 5.4. Планируется выписка домой.</option>
-
-                                </select> </td> </tr>
-
-                 <tr>      <th>Наличие заявки в соц.службу:</th>
-                        <td>  <select name="nalichie_zayavki_v_soc_sluzhbu">
-            <option {% if 'отсутствует' in  patient.nalichie_zayavki_v_soc_sluzhbu %}selected{% endif %}> Заявка отсутствует</option>
-            <option {% if 'подана' in  patient.nalichie_zayavki_v_soc_sluzhbu %}selected{% endif %}> Заявка подана</option>
-                                </select> </td> </tr>
-
-                <tr>    <th>Состояние заявки :</th>
-                      <td>  <select name="sostoyanie_zayavki">
-             <option {% if '0.' in  patient.sostoyanie_zayavki %}selected{% endif %}> 0. Заявка отсутствует</option>
-             <option {% if '1.' in  patient.sostoyanie_zayavki %}selected{% endif %}> 1. Оформление МСЭ</option>
-             <option {% if '2.' in  patient.sostoyanie_zayavki %}selected{% endif %}> 2. Оформление медкарты</option>
-             <option {% if '3.' in  patient.sostoyanie_zayavki %}selected{% endif %}> 3. Ожидание путевки</option>
-                                </select> </td> </tr>
+        <tr>   <th>Комментарий администратора:</th>
+            <td> <textarea rows="10" cols="55" name="kommentarij"   >{{ patient.kommentarij }}</textarea></td>         </tr>
 
 
-                 <tr>   <th>Прична отсутствия заявки:</th>
-                    <td><input type="text" name="prichna_otsutstviya_zayavki"  value="{{ patient.prichna_otsutstviya_zayavki }}" ></td> </tr>
-                 <tr>   <th>Комментарий:</th>
-                    <td>
-<!--                        <input type="text" name="kommentarij"  value="{{ patient.kommentarij }}" >-->
-                    <textarea rows="10" cols="45" name="kommentarij">{{ patient.kommentarij }}</textarea>
-                    </td> </tr>
+                     <table > <hr>
+                    <tr>  <th>Исход госпитализации:</th>
+                         <td>
+                            <select name="iskhod_gospit">
+                                <option {% if 'в стационаре' in  patient.iskhod_gospit %}selected{% endif %}>Пациент в стационаре</option>
+                                <option {% if '1.' in  patient.iskhod_gospit %}selected{% endif %}>1. Выписан домой</option>
+                                <option {% if '2.' in  patient.iskhod_gospit %}selected{% endif %}>2. Выписан в соц.учреждение</option>
+                                <option {% if '3.' in  patient.iskhod_gospit %}selected{% endif %}>3. Переведен в другое ЛПУ</option>
+                                <option {% if '4.' in  patient.iskhod_gospit %}selected{% endif %}>4. Умер в стационаре</option>
+                            </select>   </td></tr>
+
+                    <tr>  <th>Дата выписки:</th>
+                        <td><input type="date" name="data_vypiski" value="{{ patient.data_vypiski|date:'Y-m-d' }}" >  </td> </tr>
+
+                    </table>
+
+
+
                 </table>
             </fieldset>
         </div>
         <div>
             <fieldset>
               <!------------------------------------------ -->
-                <legend>Данные по состоянию заявки</legend>
+                <legend>Данные "СОЦИАЛЬНОГО БЛОКА"</legend>
 <!--                               <a href="javascript:history.back()" class="btn">Внести правки в раздел "Заявка"</a>-->
-                <table>
-                    <tr>
-                        <th>Тема заявки_Помощь в жизнеустройстве</th>
-                        <td>{{ patient.tema_zayavki_pomosh_v_zhizneustrojstve }}</td></tr>
-                        <th>Наличие родственников</th>
-                        <td>{{ patient.nalichie_rodstvennikov }}</td></tr>
-                        <th>Дата передачи соц координаторам ДТСЗН</th>
-                        <td>{{ patient.data_peredachi_soc_koordinatoram_dtszn }}</td><tr>
-                        <th>ФИО заведующего отд</th>
-                        <td>{{ patient.fio_zaveduyushchego_otd }}</td> <tr>
-                        <th>ФИО лечащего врача</th>
-                        <td>{{ patient.fio_lechashchego_vracha }}</td>  <tr>
-                        <th>Комментарий_соц</th>
-                        <td>{{ patient.kommentarij_soc }}</td> <tr>
-                        <th>Дата принятия в работу соц координаторами ДТСЗН</th>
-                        <td>{{ patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn }}</td> <tr>
-                        <th>Статус пациента</th>
-                        <td>{{ patient.status_pacienta }}</td>   <tr>
-                        <th>Соц_координатор</th>
-                        <td>{{ patient.soc_koordinator }}</td> <tr>
-                        <th>Комментарий соц координаторов ДТСЗН</th>
-                        <td>{{ patient.kommentarij_soc_koordinatorov_dtszn }}</td>  <tr>
-                        <th>Решение по пациенту </th>
-                        <td>{{ patient.reshenie_po_pacientu }}</td>  <tr>
-                        <th>Дата принятия решения по пациенту</th>
-                        <td>{{ patient.data_prinyatiya_resheniya_po_pacientu }}</td> <tr>
-                        <th>Пациент не может выразить свое согласие</th>
-                        <td>{{ patient.pacient_ne_mozhet_vyrazit_svoe_soglasie }}</td> <tr>
-                        <th>Отказ родственников</th>
-                        <td>{{ patient.otkaz_rodstvennikov }}</td> <tr>
-                </table>
+        <table>
+            <tr>
+                <tr>  <th>Наличие заявки в соц службу :</th>  <td>{{ patient.potrebnost_v_soc_koordinat }}</td>    </tr>
+                <tr>  <th>Социальные критерии :</th>               <td>{{ patient.soc_kriterii }}</td>  </tr>
+                <tr>   <th>Состояние заявки :</th>
+                       <td>Карта -> {{ patient.status_med_karty }}  МСЭ-> {{ patient.status_po_mse }} </td> </tr>
+
+                <tr>  <th>Тема заявки Помощь в жизнеустройстве</th>    <td>{{ patient.tema_zayavki_pomosh_v_zhizneustrojstve }}</td></tr>
+                <tr>  <th>Наличие родственников</th>                         <td>{{ patient.nalichie_rodstvennikov }}</td></tr>
+                <tr>  <th>Дата передачи соц координаторам ДТСЗН</th>          <td>{{ patient.data_peredachi_soc_koordinatoram_dtszn }}</td><tr>
+                <tr>  <th>Дата принятия в работу соц координаторами ДТСЗН</th> <td>{{ patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn }}</td> <tr>
+                <tr>  <th>Статус пациента (группа)</th>                       <td>{{ patient.status_pacienta }}</td>   <tr>
+                <tr>  <th>Соц_координатор (ФИО)</th>                          <td>{{ patient.soc_koordinator }}</td> <tr>
+                <tr>  <th>Статус решения о переводе </th>                     <td>{{ patient.status_resheniya_o_perevode }}</td>  <tr>
+                <tr>  <th>Последняя дата изменения статуса решения о переводе </th>   <td>{{ status_last_date }}</td>  <tr>
+                <tr>  <th>Пояснения к решению о переводе </th>                           <td>{{ patient.poyasneniya_k_resheniyu_po_pac }}</td>  <tr>
+                <tr>  <th>Решение ДТСЗН по путевке </th>                           <td>{{ patient.reshenie_dtszn_po_putevke }}</td>  <tr>
+                <tr>  <th>Дата принятия решения ДТСЗН по путевке</th>              <td>{{ patient.data_resheniya_dtszn }}</td> <tr>
+                <tr>  <th>Комментарий соц координаторов ДТСЗН</th>            <td>{{ patient.kommentarij_soc_koordinatorov_dtszn }}</td>  <tr>
+
+        </table>
             </fieldset>
             </br>
 

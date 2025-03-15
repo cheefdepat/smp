@@ -34,6 +34,8 @@ urlpatterns = [
     path('app_kis_long/', include('app_kis_long.url_kis_long')),
     path('app_planfact/', include('app_planfact.url_plf')),
     path('app_id/', include('app_id.url_id')),
+    path('app_uborka/', include('app_uborka.url_uborka')),
+
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('login/', views.login_view, name='login'),  # Предполагается, что у вас есть представление для входа
 

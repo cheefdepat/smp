@@ -1,0 +1,188 @@
+{% extends 'kis_long_home.html' %}
+{% block title %} Внесение сведений о пациенте - {{patient.pacient }} в таблицу "долгих" госпитализаций.{% endblock %}
+{% load custom_filters1 %}
+{% block content %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var potrebnost_v_soc_koordinat = document.getElementById('potrebnost_v_soc_koordinat');
+        var funkciional_kriterii = document.getElementById('funkciional_kriterii');
+        var status_med_karty = document.getElementById('status_med_karty');
+        var status_po_mse = document.getElementById('status_po_mse');
+<!--        var soc_kriterii = document.getElementById('soc_kriterii');-->
+        var funkciional_kriterii_row = document.getElementById('funkciional_kriterii_row');
+        var sposoben_virazit_soglasie = document.getElementById('sposoben_virazit_soglasie');
+        var sposoben_virazit_soglasie_row = document.getElementById('sposoben_virazit_soglasie_row');
+        var status_med_karty_row = document.getElementById('status_med_karty_row');
+        var status_po_mse_row = document.getElementById('status_po_mse_row');
+<!--        var soc_kriterii_row = document.getElementById('soc_kriterii_row');-->
+
+
+        potrebnost_v_soc_koordinat.onchange = function() {
+            if (this.value === '2. Есть потребность в соц.координаторе') {
+                funkciional_kriterii.disabled = false;
+                sposoben_virazit_soglasie.disabled = false;
+
+                status_med_karty.disabled = false;
+                status_po_mse.disabled = false;
+<!--                soc_kriterii.disabled = false;-->
+                funkciional_kriterii_row.style.display = 'table-row';
+                sposoben_virazit_soglasie_row.style.display = 'table-row';
+                status_med_karty_row.style.display = 'table-row';
+                status_po_mse_row.style.display = 'table-row';
+<!--                soc_kriterii_row.style.display = 'table-row';-->
+
+            } else {
+                funkciional_kriterii.disabled = true;
+                sposoben_virazit_soglasie.disabled = true;
+                sposoben_virazit_soglasie_row.style.display = 'none';
+
+                status_med_karty.disabled = true;
+                status_po_mse.disabled = true;
+<!--                soc_kriterii.disabled = true;-->
+                funkciional_kriterii_row.style.display = 'none';
+
+                status_med_karty_row.style.display = 'none';
+                status_po_mse_row.style.display = 'none';
+<!--                soc_kriterii_row.style.display = 'none';-->
+
+            }
+        };
+    });
+</script>
+
+
+<nav>
+     <a href="{% url 'app_kis_long:v_kis_home' %}" class="btn">Вернуться к общему списку</a>
+
+</nav>
+ <form method="POST">
+      {% csrf_token %}
+<div class="field-group-2-columns">
+        <div>
+            <fieldset >
+                <!------------------------------------------ -->
+                <legend>Данные по пациенту (из КИС)</legend>
+                <table >
+                    <tr>   <th >ФИО:</th>
+                        <td > {{ patient.pacient  }} </td>     </tr>
+                    <tr>     <th >Дата рождения</th>
+                        <td > {{ patient.data_rozhd }} </td>    </tr>
+                    <tr>    <th>отделение:</th>
+                        <td> {{ patient.otdelenie_name  }}  </td>  </tr>
+                    <tr>     <th>Дата госпит:</th>
+                        <td> {{ patient.data_gospit  }}  </td>   </tr>
+                    <tr> <th>Количество койко-дней:</th>
+                        <td> {{ patient.data_gospit|days_difference }}  </td>   </tr>
+                    <tr> <th>№ истории болезни:</th>
+                        <td> {{ patient.ib_nomer  }}-{{ patient.ib_god  |slice:"2:" }}-C </td>   </tr>
+
+                <!------------------------------------------ -->
+                </table>
+            </fieldset>
+<br>
+               </div>
+         <div>
+            <fieldset>
+                              <!------------------------------------------ -->
+                 <legend>.Внести сведения в таблицу "долгих" госпитализаций: {{patient.data_last_changed}}</legend>
+<!--                <button class="btn_save" type="submit" name="btn_correct_kriter" >Внести сведения о НОВОМ "долгом" пациенте</button>-->
+                <table>
+
+
+                <tr> <th>ФИО заведующего отд :</th>  <td><input type="text" name="fio_zaveduyushchego_otd"  value="{{ patient.fio_zaveduyushchego_otd }}" ></td>         </tr>
+                <tr> <th>ФИО лечащего врача :</th>  <td><input type="text" name="fio_lechashchego_vracha"  value="{{ patient.fio_lechashchego_vracha }}" ></td>         </tr>
+                <tr> <th>PPI :</th>  <td><input type="text" name="ppi"  value="{{ patient.ppi }}" ></td>         </tr>
+
+                <tr>   <th>Мед.показания для стац.наблюдения:</th>
+                    <td>
+                        <select name="med_pokazaniya">
+                            <option>0. Мед.показания отсутствуют</option>
+                            <option>1. Тяжелая одышка 5-7 баллов+ </option>
+                            <option>2. Дисфагия 3-4 ст. </option>
+                            <option>3. Эметический некупируемый синдром </option>
+                            <option>4. Нарастающий отек, асцит или плевральный выпот(треб.дренирование) </option>
+                            <option>5. Пролежни/трофические язвы(III-IVст.), ежеднев.обработки </option>
+                            <option>6. Стомы, катетеры, осложненное течение</option>
+                            <option>7. Выраженный болевой синдром, требующий коррекции </option>
+                        </select>   </td></tr>
+
+                <tr>   <th>Динамика состояния пациента:</th>
+                    <td>   <select name="dinamika_sostoyania">
+                            <option>1. Стабильное состояние</option>
+                            <option>2. Прогрессирующее заболевание</option>
+                            <option>3. Крайне тяжелое</option>
+                           </select>  </td></tr>
+
+                <tr>  <th>Двигательная активность:</th>
+                    <td>  <select name="dvigatel_activnost">
+                                <option>1. Мобилен</option>
+                                <option>2. Передвигается с помощью</option>
+                                <option>3. Полностью немобилен </option>
+                          </select> </td> </tr>
+
+                <tr id="status_nabludeniya_row">  <th>Статус наблюдения:</th>
+                        <td>  <select id="status_nabludeniya" name="status_nabludeniya">
+                                <option>1. Требуется продолжить наблюдение в стационаре</option>
+                                <option>2. Планируется выписка домой</option>
+                                <option>3. Нуждается в переводе в соц.учрежение</option>
+                                </select> </td> </tr>
+
+                <tr>   <th>Потребность в соц.координаторе:</th>
+                    <td>   <select id="potrebnost_v_soc_koordinat" name="potrebnost_v_soc_koordinat">
+                            <option>1. Нет потребности в соц.координаторе</option>
+                            <option>2. Есть потребность в соц.координаторе</option>
+                            </select>  </td></tr>
+
+                <tr id="sposoben_virazit_soglasie_row" style="display: none;">  <th>Способность выразить согласие:</th>
+                        <td>  <select id="sposoben_virazit_soglasie" name="sposoben_virazit_soglasie">
+                                <option>-</option>
+                                <option>1. Способен самостоятельно выразить согласие</option>
+                                <option>2. Неспособен самостоятельно выразить согласие</option>
+                                <option>3. Другой вариант (получить от соц.коорд.пример)</option>
+                                </select> </td> </tr>
+
+               <tr id="status_med_karty_row" style="display: none;">  <th>Статус оформления мед.карты для путевки:</th>
+                        <td>  <select id="status_med_karty" name="status_med_karty">
+                                <option>-</option>
+                                <option>1. Карта в процессе оформления</option>
+                                <option>2. Карта оформлена</option>
+                                </select> </td> </tr>
+
+               <tr id="status_po_mse_row" style="display: none;">  <th>Статус по МСЭ:</th>
+                        <td>  <select id="status_po_mse" name="status_po_mse">
+                                <option>-</option>
+                                <option>1. Есть гр.инв.</option>
+                                <option>2. Нуждается в оформлении гр.инв.</option>
+                                <option>3. В процессе оформления гр.инв.</option>
+                                </select> </td> </tr>
+
+
+
+             <tr id="funkciional_kriterii_row" style="display: none;">   <th>Функцииональн.критерии :</th>
+                <td>  <select id="funkciional_kriterii" name="funkciional_kriterii">
+                    <option >-</option>
+                    <option >1. Неспособность к самообслуживанию</option>
+                    <option >2. Полная зависимость от помощи извне</option>
+                    <option >3. Сложности в организации ухода на дому</option>
+                    </select> </td> </tr>
+
+<!--                <tr id="psikh_kriterii_row" style="display: none;">    <th>Псих.критерии :</th>-->
+<!--                      <td>  <select id="psikh_kriterii"  name="psikh_kriterii">-->
+<!--            <option>-</option>-->
+<!--            <option>1. Психоэмоциональная нестабильность пациента</option>-->
+<!--            <option>2. Эмоциональное выгорание родственников</option>-->
+<!--                                </select> </td> </tr>-->
+
+                    <tr> <th>Комментарии:</th>
+                    <td><input type="text" name="kommentarij"  value="{{ patient.kommentarij }}" ></td>         </tr>
+
+                </table>
+
+                <button class="btn_save" type="submit" name="btn_check_befor_save_new" >Внести сведения о НОВОМ "долгом" пациенте</button>
+
+            </fieldset>
+        </div>
+    </div>
+ </form>
+{% endblock %}

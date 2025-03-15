@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+{% load calculate_day_paused1 %}
+<script>
+    <!--сразу применение фильтра (задержка 500мс) после выбра СЕЛЕКТА фильтра-->
+    let timeout = null;
+    document.getElementById('filter-form').addEventListener('change', function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            document.getElementById('filter-form').submit();
+        }, 500); // задержка 500 мс
+    });
+
+<!--тут реализовано обнуление фильтрации - присваиваем "" если нажата кнопка Отменить фильтр-->
+    function resetForm() {
+        document.getElementsByName('srch_oborudovanie')[0].value = '';
+        document.getElementsByName('srch_inventarnik')[0].value = '';
+        document.getElementsByName('srch_mol')[0].value = '';
+        document.getElementsByName('srch_pacient')[0].value = '';
+<!--        document.getElementsByName('srch_tip_dvizheniya')[0].value = '';-->
+
+        document.getElementsByName('srch_tekushiy_status_pac')[0].selectedIndex = 0;
+        document.getElementsByName('srch_svedeniya_mol')[0].selectedIndex = 0;
+        document.getElementsByName('srch_paused')[0].value = '';
+        document.getElementById('filter-form').submit();
+
+    }
+    document.getElementsByName('reset')[0].addEventListener('click', function(event) {
+        resetForm();
+        event.preventDefault();
+        document.getElementById('filter-form').submit();
+    });
+</script>
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>УБОРКА</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+   <header>
+        <h4>{% block title %} Список оборудования с риском невозврата {% endblock %} </h4>
+        <div style="text-align: right; margin-top: -30px; margin-bottom: 20px;">
+            <strong>Общее количество записей: {{ total_pac }}</strong>
+        </br>
+       Вы авторизованы как "{{user}}"
+       Вам доступна группа "{{groups}}"
+               <p>Активных пользователей в системе: {{ active_user_count }}</p>
+            {% block content %}
+
+        </div>
+    </header>
+
+
+    <nav>
+        <a href="{% url 'my_app_smp:start_page' %}" class="btn">Возврат к списку ТАБЛИЦ</a>
+
+                <a  href="{% url 'my_app_smp:logout' %}" class="btn">Выход</a>
+    </nav>
+<!--uborka_start.html<br>-->
+<!--v_start_uborka-->
+<!--   {{srch_priznak_archiva}}-->
+
+   <!-- Форма поиска и количество записей на странице -->
+<form method="GET" action="" class="search-container">
+        <div style="text-align: right;">
+            Количество строк: <input type="number" style="width: 50px;"
+                                     name="uborka_records_per_page"
+                                     placeholder="Записей на странице"
+                                     value="{{ uborka_records_per_page }}" min="1">
+       </div>
+</form>
+
+
+<table class="table_home">
+<!--    фильтр в заголовки шапки -->
+    <form method="get" class="filter-form">
+    <thead>
+    <tr>
+        <th> <input type="text" name="srch_oborudovanie"    placeholder="Фильтр оборудования"
+                    value="{{ srch_oborudovanie }}" style="width: 200px;">
+        <th> <input type="text"     name="srch_inventarnik" placeholder="inventarnik"
+                    value="{{ srch_inventarnik }}" style="width: 100px;"> </th>
+        <th> <input type="text"     name="srch_mol"         placeholder="mol"
+                    value="{{ srch_mol }}" style="width: 100px;"> </th>
+        <th> <input type="text"     name="srch_pacient"     placeholder="pacient"
+                    value="{{ srch_pacient }}"style="width: 100px;"> </th>
+        <th>-</th>
+        <th>
+             <select name="srch_tekushiy_status_pac" style="width: 150px;"    onchange="this.form.submit()">
+                <option value="" {% if srch_tekushiy_status_pac == '' %}selected{% endif %}          >Все статусы</option>
+                <option {% if 'сопровождении' in  srch_tekushiy_status_pac %}selected{% endif %}    >На сопровождении</option>
+                <option {% if 'приостановлено' in  srch_tekushiy_status_pac %}selected{% endif %}   >Сопровождение приостановлено</option>
+                <option {% if 'прекращено' in  srch_tekushiy_status_pac %}selected{% endif %}       >Оказание ПМП прекращено</option>
+             </select>      </th>
+<!--        <th>-</th>-->
+        <th>
+             <select name="srch_svedeniya_mol" style="width: 200px;"     onchange="this.form.submit()">
+                <option value="" {% if srch_svedeniya_mol == '' %}selected{% endif %}           >Сведения от МОЛ</option>
+                <option {% if 'Недозвон' in  srch_svedeniya_mol %}selected{% endif %}           >Недозвон</option>
+                <option {% if 'р/м' in  srch_svedeniya_mol %}selected{% endif %}                >р/м обеспечивается регулярно</option>
+                <option {% if 'менее месяца' in  srch_svedeniya_mol %}selected{% endif %}       >Пациент скончался менее месяца назад</option>
+                <option {% if 'о принятых' in  srch_svedeniya_mol %}selected{% endif %}         >Нет сведений о принятых мероприятиях</option>
+                <option {% if 'Отказ в возврате' in  srch_svedeniya_mol %}selected{% endif %}   >Отказ в возврате оборудования</option>
+                <option {% if 'не планируется' in  srch_svedeniya_mol %}selected{% endif %}     >Оборудование находится в эксплуатации, возврат не планируется</option>
+                <option {% if 'Планируется возврат' in  srch_svedeniya_mol %}selected{% endif %}>Планируется возврат оборудования на склад</option>
+                <option {% if 'внесен в 1с/гугл' in  srch_svedeniya_mol %}selected{% endif %}   >Возврат оборудования произведен (внесен в 1с/гугл)</option>
+                <option {% if 'в юр.отдел' in  srch_svedeniya_mol %}selected{% endif %}         >Информация передана в юр.отдел</option>
+                <option {% if '1 р/мес.' in  srch_svedeniya_mol %}selected{% endif %}           >Осуществляется контрольный звонок РЦ (1 р/мес.)</option>
+<!--                <option {% if 'В архиве' in  srch_svedeniya_mol %}selected{% endif %}           >в_архиве</option>-->
+            </select>    </th>
+
+
+        <th>
+    <select name="srch_paused_days_operator" style="width: 100px;">
+        <option value="=" {% if srch_paused_days_operator == '=' %}selected{% endif %}>Равно</option>
+        <option value=">" {% if srch_paused_days_operator == '>' %}selected{% endif %}>Более</option>
+        <option value="<" {% if srch_paused_days_operator == '<' %}selected{% endif %}>Менее</option>
+    </select>
+    <input type="number" name="srch_paused" placeholder="Дней после уточнений" value="{{ srch_paused }}" style="width: 100px;">
+    </th>
+        <th>-</th>
+        <th>-</th>
+
+        <th> <select name="srch_priznak_archiva" style="width: 200px;"     onchange="this.form.submit()">
+                <option {% if 'у пациента' in  srch_priznak_archiva %}selected{% endif %}       >у пациента</option>
+                <option {% if 'в_архиве' in  srch_priznak_archiva %}selected{% endif %}         >в_архиве</option>
+                </select>
+        </th>
+        <th> <select name="srch_reshenie_yur" style="width: 200px;"     onchange="this.form.submit()">
+                <option value="" {% if srch_reshenie_yur == '' %}selected{% endif %}           >Все записи</option>
+                <option  {% if 'В процессе решения' in  srch_reshenie_yur %}selected{% endif %}     >В процессе решения</option>
+                <option  {% if 'Вопрос закрыт' in  srch_reshenie_yur %}selected{% endif %}     >Вопрос закрыт</option>
+         </select> </th>
+                <th>-</th>
+    </tr>
+
+
+    <button type="submit" class="btn_save">Фильтровать</button>
+    <button type="submit" name="reset" value="reset" class="btn_save" onclick="resetForm()">Сбросить фильтрацию</button>
+Отфильтровано {{filter_records}} записей
+</form>
+
+    <thead>
+        <tr>
+            <th>Наименование оборудования</th>  <!-- Изменено на "Действия" для ясности -->
+             <th>Инвентарный номер (указывать цифры, без номера)</th>
+                <th>МОЛ</th>
+                <th>ФИО пациента</th>
+                <th>Дата рождения пациента</th>
+                <th>Статус пациента</th>
+                <th>Сведения по оборудованию</th>
+                <th>Дата изменений / Прошло дней</th>
+                <th>Комментарий МОЛа (последний)</th>
+                <th>Комментарий (юр.отдел)</th>
+                <th>Проверить архив</th>
+                <th>Результат юр.отдел</th>
+                <th>Внести исправления</th>
+            </tr>
+    </thead>
+    <tbody>
+
+    {% for patient in page_obj %}
+        <tr>
+                <td>{{ patient.ub_oborudovanie_name }}</td>
+                <td>{{ patient.ub_inventarnik }}</td>
+                <td>{{ patient.ub_fio_mol }}</td>
+                <td>{{ patient.ub_fio_pacienta  }}</td>
+                <td>{{ patient.ub_data_rozhdeniya|date:"d.m.Y"   }}</td>
+                <td>{{ patient.ub_tekushiy_status_pac }}</td>
+                <td>{{ patient.ub_svedeniya_mol }}</td>
+                <td> {{ patient.ub_data_izmeneniy }} <br>-<br> {{patient.ub_data_izmeneniy|days_difference}} </td>
+
+                <td>{{ patient.ub_kommentarij }}</td>
+                <td>{{ patient.ub_kommentarij_yur }}</td>
+                <td>{{ patient.ub_priznak_archiv|default_if_none:"-" }}</td>
+                <td>{{ patient.ub_reshenie_yur|default_if_none:"-" }}</td>
+
+                <td>  <a href="{% url 'app_uborka:v_uborka_detals' patient.id %}" class="btn_save">Внести сведения</a> </td>
+
+        </tr>
+
+        {% endfor %}
+    </tbody>
+</table>
+
+
+         <!-- Пагинация -->
+<div class="pagination">
+
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Предыдущая</a>
+    {% endif %}
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+            </span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&records_per_page={{ records_per_page }}{% for key, value in request.GET.items %}{% if key != 'page' and key != 'records_per_page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Следующая</a>
+    {% endif %}
+</div>
+<!-- Пагинация -->
+
+
+ {% endblock %}  <!--#---------------------- конец КОНТЕНТА   -->
+    <footer>
+        <p>&copy; 2025</p>
+    </footer>
+</body>
+</html>

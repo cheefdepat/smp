@@ -24,7 +24,7 @@
 
     <nav>
         <a href="{% url 'app_planfact:plf_export_to_excel' %}?search_data_zamecaniya={{ search_data_zamecaniya }}" class=""><img style="position: relative;
-                                                                                                                                        top: 20px;" 
+                                                                                                                                        top: 20px;"
                                                                                                                                 src="{% static 'css/Microsoft_Office_Excel.png' %}" width="50" height="50"></a>
         <a href="{% url 'my_app_smp:start_page' %}" class="btn">Возврат к списку ТАБЛИЦ</a>
 <!--        <a href="#" class="btn">КЭР</a>-->
@@ -38,7 +38,10 @@
 
 
 
-    <!--------------------------------------------------------ФИЛЬТРЫ----------------------------------------------->
+
+           <main>
+        {% block content %}
+                <!--------------------------------------------------------ФИЛЬТРЫ----------------------------------------------->
     <!-- Форма поиска и количество записей на странице -->
        Количество записей, полученное после применения фильтров: {{filter_records}}
     <form method="GET" action="" class="search-container">
@@ -70,28 +73,26 @@
             <div style="text-align: right;">
                 Количество строк: <input type="number" style="width: 50px;" name="records_per_page" placeholder="Записей на странице" value="{{ records_per_page }}" min="1">
             </div>
-    <!--------------------------------------------------------ФИЛЬТРЫ------------------------------------------------>
+
         </div>
     </form>
-
-           <main>
-        {% block content %}
+<!--------------------------------------------------------ФИЛЬТРЫ------------------------------------------------>
         <!-- Основной контент будет вставлен сюда -->
-
+<!-- planfact_home_page.html -->
 <table class="table_home">
     <thead>
         <tr>
             <!--------------- Заголовки -------------------------->
-            <th>Действия</th>  <!-- Изменено на "Действия" для ясности -->
-            <th>Дата получения замечания</th>
-            <th>ПОЛИС ОМС</th>
+            <th style="width: 140px;">Действия</th>  <!-- Изменено на "Действия" для ясности -->
+            <th style="width: 100px;">Дата получения замечания</th>
+            <th style="width: 200px;">ПОЛИС ОМС</th>
             <th>ФИО</th>
-            <th>ДР</th>
-            <th>ОВПП</th>
-            <th>Плановая дата визита согласно ЕМИАС/реестру</th>
-            <th>Фактическая дата визита согласно ЕМИАС</th>
+            <th style="width: 100px;">ДР</th>
+            <th style="width: 350px;">ОВПП</th>
+            <th style="width: 100px;">Плановая дата визита</th> <!-- согласно ЕМИАС/реестру -->
+            <th style="width: 100px;">Фактическая дата визита</th> <!-- согласно ЕМИАС -->
             <th>Вопрос для разбора</th>
-            <th>Статус выполнения</th>
+            <th style="width: 180px;">Статус выполнения</th>
 
         </tr>
     </thead>
@@ -101,9 +102,7 @@
                 <td>
 
                     {% if user.is_authenticated %}
-<!--                    {% if 'vps' in groups %}-->
                     <a href="{% url 'app_planfact:plf_edit_patient' item.id %}" class="btn_save">Правки(ВПС)</a> <!-- Ссылка на редактирование -->
-<!--                    {% endif  %}-->
                     {% if 'ker' in groups %}
                     <a href="{% url 'app_planfact:plf_proverka_to_ker' item.id %}" class="btn_save">Правки(КЭР)</a><!-- Ссылка на редактирование -->
                     {% endif  %}
@@ -115,10 +114,10 @@
                 <td>{{ item.data_planfakta|date:"d.m.Y"  }}</td>
                 <td>{{ item.polis_oms }}</td>
                 <td>{{ item.fio_pacienta }}</td>
-                <td>{{ item.data_rozhdeniya|date:"d.m.Y"  }}</td>
+                <td style="text-align: center !important;">{{ item.data_rozhdeniya|date:"d.m.Y"  }}</td>
                 <td>{{ item.ovpp_name  }}</td>
-                <td>{{ item.planovaya_data_vizita_soglasno_emias_reestru|date:"d.m.Y"  }}</td>
-                <td>{{ item.fakticheskaya_data_vizita_soglasno_emias|date:"d.m.Y"  }}</td>
+                <td style="text-align: center !important;">{{ item.planovaya_data_vizita_soglasno_emias_reestru|date:"d.m.Y"  }}</td>
+                <td style="text-align: center !important;">{{ item.fakticheskaya_data_vizita_soglasno_emias|date:"d.m.Y"  }}</td>
                 <td>{{ item.vopros_dlya_razbora  }}</td>
                 <td>{{ item.ok_status_zapolnenia  }}</td>
 

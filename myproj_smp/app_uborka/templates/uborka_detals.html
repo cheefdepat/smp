@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+{% load calculate_day_paused1 %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Детали_уборки</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+   <header>
+        <h4>{% block title %} ----Список оборудования с риском невозврата {% endblock %} </h4>
+        <div style="text-align: right; margin-top: -30px; margin-bottom: 20px;">
+            <strong>Общее количество записей: {{ total_pac }}</strong>
+        </br>
+       Вы авторизованы как "{{user}}"
+       Вам доступна группа "{{groups}}"
+               <p>Активных пользователей в системе: {{ active_user_count }}</p>
+
+        </div>
+    </header>
+
+    <nav>
+<!--        <a href="{% url 'my_app_smp:start_page' %}" class="btn">Возврат к списку ТАБЛИЦ</a>-->
+        <a href="{% url 'app_uborka:v_start_uborka' %}" class="btn">Назад</a>
+         <a  href="{% url 'my_app_smp:logout' %}" class="btn">Выход</a>
+    </nav>
+uborka_detals.html<br>
+v_uborka_detals
+
+{{all_oborudovanie}}
+<div>
+            <fieldset >
+                <!------------------------------------------ -->
+          <legend>Данные по пациенту</legend>
+                <table >
+                    <tr> <th >ФИО:</th>                  <td > {{ patient.ub_fio_pacienta  }} </td>     </tr>
+                    <tr> <th >Дата рождения</th>         <td > {{ patient.ub_data_rozhdeniya|date:"d.m.Y" }} </td>    </tr>
+                    <tr> <th>Гражданство:</th>             <td> {{ patient.ub_grazhdanstvo  }}  </td>  </tr>
+                    <tr> <th>Текущий статус пациента:</th>           <td> {{ patient.ub_tekushiy_status_pac  }}  </td>   </tr>
+                    <tr> <th>Дата последних внесенных:<br>
+                        изменений по розыску:</th>             <td> {{ patient.ub_data_izmeneniy  }}  </td>   </tr>
+                    <tr> <th>Прошло дней от последних <br>
+                             внесенных изменений по розыску:</th>             <td> {{patient.ub_data_izmeneniy|days_difference}} </td>   </tr>
+                <!------------------------------------------ -->
+                </table>
+            </fieldset>
+</div>
+    <form method="post">
+    {% csrf_token %}
+    <table>
+        <thead>
+            <tr>
+                <th>Наименование оборудования</th>
+                <th>Инвентарный номер (указывать цифры, без номера)</th>
+                <th>МОЛ</th>
+                <th>Сведения по оборудованию</th>
+                <th>Комментарий (последний)</th>
+                <th>Комментарий (юр.отдел)</th>
+                <th>Результат (юр.отдел)</th>
+            </tr>
+        </thead>
+
+        {% for oborud in all_oborudovanie %}
+            <tr>
+                <td>{{ oborud.ub_oborudovanie_name }}</td>
+                <td>{{ oborud.ub_inventarnik }}</td>
+                <td>{{ oborud.ub_fio_mol }}</td>
+
+                <td>
+                    <select name="svedeniya_mol_{{ oborud.id }}" style="width: 200px;"  ">
+                        <option value="" {% if oborud.ub_svedeniya_mol == '' %}selected{% endif %}           >-</option>
+                        <option {% if 'Недозвон' in  oborud.ub_svedeniya_mol %}selected{% endif %}           >Недозвон</option>
+                        <option {% if 'р/м' in  oborud.ub_svedeniya_mol %}selected{% endif %}                >р/м обеспечивается регулярно</option>
+                        <option {% if 'менее месяца' in  oborud.ub_svedeniya_mol %}selected{% endif %}       >Пациент скончался менее месяца назад</option>
+                        <option {% if 'о принятых' in  oborud.ub_svedeniya_mol %}selected{% endif %}         >Нет сведений о принятых мероприятиях</option>
+                        <option {% if 'Отказ в возврате' in  oborud.ub_svedeniya_mol %}selected{% endif %}   >Отказ в возврате оборудования</option>
+                        <option {% if 'не планируется' in  oborud.ub_svedeniya_mol %}selected{% endif %}     >Оборудование находится в эксплуатации, возврат не планируется</option>
+                        <option {% if 'Планируется возврат' in  oborud.ub_svedeniya_mol %}selected{% endif %}>Планируется возврат оборудования на склад</option>
+                        <option {% if 'внесен в 1с/гугл' in  oborud.ub_svedeniya_mol %}selected{% endif %}   >Возврат оборудования внесен в 1C</option>
+                        <option {% if 'в юр.отдел' in  oborud.ub_svedeniya_mol %}selected{% endif %}         >Информация передана в юр.отдел</option>
+                        <option {% if '1 р/мес.' in  oborud.ub_svedeniya_mol %}selected{% endif %}           >Осуществляется звонок РЦ(1р/мес)</option>
+                        <option {% if 'Морозовск' in  oborud.ub_svedeniya_mol %}selected{% endif %}           >Оборудование в Морозовской</option>
+                    </select>   </td>
+
+                <td> <textarea rows="2" cols="45" name="kommentarij_{{ oborud.id }}"    >{{ oborud.ub_kommentarij|default_if_none:"-" }}</textarea></td>
+                <td> <textarea rows="2" cols="45" name="kommentarij_yur_{{ oborud.id }}">{{ oborud.ub_kommentarij_yur|default_if_none:"-" }}</textarea></td>
+                <td> <select name="sreshenie_yur_{{ oborud.id }}" style="width: 200px;"  ">
+                        <option {% if oborud.ub_reshenie_yur is None %}selected{% endif %}           >-</option>
+                        <option {% if 'В процессе решения' in  oborud.ub_reshenie_yur %}selected{% endif %}  >В процессе решения</option>
+                        <option {% if 'Вопрос закрыт' in  oborud.ub_reshenie_yur %}selected{% endif %}       >Вопрос закрыт</option>
+
+                    </select>   </td>
+
+
+                </td>
+            </tr>
+
+        {% endfor %}
+
+
+    </table>
+        <button class="btn_save" type="submit" name="save_detals" >Сохранить</button>
+</form>
+    <footer>
+        <p>&copy; 2025</p>
+    </footer>
+</body>
+</html>
+
+
+
+

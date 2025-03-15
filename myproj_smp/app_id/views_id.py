@@ -5,7 +5,8 @@ from django.shortcuts import get_object_or_404, redirect
 from .models import IdReesrtFio
 from django.db.models import Q
 from django.core.paginator import Paginator
-
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 def zamena_pustot(pole_proverki_daty):
@@ -159,7 +160,8 @@ def v_id_proverka(request, id):
             patient.pol = pol
 
             patient.save()
-            return redirect('app_id:v_id_add_svedeniya_o_pac')  # Переходим на главную страницу
+            # return redirect('app_id:v_id_add_svedeniya_o_pac')  # Переходим на главную страницу
+            return HttpResponseRedirect(reverse('app_id:v_id_add_svedeniya_o_pac') + '?search_fio_status=empty')
 
         elif 'korrektirovat' in request.POST:  # Кнопка "Корректировать"
             return redirect('app_id:v_id_edit_patient', id=id)  # Возвращаем на страницу редактирования

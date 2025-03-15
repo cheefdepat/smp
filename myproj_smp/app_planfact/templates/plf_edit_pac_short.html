@@ -15,7 +15,7 @@
 
         {% csrf_token %}
         <br>
-
+<!--plf_edit_pac_short.html-->
         <div class="field-group-2-columns">
             <div>
 
@@ -64,41 +64,112 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Вопрос для разбора:</th>
-                            <td> {{ patient.vopros_dlya_razbora  }}  </td>
+
+                            <th style="color: blue; font-size: 20px;font-weight: 700;">Вопрос для разбора:</th>
+                            <td style="color: blue; font-size: 20px;font-weight: 700;"> {{ patient.vopros_dlya_razbora  }}  </td>
                         </tr>
 
-                        </tr>
+  <tr> <td></td></tr>
+<tr> <th>Дата ВК (ОК):</th>   <td><input type="date" name="data_vk"  value="{{ patient.data_vk|date:'Y-m-d' }}" > </td></tr>
+<tr> <th>Наименование МО, проводившей ВК(ОК):</th>
+    <td><input type="text" name="name_mo_provod_vk"  value="{{ patient.name_mo_provod_vk|default_if_none:"-" }}" > </td></tr>
+<tr> <th>Диагноз МКБ-10:</th>
+            <td><input type="text" name="diagnoz_mkb10"  value="{{ patient.diagnoz_mkb10|default_if_none:"-" }}" > </td></tr>
+
+<tr> <th>Дата внесения в Реестр:</th>   <td><input type="date" name="data_vklyucheniya_v_reestr"  value="{{ patient.data_vklyucheniya_v_reestr|date:'Y-m-d' }}" > </td></tr>
+<tr> <th>Дата первичного визита:</th>   <td><input type="date" name="data_pervichnogo_vizita"  value="{{ patient.data_pervichnogo_vizita|date:'Y-m-d' }}" > </td></tr>
+
+<tr> <th>Комментарий к первичному визиту(при необходимости):</th>
+                <td> <textarea rows="2" cols="45" name="komment_k_pervichnomu_vizitu"   >{{ patient.komment_k_pervichnomu_vizitu|default_if_none:"-" }}</textarea></td>         </tr>
+
+<tr> <th>Дата последнего визита:</th>   <td><input type="date" name="data_poslednego_vizita"  value="{{ patient.data_poslednego_vizita|date:'Y-m-d' }}" > </td></tr>
+
+<tr> <th>Комментарий к последнему визиту(при необходимости) :</th>
+                <td> <textarea rows="2" cols="45" name="komment_k_posled_vizitu"   >{{ patient.komment_k_posled_vizitu|default_if_none:"-" }}</textarea></td>         </tr>
+
                     </table>
                          </fieldset>
+
             </div>
        <!------------------------------------------------------------------------------------------------------------>
+
             <div>
                 <fieldset>
                     <legend>Поля для внесения данных</legend>
                     <legend>Статус записи о пациенте: "{{patient.ok_status_zapolnenia }}"</legend>
                     <table>
-                        <tr>
-                            <th>Ответ КЦ:</th>
-                            <td><input type="text" name="otvet_kc"  value="{{ patient.otvet_kc }}" ></td>
-                        </tr>
-                        <tr>
-<!--                            <th>Дефекты в оказании ПМП на основании карты контроля качества оказания ПМП в амбулаторных условиях. (есть- указать номера пунктов чек-листа/ нет):</th>-->
-<!--                            <td><input type="text" name="defekty_v_okazanii_pmp_na_osnovanii_karty_kontrolya_kachest"  value="{{ patient.defekty_v_okazanii_pmp_na_osnovanii_karty_kontrolya_kachest }}" ></td>-->
-                        </tr>
-                        <tr>
-<!--                            <th>Описание дефектов:</th>-->
-<!--                            <td><input type="text" name="opisanie_defektov"  value="{{ patient.opisanie_defektov }}" ></td>-->
-                        </tr>
-                        <tr>
-<!--                            <th>Выводы (связь переноса визита с дефектами оказания ПМП)              ДА/НЕТ:</th>-->
-<!--                            <td><input type="text" name="vyvody_svyaz_perenosa_vizita_s_defektami_okazaniya_pmp"  value="{{ patient.vyvody_svyaz_perenosa_vizita_s_defektami_okazaniya_pmp }}" ></td>-->
-                        </tr>
-                        <tr>
-<!--                            <th>Выполненные мероприятия по недопущению переносов. (коррекция терапии, изменеие базового плана, госпитализация):</th>-->
+        <tr>
+
+
+<th>Имеющаяся тягостная симптоматика, паллиативные потребности:</th>
+                <td> <textarea rows="2" cols="45" name="tyagostnaya_simptomatika_pall_potrebnosti"   >{{ patient.tyagostnaya_simptomatika_pall_potrebnosti|default_if_none:"-" }}</textarea></td>         </tr>
+
+<th>Индивидуальный план наблюдения соотвествует тяжести состояния и прогнозу:</th>
+                <td> <textarea rows="2" cols="45" name="plan_nablyudeniya_sootvestvuet_tyazhesti_sostoyaniya_i_prognozu"   >{{ patient.plan_nablyudeniya_sootvestvuet_tyazhesti_sostoyaniya_i_prognozu|default_if_none:"-" }}</textarea></td>         </tr>
+
+<th>Вызовы СМП, совершенные после последнего визита (даты вызовов СМП):</th>
+                <td> <textarea rows="2" cols="45" name="vizov_smp_posle_last_vizit"   >{{ patient.vizov_smp_posle_last_vizit|default_if_none:"-" }}</textarea></td>         </tr>
+
+<th>Наличие показаний к оказанию специализированной ПМП:</th>
+                <td> <textarea rows="2" cols="45" name="nalichie_pokazanij_k_okazaniyu_specPMP"   >{{ patient.nalichie_pokazanij_k_okazaniyu_specPMP|default_if_none:"-" }}</textarea></td>         </tr>
+
+<th>Наблюдение в других МО (параллельно с ОВППМП):</th>
+                <td> <textarea rows="2" cols="45" name="nablyudenie_v_drugoj_mo_parallel_s_ovpp"   >{{ patient.nablyudenie_v_drugoj_mo_parallel_s_ovpp|default_if_none:"-" }}</textarea></td>         </tr>
+<th>Наименование другой МО, в которой наблюдается пациент параллельно с параллельно с ОВППМП:</th>
+                <td> <textarea rows="2" cols="45" name="name_drugoj_mo_parallel_s_ovpp"   >{{ patient.name_drugoj_mo_parallel_s_ovpp|default_if_none:"-" }}</textarea></td>         </tr>
+
+<tr> <th>Дата последнего посещения другой МО:</th>
+    <td><input type="date" name="data_poslednego_poseshcheniya_drugoj_mo"  value="{{ patient.data_poslednego_poseshcheniya_drugoj_mo|date:'Y-m-d' }}" > </td></tr>
+
+<tr> <th>Обоснование параллельного наблюдения иными МО:</th>
+    <td> <textarea rows="2" cols="45" name="osnovaniya_parallel_nabluden"   >{{ patient.osnovaniya_parallel_nabluden|default_if_none:"-" }}</textarea></td>         </tr>
+
+
+<tr> <th> Выписка рецептов для лечения тягостной симптматики ОВППМП дата последней выписки, наименование препарата, на какой срок или количество препарата:</th>
+     <td> <textarea rows="2" cols="45" name="vypiska_receptov_vps"   >{{ patient.vypiska_receptov_vps|default_if_none:"-" }}</textarea></td>         </tr>
+
+<tr> <th> Выписка рецептов для лечения тягостной симптматикидругой МО дата, наименование препарата, на какой срок или количество препарата:</th>
+                <td> <textarea rows="2" cols="45" name="vypiska_receptov_drugoj_mo"   >{{ patient.vypiska_receptov_drugoj_mo|default_if_none:"-" }}</textarea></td>         </tr>
+<tr><th> Потребность в респираторной поддержке да / нет, при наличии потребности - комментарии, в том числе дата выявления потребности и дата обеспечения респираторным оборудованием  :</th>
+                <td> <textarea rows="2" cols="45" name="potrebnost_v_respiratorke"   >{{ patient.potrebnost_v_respiratorke|default_if_none:"-" }}</textarea></td>         </tr>
+
+<tr> <th> Дефекты, выявленные в процессе разбора:</th>
+                <td> <textarea rows="2" cols="45" name="vyvlennye_defekty"   >{{ patient.vyvlennye_defekty|default_if_none:"-" }}</textarea></td>         </tr>
+
+
+<tr><th> Меры, принятые в ОВППМП для оказания качественной ПМП, при необходимости - комментарии:</th>
+                <td> <textarea rows="2" cols="45" name="mery_prinyatye_vps_dlya_uluchsheniya_pmp"   >{{ patient.mery_prinyatye_vps_dlya_uluchsheniya_pmp|default_if_none:"-" }}</textarea></td>         </tr>
+
+
+<th> Предложения по организационным решениям для улучшения качества оказания ПМП:</th>
+                <td> <textarea rows="2" cols="45" name="predlozheniya_dlya_uluchsheniya_pmp"   >{{ patient.predlozheniya_dlya_uluchsheniya_pmp|default_if_none:"-" }}</textarea></td>         </tr>
+
+
+<th style="color: blue; font-size: 20px;font-weight: 700;">Комментарий ЦПП (ответ на вопрос для разбора):</th>
+        <td> <textarea rows="2" cols="45" name="otvet_kc" style="color: blue; font-size: 20px;font-weight: 700; width: 352px; height: 70px;">{{ patient.otvet_kc|default_if_none:"-" }}</textarea></td>         </tr>
+<!--                                <td>-->
+<!--                                    {% if 'ker' in groups %}-->
+<!--                                        <input type="text" name="otvet_kc"  value="{{ patient.otvet_kc|default_if_none:"-" }}" >-->
+<!--                                    {% else %}-->
+<!--                                        {{ patient.otvet_kc|default_if_none:"-" }}-->
+<!--                                    {% endif %}-->
+<!--                                </td>-->
+
+
+
+
 <!--                            <td><input type="text" name="vypolnennye_meropriyatiya_po_nedopushcheniyu_perenosov"  value="{{ patient.vypolnennye_meropriyatiya_po_nedopushcheniyu_perenosov }}" ></td>-->
                         </tr>
+
                     </table>
+<a href="{% url 'app_planfact:plf_start_list' %}" class="btn_save">Назад к списку пациентов </a>
+
+{% if 'ker' in groups %}
+<button class="btn_save" type="submit" name="ot_ker_nazad_v_vps" >Вернуть запись на ВПС</button>
+{% endif  %}
+
+<button class="btn_save" type="submit" name="plf_save_vps" >Сохранить</button>
+<button class="btn_save" type="submit" name="plf_send_to_ker" >Отправить в КЭР</button>
                 </fieldset>
 
             </div>
