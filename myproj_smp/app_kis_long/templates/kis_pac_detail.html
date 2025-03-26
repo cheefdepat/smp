@@ -78,6 +78,9 @@
                 <th>Дата передачи соц координаторам ДТСЗН</th>          <td>{{ patient.data_peredachi_soc_koordinatoram_dtszn|default_if_none:"-"  }}</td><tr>
 <!--                                                                                                                             |default_if_none:'-'          -->
                 <th>Дата принятия в работу соц координаторами ДТСЗН</th> <td>{{ patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn|default_if_none:"-" }}</td> <tr>
+
+                <th>Получатель соц.услуг</th>                           <td>{{ patient.poluchatel_soc_uslug|default_if_none:"-"  }}</td><tr>
+
                 <th>Статус пациента (группа)</th>                       <td>{{ patient.status_pacienta|default_if_none:'-'  }}</td>   <tr>
                 <th>Соц.координатор (ФИО)</th>                          <td>{{ patient.soc_koordinator|default_if_none:'-'  }}</td> <tr>
                 <th>Статус решения о переводе </th>                     <td>{{ patient.status_resheniya_o_perevode|default_if_none:"Статус не определен" }}</td>  <tr>
@@ -86,6 +89,11 @@
                 <th>Решение ДТСЗН по путевке </th>                       <td>{{ patient.reshenie_dtszn_po_putevke|default_if_none:'-'  }}</td>  <tr>
                 <th>Дата принятия решения ДТСЗН по путевке</th>          <td>{{ patient.data_resheniya_dtszn|default_if_none:"Статус не определен" }}</td> <tr>
                 <th>Комментарий соц координаторов ДТСЗН</th>            <td>{{ patient.kommentarij_soc_koordinatorov_dtszn|default_if_none:'-'  }}</td>  <tr>
+
+                <th>Сведения о пациенте переданы в ДТСЗН</th>            <td>{{ patient.svedeniya_o_pac_peredani_dtszn|default_if_none:'-'  }}</td>  <tr>
+                <th>Дата передачи сведений о пациенте в ДТСЗН</th>        <td>{{ patient.data_peredachi_sveden_v_dtszn|default_if_none:'-'  }}</td>  <tr>
+
+
 
                 </table>
             </fieldset>

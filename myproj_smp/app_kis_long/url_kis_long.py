@@ -7,6 +7,7 @@ from .views_kis import v_kis_pravka_zayavka
 from .views_kis import v_find_new_in_kis
 from .views_kis import v_new_is_kis_v_kislong
 from .views_kis import v_kis_proverka_new
+from .views_kis import v_statistica
 
 
 app_name = 'app_kis_long'  # Убедитесь, что это указано
@@ -20,5 +21,6 @@ urlpatterns = [
     path('v_find_new_in_kis/', v_find_new_in_kis, name='v_find_new_in_kis'),
     path('v_new_is_kis_v_kislong/<int:id>/', v_new_is_kis_v_kislong, name='v_new_is_kis_v_kislong'),
     path('v_kis_proverka_new/<int:id>/', v_kis_proverka_new, name='v_kis_proverka_new'),
+    path('v_statistica/', v_statistica, name='v_statistica'),  # Новый маршрут для редактирования
 
 ]

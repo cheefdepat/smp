@@ -23,6 +23,7 @@
     </header>
 {% block content %}
     <nav>
+        <a  href="{% url 'app_kis_long:v_statistica' %}" class="btn">Статистика</a>
         <a href="{% url 'my_app_smp:start_page' %}" class="btn">Возврат к списку ТАБЛИЦ</a>
 {% if 'soc_koordinator' not in groups or 'admin' in groups  %}
         <a href="{% url 'app_kis_long:v_find_new_in_kis' %}" class="btn">Проверить "новых" пациентов</a>
@@ -55,16 +56,27 @@
                 <th>Отделение</th>
                 <th style="width: 100px;">Дата госпитализации</th>
                 <th style="width: 80px;">Койко-дни
-                    <a href="?order_by=kojko_dni&order_type=asc" class="btn_sort">↑</a>
-                    <a href="?order_by=kojko_dni&order_type=desc" class="btn_sort">↓</a> </th>
+<!--                    <a href="?order_by=kojko_dni&order_type=asc" class="btn_sort">↑</a>-->
+<!--                    <a href="?order_by=kojko_dni&order_type=desc" class="btn_sort">↓</a> -->
+                </th>
             <th style="width: 200px;">Исход<br> госпитализации</th>
                 <th style="width: 100px;">Дата изменений (мед.блок)
-                    <a href="?order_by=data_last_changed_med&order_type=asc" class="btn_sort">↑</a>
-                    <a href="?order_by=data_last_changed_med&order_type=desc" class="btn_sort">↓</a></th>
+<!--                    <a href="?order_by=data_last_changed_med&order_type=asc" class="btn_sort">↑</a>-->
+<!--                    <a href="?order_by=data_last_changed_med&order_type=desc" class="btn_sort">↓</a>-->
+                </th>
+
             <th>Мед.показания</th>
-            <th style="width: 100px;">Дата изменений (соц.блок)
-                    <a href="?order_by=data_last_changed_soc&order_type=asc" class="btn_sort">↑</a>
-                    <a href="?order_by=data_last_changed_soc&order_type=desc" class="btn_sort">↓</a></th>
+
+<th style="width: 100px;">Дата принятия в работу
+    <a href="?order_by=data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn&order_type=asc{% for key, value in request.GET.items %}{% if key != 'order_by' and key != 'order_type' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">↑</a>
+    <a href="?order_by=data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn&order_type=desc{% for key, value in request.GET.items %}{% if key != 'order_by' and key != 'order_type' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">↓</a>
+</th>
+
+
+            <th style="width: 120px;">Дата изменений (соц.блок)
+<!--                    <a href="?order_by=data_last_changed_soc&order_type=asc" class="btn_sort">↑</a>-->
+<!--                    <a href="?order_by=data_last_changed_soc&order_type=desc" class="btn_sort">↓</a>-->
+        </th>
                 <th style="width: 200px;">Наличие потребности в соц.коорд.</th>
 <!--                <th>Статус записи</th>-->
                 <!-- Добавьте другие заголовки для всех полей модели -->
@@ -86,6 +98,7 @@
                 <td>{{ patient.iskhod_gospit }}</td>
                 <td>{{ patient.data_last_changed_med|date:"d.m.Y"   }}</td>
                 <td>{{ patient.med_pokazaniya }}</td>
+                <td>{{ patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn|date:"d.m.Y"  }}</td>
                 <td>{{ patient.data_last_changed_soc|date:"d.m.Y"   }}</td>
                 <td>{{ patient.potrebnost_v_soc_koordinat|default_if_none:'-'  }}</td>
 <!--                <td>{{ patient.status_zapisi }}</td>-->

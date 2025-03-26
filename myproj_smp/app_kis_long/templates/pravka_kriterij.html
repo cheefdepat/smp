@@ -218,6 +218,11 @@
                 <tr>  <th>Наличие родственников</th>                         <td>{{ patient.nalichie_rodstvennikov }}</td></tr>
                 <tr>  <th>Дата передачи соц координаторам ДТСЗН</th>          <td>{{ patient.data_peredachi_soc_koordinatoram_dtszn }}</td><tr>
                 <tr>  <th>Дата принятия в работу соц координаторами ДТСЗН</th> <td>{{ patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn }}</td> <tr>
+
+        <!--внести в боевой 19-03-->
+                <th>Получатель соц.услуг</th>                           <td>{{ patient.poluchatel_soc_uslug|default_if_none:"-"  }}</td><tr>
+
+
                 <tr>  <th>Статус пациента (группа)</th>                       <td>{{ patient.status_pacienta }}</td>   <tr>
                 <tr>  <th>Соц_координатор (ФИО)</th>                          <td>{{ patient.soc_koordinator }}</td> <tr>
                 <tr>  <th>Статус решения о переводе </th>                     <td>{{ patient.status_resheniya_o_perevode }}</td>  <tr>
@@ -226,6 +231,10 @@
                 <tr>  <th>Решение ДТСЗН по путевке </th>                           <td>{{ patient.reshenie_dtszn_po_putevke }}</td>  <tr>
                 <tr>  <th>Дата принятия решения ДТСЗН по путевке</th>              <td>{{ patient.data_resheniya_dtszn }}</td> <tr>
                 <tr>  <th>Комментарий соц координаторов ДТСЗН</th>            <td>{{ patient.kommentarij_soc_koordinatorov_dtszn }}</td>  <tr>
+
+
+                <th>Сведения о пациенте переданы в ДТСЗН</th>            <td>{{ patient.svedeniya_o_pac_peredani_dtszn|default_if_none:'-'  }}</td>  <tr>
+                <th>Дата передачи сведений о пациенте в ДТСЗН</th>        <td>{{ patient.data_peredachi_sveden_v_dtszn|default_if_none:'-'  }}</td>  <tr>
 
         </table>
             </fieldset>

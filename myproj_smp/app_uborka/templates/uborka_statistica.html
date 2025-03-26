@@ -1,0 +1,31 @@
+{% extends "edit_pacient_base.html" %}
+
+{% block title %} Вывод результатов: {% endblock %}
+
+{% block content %}
+
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Результаты</title>
+    <style>
+        .metabase-dashboard {
+            width: 100%; /* Ширина iframe */
+            height: 1500px; /* Высота iframe */
+            border: none; /* Убираем рамку */
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="{% url 'app_uborka:v_start_uborka' %}" class="btn">Назад</a>
+
+</nav>
+    <main>
+       <iframe class="metabase-dashboard" src="http://10.159.8.163:3210/public/dashboard/de87e4ab-5aa1-4628-9434-eef155e1843a" allow="fullscreen"></iframe>
+     </main>
+
+</body>
+</html>
+{% endblock %}

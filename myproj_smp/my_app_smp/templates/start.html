@@ -34,12 +34,13 @@
     {% if 'admin' in groups or 'glav' in groups or 'soc_koordinator' in groups or 'stacionar' in groups %}
     <a href="{% url 'app_kis_long:v_kis_home' %}" class="btn_start">Перейти в приложение "КИС-60"</a><br>
     {% endif %}
-        {% if 'mk' in groups or 'ker' in groups or  'admin' in groups  %}
+
+     {% if 'mk' in groups or 'ker' in groups or  'admin' in groups  %}
         <a href="{% url 'app_id:v_id_add_svedeniya_o_pac' %}" class="btn_start">Внести сведения о пациенте</a><br>
      {% endif  %}
 
     {% if 'uborka' in groups or 'admin' in groups  %}
-    <a href="{% url 'app_uborka:v_start_uborka' %}" class="btn_start">"Уборка"</a><br>
+    <a href="{% url 'app_uborka:v_start_uborka' %}" class="btn_start">Уборка</a><br>
      {% endif  %}
     <p></p>
 </div>

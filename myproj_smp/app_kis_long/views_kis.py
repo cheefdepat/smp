@@ -11,6 +11,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q, F
 from django.db.models.functions import Lower
 
+
 class MyFilter(logging.Filter):
     def filter(self, record):
         return not record.getMessage().startswith('GET') and not record.getMessage().startswith('POST')
@@ -43,6 +44,9 @@ def zamena_pustot(pole_proverki_daty):
     else:
         pole_proverki_daty = pole_proverki_daty
     return pole_proverki_daty
+
+def v_statistica(request):
+    return render(request, 'kis_statistica.html')
 
 def calculate_koiko_dni():
     # Получаем сегодняшнюю дату
@@ -88,7 +92,10 @@ def v_find_new_in_kis(request):
     patients_all = Kis.objects.filter(
                         data_vipiski__isnull=True,
                         data_gospit__lt=kojko_dni_min,  # --- сколько к-дней берем в срез
-                        )
+                        ).exclude(
+                                Q(otdelenie_name__icontains="респираторной поддержки") |
+                                Q(otdelenie_name__icontains="помощи детям")
+                            )
 
     if request.method == 'GET':
         # ---------------------------- сброс фильтров в 0 --------------
@@ -222,14 +229,14 @@ def v_kis_home(request):
             # patients = KisLong.objects.all()
             patients = KisLong.objects.filter(iskhod_gospit='Пациент в стационаре')  # Фильтруйте пациентов по умолчанию
 
+        # Пример обработки фильтров и сортировки
         if form_filtr1.is_valid():
-            patients = KisLong.objects.all()
+            # Применение фильтров
+            patients = KisLong.objects.all()  # Начинаем с полного списка
             fio_pacienta = form_filtr1.cleaned_data['form_fio_pacienta']
             otdelenie = form_filtr1.cleaned_data['form_otdelenie']
             iskhod_gospit = form_filtr1.cleaned_data['form_iskhod_gospit']
             kojko_dni_min = form_filtr1.cleaned_data['form_kojko_dni_min']
-            # kojko_dni_max = form_filtr1.cleaned_data['form_kojko_dni_max']
-
             med_pokazaniya = form_filtr1.cleaned_data['form_med_pokazaniya']
             potrebnost_v_soc = form_filtr1.cleaned_data['form_potrebnost_v_soc']
 
@@ -244,32 +251,19 @@ def v_kis_home(request):
             if potrebnost_v_soc:
                 patients = patients.filter(potrebnost_v_soc_koordinat=potrebnost_v_soc)
 
+            if kojko_dni_min:
+                patients = patients.filter(kojko_dni__gte=kojko_dni_min)
 
-            if not kojko_dni_min:        kojko_dni_min = 1
-            # if not kojko_dni_max:        kojko_dni_max = 10000
-            # patients = patients.filter(kojko_dni__range=(kojko_dni_min, kojko_dni_max))
-            patients = patients.filter(kojko_dni__range=(kojko_dni_min, 1000))
-        # ------------- сортировка по полям шапки ----- н --
+        # Применение сортировки
         if order_by and order_type:
-            if order_by == 'data_last_changed_med':
-                if order_type == 'asc':
-                    patients = patients.order_by('data_last_changed_med')
-                elif order_type == 'desc':
-                    patients = patients.order_by('-data_last_changed_med')
-            elif order_by == 'data_last_changed_soc':
-                if order_type == 'asc':
-                    patients = patients.order_by('data_last_changed_soc')
-                elif order_type == 'desc':
-                    patients = patients.order_by('-data_last_changed_soc')
-            elif order_by == 'kojko_dni':
-                if order_type == 'asc':
-                    patients = patients.order_by('kojko_dni')
-                elif order_type == 'desc':
-                    patients = patients.order_by('-kojko_dni')
-        # ------------- сортировка по полям шапки ----- к --
+            patients = patients.order_by(f"{'-' if order_type == 'desc' else ''}{order_by}")
+
+            # ------------- сортировка по полям шапки ----- к --
+
 
         total_pac = patients.count()
         paginator = Paginator(patients, records_per_page)  # Показывать 10 записей на странице
+
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         # Сохраняем количество записей на странице в GET-запросе
@@ -440,10 +434,18 @@ def v_kis_proverka_new(request, id):
         status_zapisi = 'Заявка не оформлялась',
         data_peredachi_soc_koordinatoram_dtszn = None
 
+    # data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn = data_peredachi_soc_koordinatoram_dtszn
+
+    data_peredachi_soc_koordinatoram_dtszn_session = data_peredachi_soc_koordinatoram_dtszn
+    # data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn_session = data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn
+
+
     if request.method == 'POST':
         if 'vnosim_new_pac_v_bazy_kis_long' in request.POST:  # Кнопка "vnosim_v_bazy"
 
             # ---------- формируем список переменных для записи в kis_long_tab:-----------
+
+
             new_kis_long = KisLong(
                 # n_istorii_bolezni=ib_nomer,
                 fio_pacienta=fio_pacienta_session,
@@ -470,11 +472,13 @@ def v_kis_proverka_new(request, id):
                 # status_zapisi=status_zapisi[0],
                 data_rozhdeniya=data_rozhdeniya_session,
                 data_gospit=data_gospit_format_date,
-                data_peredachi_soc_koordinatoram_dtszn=data_peredachi_soc_koordinatoram_dtszn,
+                data_peredachi_soc_koordinatoram_dtszn=data_peredachi_soc_koordinatoram_dtszn_session,
+                # data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn=data_peredachi_soc_koordinatoram_dtszn_session,
                 data_last_changed_med=timezone.now().date()
 
             )
-
+            print('--------------------------------------------------------------')
+            print(data_peredachi_soc_koordinatoram_dtszn_session)
             new_kis_long.save()
 
             return redirect('app_kis_long:v_kis_home')   # Переходим на главную страницу
@@ -483,7 +487,8 @@ def v_kis_proverka_new(request, id):
             return redirect('app_kis_long:v_new_is_kis_v_kislong', id=id)  # Возвращаем на страницу редактирования
 
     return render(request, 'kis_proverka_new_pac.html', {
-                                                            # 'patient': patient,
+                                                            'id': id,
+
                                                             'fio_pacienta': fio_pacienta_session,
                                                             'data_rozhdeniya': data_rozhdeniya_session,
                                                             'otdelenie_name': otdelenie_name,
@@ -511,7 +516,7 @@ def v_kis_proverka_new(request, id):
 
                                                             'nazvanie_knopki_save': nazvanie_knopki_save,
                                                             'status_zapisi': status_zapisi[0],
-                                                            'data_peredachi_soc_koordinatoram_dtszn': data_peredachi_soc_koordinatoram_dtszn,
+                                                            'data_peredachi_soc_koordinatoram_dtszn': data_peredachi_soc_koordinatoram_dtszn_session,
 
 
                                                           })
@@ -622,9 +627,16 @@ def v_kis_pravka_kriterij(request, id):
                 )
                 patient_changed.save()  # Сохраняем объект в базе данных
                 patient.data_last_changed_med = datetime.now()
-        if patient.data_peredachi_soc_koordinatoram_dtszn is None:
+
+
+        #  -------- проверка на ЕСТЬ необх СОЦ для записи даты передачи и приема в работу------------н
+        if patient.potrebnost_v_soc_koordinat == '2. Есть потребность в соц.координаторе' and patient.data_peredachi_soc_koordinatoram_dtszn is None:
             patient.data_peredachi_soc_koordinatoram_dtszn = datetime.now()
-            patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn = datetime.now()
+            # patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn = datetime.now()
+        # elif patient.potrebnost_v_soc_koordinat == '2. Есть потребность в соц.координаторе' and patient.data_peredachi_soc_koordinatoram_dtszn is not None:
+        #     patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn = patient.data_peredachi_soc_koordinatoram_dtszn
+        #  -------- проверка на ЕСТЬ необх СОЦ для записи даты передачи и приема в работу------------к
+
         patient.save()
 
         return redirect('app_kis_long:v_kis_pac_detail', id=patient.id)
@@ -653,8 +665,18 @@ def v_kis_pravka_zayavka(request, id):
     status_resheniya_o_perevode_old = patient.status_resheniya_o_perevode
     poyasneniya_k_resheniyu_po_pac_old = patient.poyasneniya_k_resheniyu_po_pac
     reshenie_dtszn_po_putevke_old = patient.reshenie_dtszn_po_putevke
+
     data_resheniya_dtszn_old = patient.data_resheniya_dtszn
+    data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn_old = patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn
+
+    poluchatel_soc_uslug_old = patient.poluchatel_soc_uslug
+
     kommentarij_soc_koordinatorov_dtszn_old = patient.kommentarij_soc_koordinatorov_dtszn
+    svedeniya_o_pac_peredani_dtszn_old = patient.svedeniya_o_pac_peredani_dtszn
+
+    data_peredachi_sveden_v_dtszn_old = patient.data_peredachi_sveden_v_dtszn
+
+
 
     old_status = {
         'soc_kriterii': soc_kriterii_old,
@@ -667,6 +689,10 @@ def v_kis_pravka_zayavka(request, id):
         'reshenie_dtszn_po_putevke': reshenie_dtszn_po_putevke_old,
         'data_resheniya_dtszn': data_resheniya_dtszn_old,
         'kommentarij_soc_koordinatorov_dtszn': kommentarij_soc_koordinatorov_dtszn_old,
+        'svedeniya_o_pac_peredani_dtszn': svedeniya_o_pac_peredani_dtszn_old,
+        'data_peredachi_sveden_v_dtszn': data_peredachi_sveden_v_dtszn_old,
+        'data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn': data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn_old,
+        'poluchatel_soc_uslug': poluchatel_soc_uslug_old,
                   }
     # ------------------- Шаги по сохранению изменений ---------- к
 
@@ -692,6 +718,7 @@ def v_kis_pravka_zayavka(request, id):
         # --- просто показываем последнюю дату ---
         # 12. Пояснения к решению о переводе
         patient.poyasneniya_k_resheniyu_po_pac = request.POST.get('poyasneniya_k_resheniyu_po_pac')
+        patient.poluchatel_soc_uslug = request.POST.get('poluchatel_soc_uslug')
         # 13. Решение ДТСЗН по путевке
         patient.reshenie_dtszn_po_putevke = request.POST.get('reshenie_dtszn_po_putevke')
         # 14. Дата принятия решения ДТСЗН по путевке
@@ -703,6 +730,16 @@ def v_kis_pravka_zayavka(request, id):
         # print('wwwwwwwwwwwwwwwwwww')
         # 15. Комментарий соц координаторов ДТСЗН
         patient.kommentarij_soc_koordinatorov_dtszn = request.POST.get('kommentarij_soc_koordinatorov_dtszn')
+        patient.svedeniya_o_pac_peredani_dtszn = request.POST.get('svedeniya_o_pac_peredani_dtszn')
+
+        patient.data_peredachi_sveden_v_dtszn = request.POST.get('data_peredachi_sveden_v_dtszn')
+        patient.data_peredachi_sveden_v_dtszn = zamena_pustot(patient.data_peredachi_sveden_v_dtszn)
+
+        patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn = request.POST.get('data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn')
+        patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn = zamena_pustot(patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn)
+
+
+
 
         new_status = {
             'soc_kriterii': patient.soc_kriterii,
@@ -715,6 +752,10 @@ def v_kis_pravka_zayavka(request, id):
             'reshenie_dtszn_po_putevke': patient.reshenie_dtszn_po_putevke,
             'data_resheniya_dtszn': patient.data_resheniya_dtszn,
             'kommentarij_soc_koordinatorov_dtszn': patient.kommentarij_soc_koordinatorov_dtszn,
+            'svedeniya_o_pac_peredani_dtszn': patient.svedeniya_o_pac_peredani_dtszn,
+            'data_peredachi_sveden_v_dtszn': patient.data_peredachi_sveden_v_dtszn,
+            'data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn': patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn,
+            'poluchatel_soc_uslug': patient.poluchatel_soc_uslug,
         }
 
 

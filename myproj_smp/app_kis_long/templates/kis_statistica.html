@@ -1,0 +1,31 @@
+{% extends "kis_long_home.html" %}
+
+{% block title %} Вывод результатов: {% endblock %}
+
+{% block content %}
+
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Результаты</title>
+    <style>
+        .metabase-dashboard {
+            width: 100%; /* Ширина iframe */
+            height: 1500px; /* Высота iframe */
+            border: none; /* Убираем рамку */
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="{% url 'app_kis_long:v_kis_home' %}" class="btn">Назад</a>
+
+</nav>
+    <main>
+       <iframe class="metabase-dashboard" src="http://10.159.8.163:3210/public/dashboard/c86642f5-3d52-45ab-9fc6-ac96e641e032" allow="fullscreen"></iframe>
+     </main>
+
+</body>
+</html>
+{% endblock %}

@@ -115,3 +115,4 @@ class KisFilterForm(forms.Form):
     #                                    # initial=3000,
     #                                    widget=forms.NumberInput(
     #                                            attrs={'style': 'width: 50px; background-color: #87CEEB;'}))
+

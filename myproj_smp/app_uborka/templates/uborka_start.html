@@ -55,9 +55,9 @@
 
 
     <nav>
-        <a href="{% url 'my_app_smp:start_page' %}" class="btn">Возврат к списку ТАБЛИЦ</a>
-
-                <a  href="{% url 'my_app_smp:logout' %}" class="btn">Выход</a>
+        <a  href="{% url 'app_uborka:v_statistica' %}" class="btn">Статистика</a>
+        <a href="{% url 'my_app_smp:start_page' %}" class="btn">К списку ПРИЛОЖЕНИЙ</a>
+        <a  href="{% url 'my_app_smp:logout' %}" class="btn">Сменить пользователя</a>
     </nav>
 <!--uborka_start.html<br>-->
 <!--v_start_uborka-->
@@ -79,25 +79,26 @@
     <form method="get" class="filter-form">
     <thead>
     <tr>
-        <th> <input type="text" name="srch_oborudovanie"    placeholder="Фильтр оборудования"
-                    value="{{ srch_oborudovanie }}" style="width: 200px;">
-        <th> <input type="text"     name="srch_inventarnik" placeholder="inventarnik"
-                    value="{{ srch_inventarnik }}" style="width: 100px;"> </th>
-        <th> <input type="text"     name="srch_mol"         placeholder="mol"
-                    value="{{ srch_mol }}" style="width: 100px;"> </th>
-        <th> <input type="text"     name="srch_pacient"     placeholder="pacient"
-                    value="{{ srch_pacient }}"style="width: 100px;"> </th>
-        <th>-</th>
-        <th>
-             <select name="srch_tekushiy_status_pac" style="width: 150px;"    onchange="this.form.submit()">
+        <td> <input type="text" name="srch_oborudovanie"    placeholder="Фильтр оборудования"
+                    value="{{ srch_oborudovanie }}" style="width: 200px; background-color: #b5cfde;">
+        <td style="width: 200px;"> <input type="text"     name="srch_inventarnik" placeholder="inventarnik"
+                    value="{{ srch_inventarnik }}" style="width: 130px; background-color: #b5cfde;"> </td>
+        <td  style="width: 150px;"> <input type="text"     name="srch_mol"         placeholder="mol"
+                    value="{{ srch_mol }}" style="width: 100px; background-color: #b5cfde;"> </td>
+        <td> <input type="text"     name="srch_pacient"     placeholder="pacient"
+                    value="{{ srch_pacient }}"style="width: 150px; background-color: #b5cfde;"> </td>
+        <td style="width: 100px;"></td>
+        <td style="width: 170px;">
+             <select name="srch_tekushiy_status_pac" style="width: 120px; background-color: #b5cfde;"    onchange="this.form.submit()">
                 <option value="" {% if srch_tekushiy_status_pac == '' %}selected{% endif %}          >Все статусы</option>
                 <option {% if 'сопровождении' in  srch_tekushiy_status_pac %}selected{% endif %}    >На сопровождении</option>
                 <option {% if 'приостановлено' in  srch_tekushiy_status_pac %}selected{% endif %}   >Сопровождение приостановлено</option>
-                <option {% if 'прекращено' in  srch_tekushiy_status_pac %}selected{% endif %}       >Оказание ПМП прекращено</option>
-             </select>      </th>
-<!--        <th>-</th>-->
-        <th>
-             <select name="srch_svedeniya_mol" style="width: 200px;"     onchange="this.form.submit()">
+                <option {% if 'Прекращено' in  srch_tekushiy_status_pac %}selected{% endif %}       >Прекращено оказание ПМП</option>
+                <option {% if 'отстутствует_в_реестре' in  srch_tekushiy_status_pac %}selected{% endif %}       >отстутствует_в_реестре</option>
+             </select>      </td>
+<!--        <td>-</td>-->
+        <td>
+             <select name="srch_svedeniya_mol" style="width: 200px; background-color: #b5cfde;"     onchange="this.form.submit()">
                 <option value="" {% if srch_svedeniya_mol == '' %}selected{% endif %}           >Сведения от МОЛ</option>
                 <option {% if 'Недозвон' in  srch_svedeniya_mol %}selected{% endif %}           >Недозвон</option>
                 <option {% if 'р/м' in  srch_svedeniya_mol %}selected{% endif %}                >р/м обеспечивается регулярно</option>
@@ -110,31 +111,31 @@
                 <option {% if 'в юр.отдел' in  srch_svedeniya_mol %}selected{% endif %}         >Информация передана в юр.отдел</option>
                 <option {% if '1 р/мес.' in  srch_svedeniya_mol %}selected{% endif %}           >Осуществляется контрольный звонок РЦ (1 р/мес.)</option>
 <!--                <option {% if 'В архиве' in  srch_svedeniya_mol %}selected{% endif %}           >в_архиве</option>-->
-            </select>    </th>
+            </select>    </td>
 
 
-        <th>
-    <select name="srch_paused_days_operator" style="width: 100px;">
+        <td style="width: 140px;">
+    <select name="srch_paused_days_operator" style="width: 100px; background-color: #b5cfde;">
         <option value="=" {% if srch_paused_days_operator == '=' %}selected{% endif %}>Равно</option>
         <option value=">" {% if srch_paused_days_operator == '>' %}selected{% endif %}>Более</option>
         <option value="<" {% if srch_paused_days_operator == '<' %}selected{% endif %}>Менее</option>
     </select>
-    <input type="number" name="srch_paused" placeholder="Дней после уточнений" value="{{ srch_paused }}" style="width: 100px;">
-    </th>
-        <th>-</th>
-        <th>-</th>
+    <input type="number" name="srch_paused" placeholder="Дней после уточнений" value="{{ srch_paused }}" style="width: 100px; background-color: #b5cfde;">
+    </td>
+        <td></td>
+        <td></td>
 
-        <th> <select name="srch_priznak_archiva" style="width: 200px;"     onchange="this.form.submit()">
+        <td style="width: 100px;"> <select name="srch_priznak_archiva" style="width: 100px; background-color: #b5cfde;"     onchange="this.form.submit()">
                 <option {% if 'у пациента' in  srch_priznak_archiva %}selected{% endif %}       >у пациента</option>
                 <option {% if 'в_архиве' in  srch_priznak_archiva %}selected{% endif %}         >в_архиве</option>
                 </select>
-        </th>
-        <th> <select name="srch_reshenie_yur" style="width: 200px;"     onchange="this.form.submit()">
+        </td>
+        <td style="width: 70px;"> <select name="srch_reshenie_yur" style="width: 100px; background-color: #b5cfde;"     onchange="this.form.submit()">
                 <option value="" {% if srch_reshenie_yur == '' %}selected{% endif %}           >Все записи</option>
                 <option  {% if 'В процессе решения' in  srch_reshenie_yur %}selected{% endif %}     >В процессе решения</option>
                 <option  {% if 'Вопрос закрыт' in  srch_reshenie_yur %}selected{% endif %}     >Вопрос закрыт</option>
-         </select> </th>
-                <th>-</th>
+         </select> </td>
+                <td style="width: 70px;"></td>
     </tr>
 
 
@@ -143,47 +144,47 @@
 Отфильтровано {{filter_records}} записей
 </form>
 
-    <thead>
+    <!-- <thead> -->
         <tr>
             <th>Наименование оборудования</th>  <!-- Изменено на "Действия" для ясности -->
-             <th>Инвентарный номер (указывать цифры, без номера)</th>
-                <th>МОЛ</th>
+             <th style="width: 200px;">Инвентарный номер (указывать цифры, без номера)</th>
+                <th style="width: 200px;">МОЛ</th>
                 <th>ФИО пациента</th>
-                <th>Дата рождения пациента</th>
-                <th>Статус пациента</th>
+                <th style="width: 100px;">Дата рождения пациента</th>
+                <th style="width: 100px;">Статус пациента</th>
                 <th>Сведения по оборудованию</th>
-                <th>Дата изменений / Прошло дней</th>
+                <th style="width: 100px;">Дата изменений / Прошло дней</th>
                 <th>Комментарий МОЛа (последний)</th>
                 <th>Комментарий (юр.отдел)</th>
-                <th>Проверить архив</th>
-                <th>Результат юр.отдел</th>
-                <th>Внести исправления</th>
+                <th style="width: 130px;">Проверить архив</th>
+                <th style="width: 70px;">Результат юр.отдел</th>
+                <th style="width: 70px;">Внести исправления</th>
             </tr>
-    </thead>
-    <tbody>
+    <!-- </thead> -->
+    <!-- <tbody> -->
 
     {% for patient in page_obj %}
         <tr>
                 <td>{{ patient.ub_oborudovanie_name }}</td>
-                <td>{{ patient.ub_inventarnik }}</td>
-                <td>{{ patient.ub_fio_mol }}</td>
+                <td style="text-align: right !important;">{{ patient.ub_inventarnik }}</td>
+                <td style="text-align: center !important;">{{ patient.ub_fio_mol }}</td>
                 <td>{{ patient.ub_fio_pacienta  }}</td>
-                <td>{{ patient.ub_data_rozhdeniya|date:"d.m.Y"   }}</td>
-                <td>{{ patient.ub_tekushiy_status_pac }}</td>
+                <td style="text-align: center !important;">{{ patient.ub_data_rozhdeniya|date:"d.m.Y"   }}</td>
+                <td style="text-align: center !important;">{{ patient.ub_tekushiy_status_pac }}</td>
                 <td>{{ patient.ub_svedeniya_mol }}</td>
-                <td> {{ patient.ub_data_izmeneniy }} <br>-<br> {{patient.ub_data_izmeneniy|days_difference}} </td>
+                <td style="text-align: center !important;"> {{ patient.ub_data_izmeneniy }} <br><br> {{patient.ub_data_izmeneniy|days_difference}} </td>
 
                 <td>{{ patient.ub_kommentarij }}</td>
                 <td>{{ patient.ub_kommentarij_yur }}</td>
-                <td>{{ patient.ub_priznak_archiv|default_if_none:"-" }}</td>
-                <td>{{ patient.ub_reshenie_yur|default_if_none:"-" }}</td>
+                <td style="text-align: center !important;">{{ patient.ub_priznak_archiv|default_if_none:"-" }}</td>
+                <td style="text-align: center !important;">{{ patient.ub_reshenie_yur|default_if_none:"-" }}</td>
 
-                <td>  <a href="{% url 'app_uborka:v_uborka_detals' patient.id %}" class="btn_save">Внести сведения</a> </td>
+                <td>  <a href="{% url 'app_uborka:v_uborka_detals' patient.id %}" class="btn_save" <table class="table_home" style="width: 70px;">Внести сведения</a> </td>
 
         </tr>
 
         {% endfor %}
-    </tbody>
+    <!-- </tbody> -->
 </table>
 
 

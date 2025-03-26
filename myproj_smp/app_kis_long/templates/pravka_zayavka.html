@@ -84,7 +84,17 @@
 
                  <tr> <th>Дата передачи соц.координаторам ДТСЗН</th> <td>{{ patient.data_peredachi_soc_koordinatoram_dtszn }}</td>    </tr>
 
-                 <tr> <th>Дата принятия в работу соц координаторами ДТСЗН</th> <td>{{ patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn }}</td>    </tr>
+                 <tr> <th>Дата принятия в работу соц координаторами ДТСЗН</th>
+                     <td><input type="date" name="data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn" value="{{ patient.data_prinyatiya_v_rabotu_soc_koordinatorami_dtszn|date:'Y-m-d' }}" >  </td> </tr>
+
+
+                <th>Получатель соц.услуг
+                    </th> <td>  <select name="poluchatel_soc_uslug">
+                         <option {% if '0.' in  patient.poluchatel_soc_uslug %}selected{% endif %}>0. не указано</option>
+                         <option {% if '1.' in  patient.poluchatel_soc_uslug %}selected{% endif %}>1. да</option>
+                         <option {% if '2.' in  patient.poluchatel_soc_uslug %}selected{% endif %}>2. нет</option>
+                         <option {% if '3.' in  patient.poluchatel_soc_uslug %}selected{% endif %}>3. не нуждается</option>
+                                </select> </td> </tr>
 
                  <tr> <th>Статус пациента (группа инвалидности)</th> <td>  <select name="status_pacienta">
                          <option {% if 'нет' in  patient.status_pacienta %}selected{% endif %}>нет инвалидности </option>
@@ -97,6 +107,7 @@
                  <tr>  <th>Соц.координатор (ФИО)</th>  <td><input type="text" name="soc_koordinator"  value="{{ patient.soc_koordinator }}" ></td>         </tr>
 
                  <tr> <th>Статус решения о переводе </th> <td>  <select name="status_resheniya_o_perevode">
+                         <option {% if '0.' in  patient.status_resheniya_o_perevode %}selected{% endif %}>0. Консультация пациента</option>
                          <option {% if '1.' in  patient.status_resheniya_o_perevode %}selected{% endif %}>1. Сбор документов для запроса в ДТСЗН</option>
                          <option {% if '2.' in  patient.status_resheniya_o_perevode %}selected{% endif %}>2. Ожидание ответа от ДТСЗН </option>
                          <option {% if '3.' in  patient.status_resheniya_o_perevode %}selected{% endif %}>3. Ожидание путевки</option>
@@ -109,6 +120,7 @@
                       <td> <textarea rows="5" cols="45" name="poyasneniya_k_resheniyu_po_pac"   >{{ patient.poyasneniya_k_resheniyu_po_pac }}</textarea></td>         </tr>
 
                  <tr> <th>Решение ДТСЗН по путевке </th>  <td> <select name="reshenie_dtszn_po_putevke">
+                        <option {% if '0.' in  patient.reshenie_dtszn_po_putevke %}selected{% endif %}>0. Нет информации</option>
                          <option {% if '1.' in  patient.reshenie_dtszn_po_putevke %}selected{% endif %}>1. Док.направлены, ожидается ответ ДТСЗН</option>
                          <option {% if '2.' in  patient.reshenie_dtszn_po_putevke %}selected{% endif %}>2. Получение путевки одобрено </option>
                          <option {% if '3.' in  patient.reshenie_dtszn_po_putevke %}selected{% endif %}>3. В получении путевки отказано</option>
@@ -119,6 +131,14 @@
 
                  <tr> <th>Комментарий соц координаторов ДТСЗН</th>
                         <td> <textarea rows="10" cols="45" name="kommentarij_soc_koordinatorov_dtszn"   >{{ patient.kommentarij_soc_koordinatorov_dtszn }}</textarea></td>         </tr>
+
+                 <th>Сведения о пациенте переданы в ДТСЗН</th>         <td> <select name="svedeniya_o_pac_peredani_dtszn">
+                         <option {% if '1.' in  patient.svedeniya_o_pac_peredani_dtszn %}selected{% endif %}>1.Сведения НЕ переданы в ДТСЗН</option>
+                         <option {% if '2.' in  patient.svedeniya_o_pac_peredani_dtszn %}selected{% endif %}>2.Сведения переданы в ДТСЗН </option>
+                    </select> </td> </tr>
+
+                 <tr> <th>Дата передачи сведений о пациенте в ДТСЗН:</th>
+                     <td><input type="date" name="data_peredachi_sveden_v_dtszn" value="{{ patient.data_peredachi_sveden_v_dtszn|date:'Y-m-d' }}" >  </td> </tr>
 
 
                 </table>
